@@ -1,15 +1,15 @@
 import React, { Component, RefObject } from 'react';
-import { FlatListProps, LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native';
+import { FlashList, FlashListProps } from '@shopify/flash-list';
+import { AnimateProps } from 'react-native-reanimated';
+import { ReanimatedScrollEvent } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
 import { LoadEarlierProps } from '../LoadEarlier';
 import { MessageProps } from '../Message';
-import { User, IMessage, Reply } from '../types';
-import { ReanimatedScrollEvent } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
-import { FlatList } from 'react-native-reanimated/lib/typescript/Animated';
-import { AnimateProps } from 'react-native-reanimated';
+import { IMessage, Reply, User } from '../types';
 export type ListViewProps = {
     onLayout?: (event: LayoutChangeEvent) => void;
-} & object;
-export type AnimatedList<TMessage> = Component<AnimateProps<FlatListProps<TMessage>>, unknown, unknown> & FlatList<FlatListProps<TMessage>>;
+} & FlashListProps<any>;
+export type AnimatedList<TMessage> = Component<AnimateProps<FlashListProps<TMessage>>, unknown, unknown> & FlashList<FlashListProps<TMessage>>;
 export interface MessageContainerProps<TMessage extends IMessage = IMessage> {
     forwardRef?: RefObject<AnimatedList<TMessage>>;
     messages?: TMessage[];
