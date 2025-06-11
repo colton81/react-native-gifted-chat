@@ -5,6 +5,8 @@ import {
   Text,
   Platform,
   LayoutChangeEvent,
+  ListRenderItemInfo,
+  FlatList,
   CellRendererProps,
 } from 'react-native'
 import Animated, { runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
@@ -22,10 +24,10 @@ import { warning } from '../logging'
 import stylesCommon from '../styles'
 import styles from './styles'
 import { isSameDay } from '../utils'
-import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
+
 export * from './types'
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlashList)
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageContainerProps<TMessage>) {
   const {
@@ -347,7 +349,7 @@ function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageC
     >
       <AnimatedFlatList
         extraData={extraData}
-        ref={forwardRef as unknown as React.Ref<FlashList<unknown>>}
+        ref={forwardRef as React.Ref<FlatList<unknown>>}
         keyExtractor={keyExtractor}
         data={messages}
         renderItem={renderItem}
