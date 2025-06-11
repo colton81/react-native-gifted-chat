@@ -281,13 +281,19 @@ function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageC
 
   const renderCell = (props:any) => {
     const handleOnLayout = (event: LayoutChangeEvent) => {
+      console.log("Props:", props.children.props.data)
       props?.onLayout?.(event)
+     
+     
+
       const { y, height } = event.nativeEvent.layout
+
       const newValue = {
         y,
         height,
         createdAt: new Date((props.children.props.data as IMessage)?.createdAt ?? 0).getTime(),
       }
+
       daysPositions.modify(value => {
         'worklet'
 
