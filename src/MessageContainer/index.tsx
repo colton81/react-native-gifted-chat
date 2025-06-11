@@ -192,7 +192,7 @@ function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageC
         previousMessage,
         nextMessage,
         position: messageItem.user._id === user._id ? 'right' : 'left',
-        // onRefDayWrapper: handleLayoutDayWrapper,
+        onRefDayWrapper: handleLayoutDayWrapper,
         scrolledY,
         daysPositions,
         listHeight,
