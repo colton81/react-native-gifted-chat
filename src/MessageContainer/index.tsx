@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   Text,
   Platform,
-  LayoutChangeEvent
+  LayoutChangeEvent,
+  CellRendererProps,
 } from 'react-native'
 import Animated, { runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { ReanimatedScrollEvent } from 'react-native-reanimated/lib/typescript/hook/commonTypes'
@@ -21,30 +22,10 @@ import { warning } from '../logging'
 import stylesCommon from '../styles'
 import styles from './styles'
 import { isSameDay } from '../utils'
-import { CellContainer, FlashList } from '@shopify/flash-list'
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 export * from './types'
-export interface RenderCellType {
-    children?: Children;
-    index?:    number;
-    onLayout?: any[];
-    style?:    Style;
-}
-
-export interface Children {
-}
-
-export interface Style {
-    alignItems?:    string;
-    flexDirection?: string;
-    left?:          number;
-    position?:      string;
-    top?:           number;
-    transform?:     Array<Children[]>;
-    width?:         number;
-}
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlashList)
-const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 
 function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageContainerProps<TMessage>) {
   const {
@@ -156,7 +137,7 @@ function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageC
       makeScrollToBottomHidden()
   }, [handleOnScrollProp, inverted, scrollToBottomOffset, scrollToBottomOpacity])
 
-  const renderItem = useCallback(({ item, index }: { item: any; index: number }): any => {
+  const renderItem = useCallback(({ item, index }: ListRenderItemInfo<unknown>): React.ReactElement | null => {
     const messageItem = item as TMessage
 
     if (!messageItem._id && messageItem._id !== 0)
@@ -277,21 +258,18 @@ function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageC
       onLoadEarlier()
   }, [infiniteScroll, loadEarlier, onLoadEarlier, isLoadingEarlier])
 
-  // const keyExtractor = useCallback((item: unknown) => (item as TMessage)._id.toString(), [])
+  const keyExtractor = useCallback((item: unknown) => (item as TMessage)._id.toString(), [])
 
-  const renderCell = (props:any) => {
+  const renderCell = useCallback((props: CellRendererProps<unknown>) => {
     const handleOnLayout = (event: LayoutChangeEvent) => {
-      console.log("Props:", props.children.props.data)
-      props?.onLayout?.(event)
-     
-     
+      props.onLayout?.(event)
 
       const { y, height } = event.nativeEvent.layout
 
       const newValue = {
         y,
         height,
-        createdAt: new Date((props.children.props.data as IMessage)?.createdAt ?? 0).getTime(),
+        createdAt: new Date((props.item as IMessage).createdAt).getTime(),
       }
 
       daysPositions.modify(value => {
@@ -315,23 +293,20 @@ function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageC
           }
 
         // @ts-expect-error: https://docs.swmansion.com/react-native-reanimated/docs/core/useSharedValue#remarks
-        value[props.children.props.data._id] = newValue
+        value[props.item._id] = newValue
         return value
       })
     }
-    return(
-      <AnimatedCellContainer {...props}  onLayout={handleOnLayout} >{props.children}</AnimatedCellContainer>
-    )
 
-    // return (
-    //   <View
-    //     {...props}
-    //     onLayout={handleOnLayout}
-    //   >
-    //     {props.children}
-    //   </View>
-    // )
-  }
+    return (
+      <View
+        {...props}
+        onLayout={handleOnLayout}
+      >
+        {props.children}
+      </View>
+    )
+  }, [daysPositions, inverted])
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: event => {
@@ -372,14 +347,14 @@ function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageC
     >
       <AnimatedFlatList
         extraData={extraData}
-        ref={forwardRef as unknown as React.Ref<any>}
-       //keyExtractor={keyExtractor}
+        ref={forwardRef as unknown as React.Ref<FlashList<unknown>>}
+        keyExtractor={keyExtractor}
         data={messages}
         renderItem={renderItem}
-       inverted={inverted}
-       automaticallyAdjustContentInsets={false}
-       style={stylesCommon.fill}
-       {...invertibleScrollViewProps}
+        inverted={inverted}
+        automaticallyAdjustContentInsets={false}
+        style={stylesCommon.fill}
+        {...invertibleScrollViewProps}
         ListEmptyComponent={renderChatEmpty}
         ListFooterComponent={
           inverted ? ListHeaderComponent : ListFooterComponent
@@ -387,14 +362,13 @@ function MessageContainer<TMessage extends IMessage = IMessage> (props: MessageC
         ListHeaderComponent={
           inverted ? ListFooterComponent : ListHeaderComponent
         }
-       onScroll={scrollHandler}
-       scrollEventThrottle={1}
-       onEndReached={onEndReached}
-       onEndReachedThreshold={0.1}
-      {...listViewProps}
-       onLayout={onLayoutList}
-      
-       CellRendererComponent={renderCell}
+        onScroll={scrollHandler}
+        scrollEventThrottle={1}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.1}
+        {...listViewProps}
+        onLayout={onLayoutList}
+        CellRendererComponent={renderCell}
       />
       {isScrollToBottomEnabled
         ? renderScrollToBottomWrapper()
