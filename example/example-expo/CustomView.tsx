@@ -9,6 +9,7 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native'
+import MapView from 'react-native-maps'
 // import { ProgressBar } from 'react-native-paper'
 
 interface Props {
@@ -57,7 +58,27 @@ const CustomView = ({
         style={[styles.container, containerStyle]}
         onPress={openMapAsync}
       >
-       
+        {Platform.OS !== 'web'
+          ? (
+            <MapView
+              style={[styles.mapView, mapViewStyle]}
+              region={{
+                latitude: currentMessage.location.latitude,
+                longitude: currentMessage.location.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              scrollEnabled={false}
+              zoomEnabled={false}
+            />
+          )
+          : (
+            <View style={{ padding: 15 }}>
+              <Text style={{ color: 'tomato', fontWeight: 'bold' }}>
+              Map not supported in web yet, sorry!
+              </Text>
+            </View>
+          )}
       </TouchableOpacity>
     )
 
