@@ -299,9 +299,6 @@ const App = () => {
           inverted={Platform.OS !== 'web'}
           infiniteScroll
           bottomOffset={-insets.bottom}
-          listViewProps={{
-            onEndReachedThreshold: 0.5,
-          }}
         />
       </View>
     </SafeAreaView>

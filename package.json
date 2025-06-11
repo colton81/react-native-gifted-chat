@@ -61,7 +61,6 @@
     "react-native-parsed-text": "^0.0.22"
   },
   "devDependencies": {
-    "@shopify/flash-list": "^1.8.2",
     "@babel/core": "^7.26.10",
     "@babel/plugin-transform-react-jsx": "^7.25.9",
     "@babel/plugin-transform-unicode-property-regex": "^7.25.9",
