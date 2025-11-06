@@ -1140,6 +1140,60 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@biomejs/biome@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/biome/-/biome-2.3.4.tgz#af073a9e77b85745722931acbb03272efe9bae1f"
+  integrity sha512-TU08LXjBHdy0mEY9APtEtZdNQQijXUDSXR7IK1i45wgoPD5R0muK7s61QcFir6FpOj/RP1+YkPx5QJlycXUU3w==
+  optionalDependencies:
+    "@biomejs/cli-darwin-arm64" "2.3.4"
+    "@biomejs/cli-darwin-x64" "2.3.4"
+    "@biomejs/cli-linux-arm64" "2.3.4"
+    "@biomejs/cli-linux-arm64-musl" "2.3.4"
+    "@biomejs/cli-linux-x64" "2.3.4"
+    "@biomejs/cli-linux-x64-musl" "2.3.4"
+    "@biomejs/cli-win32-arm64" "2.3.4"
+    "@biomejs/cli-win32-x64" "2.3.4"
+
+"@biomejs/cli-darwin-arm64@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-darwin-arm64/-/cli-darwin-arm64-2.3.4.tgz#461ab7a4f4a55173f75c634e1fd3fba591252755"
+  integrity sha512-w40GvlNzLaqmuWYiDU6Ys9FNhJiclngKqcGld3iJIiy2bpJ0Q+8n3haiaC81uTPY/NA0d8Q/I3Z9+ajc14102Q==
+
+"@biomejs/cli-darwin-x64@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-darwin-x64/-/cli-darwin-x64-2.3.4.tgz#e42edafe2003c7f73d604263b93a972a1ebae02c"
+  integrity sha512-3s7TLVtjJ7ni1xADXsS7x7GMUrLBZXg8SemXc3T0XLslzvqKj/dq1xGeBQ+pOWQzng9MaozfacIHdK2UlJ3jGA==
+
+"@biomejs/cli-linux-arm64-musl@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-arm64-musl/-/cli-linux-arm64-musl-2.3.4.tgz#57851b3d40375d8a77020704e59232c05c4a1dca"
+  integrity sha512-IruVGQRwMURivWazchiq7gKAqZSFs5so6gi0hJyxk7x6HR+iwZbO2IxNOqyLURBvL06qkIHs7Wffl6Bw30vCbQ==
+
+"@biomejs/cli-linux-arm64@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-arm64/-/cli-linux-arm64-2.3.4.tgz#f1b3f72bc475765aa1131d1d5b7c2ec6b1ccb736"
+  integrity sha512-y7efHyyM2gYmHy/AdWEip+VgTMe9973aP7XYKPzu/j8JxnPHuSUXftzmPhkVw0lfm4ECGbdBdGD6+rLmTgNZaA==
+
+"@biomejs/cli-linux-x64-musl@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-x64-musl/-/cli-linux-x64-musl-2.3.4.tgz#31a562bafd207e7ca639286c792b3a7b5307f80f"
+  integrity sha512-mzKFFv/w66e4/jCobFmD3kymCqG+FuWE7sVa4Yjqd9v7qt2UhXo67MSZKY9Ih18V2IwPzRKQPCw6KwdZs6AXSA==
+
+"@biomejs/cli-linux-x64@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-linux-x64/-/cli-linux-x64-2.3.4.tgz#15db914734dfd1a9ced1281efd7dbb7be50de45e"
+  integrity sha512-gKfjWR/6/dfIxPJCw8REdEowiXCkIpl9jycpNVHux8aX2yhWPLjydOshkDL6Y/82PcQJHn95VCj7J+BRcE5o1Q==
+
+"@biomejs/cli-win32-arm64@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-win32-arm64/-/cli-win32-arm64-2.3.4.tgz#9e5a9b517699f12f94194c53338d6feb11c59ffc"
+  integrity sha512-5TJ6JfVez+yyupJ/iGUici2wzKf0RrSAxJhghQXtAEsc67OIpdwSKAQboemILrwKfHDi5s6mu7mX+VTCTUydkw==
+
+"@biomejs/cli-win32-x64@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@biomejs/cli-win32-x64/-/cli-win32-x64-2.3.4.tgz#2133a83e4ee05a7f14a29ea7420caece8c828198"
+  integrity sha512-FGCijXecmC4IedQ0esdYNlMpx0Jxgf4zceCaMu6fkjWyjgn50ZQtMiqZZQ0Q/77yqPxvtkgZAvt5uGw0gAAjig==
+
 "@eslint-community/eslint-utils@^4.1.2", "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0", "@eslint-community/eslint-utils@^4.5.0", "@eslint-community/eslint-utils@^4.7.0":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.7.0.tgz#607084630c6c033992a082de6e6fbc1a8b52175a"
@@ -1674,6 +1728,11 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
+
+"@shopify/flash-list@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@shopify/flash-list/-/flash-list-2.2.0.tgz#bafd714576182681cba25fb13195dee19f5ca521"
+  integrity sha512-mL61IofcfBNRZ/qazIf+pghGULkcZUQ7EZNldH1JBbIjtDb25ADSiQrt62ZTnRz0H5+bPFEZUmN9+WChHzX8pw==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"

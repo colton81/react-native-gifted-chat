@@ -1,3 +1,3 @@
 export interface TypingIndicatorProps {
-  isTyping?: boolean
+	isTyping?: boolean;
 }

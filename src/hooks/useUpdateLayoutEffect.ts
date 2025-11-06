@@ -1,4 +1,4 @@
-import { DependencyList, useLayoutEffect, useRef } from 'react'
+import { DependencyList, useLayoutEffect, useRef } from "react";
 
 /**
  * A custom useEffect hook that only triggers on updates, not on initial mount
@@ -6,16 +6,18 @@ import { DependencyList, useLayoutEffect, useRef } from 'react'
  * @param {()=>void} effect the function to call
  * @param {DependencyList} dependencies the state(s) that fires the update
  */
-export function useUpdateLayoutEffect (
+export function useUpdateLayoutEffect(
   effect: () => void,
   dependencies: DependencyList = []
 ) {
-  const isInitialMount = useRef(true)
+  const isInitialMount = useRef(true);
 
   useLayoutEffect(() => {
-    if (isInitialMount.current)
-      isInitialMount.current = false
-    else
-      effect()
-  }, dependencies)
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      effect();
+    }
+    // biome-ignore lint/correctness/useExhaustiveDependencies: not dealing with this
+  }, dependencies);
 }

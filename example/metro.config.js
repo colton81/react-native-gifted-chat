@@ -1,39 +1,33 @@
-/**
- * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
-*
-* @type {import('metro-config').MetroConfig}
-*/
+// Learn more https://docs.expo.io/guides/customizing-metro
+/** biome-ignore-all lint/style/noCommonJs: <explanation> */
+const { getDefaultConfig } = require("expo/metro-config");
+const path = require("path");
+/** @type {import('expo/metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname);
+config.resolver.blockList = [
+	...Array.from(config.resolver.blockList ?? []),
+	new RegExp(path.resolve("..", "node_modules", "react")),
+	new RegExp(path.resolve("..", "node_modules", "react-native")),
+	new RegExp(path.resolve("..", "node_modules", "@react-navigation")),
+];
 
-/* eslint-disable @typescript-eslint/no-require-imports */
-const { mergeConfig } = require('@react-native/metro-config')
-const { getDefaultConfig } = require('@expo/metro-config')
-const path = require('path')
-// const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro-config')
+config.resolver.extraNodeModules = {
+	get: (target, name) => {
+		// console.log(`example/metro name: ${name}`, Object.prototype.hasOwnProperty.call(target, name))
+		if (Object.hasOwn(target, name)) {
+			return target[name];
+		}
 
-/* eslint-enable @typescript-eslint/no-require-imports */
-const config = {
-  watchFolders: [
-    path.resolve(__dirname, '../src'),
-  ],
-  resolver: {
-    extraNodeModules: new Proxy(
-      {},
-      {
-        get: (target, name) => {
-          // console.log(`example/metro name: ${name}`, Object.prototype.hasOwnProperty.call(target, name))
-          if (Object.prototype.hasOwnProperty.call(target, name))
-            return target[name]
+		if (name === "react-native-gifted-chat") {
+			return path.join(process.cwd(), "../src");
+		}
 
-          if (name === 'react-native-gifted-chat')
-            return path.join(process.cwd(), '../src')
-
-          return path.join(process.cwd(), `node_modules/${name}`)
-        },
-      }
-    ),
-  },
-}
-
-// module.exports = wrapWithReanimatedMetroConfig(mergeConfig(getDefaultConfig(__dirname), config))
-module.exports = mergeConfig(getDefaultConfig(__dirname), config)
+		return path.join(process.cwd(), `node_modules/${name}`);
+	},
+};
+config.resolver.nodeModulesPaths = [
+	path.resolve(__dirname, "./node_modules"),
+	path.resolve(__dirname, "../node_modules"),
+];
+config.watchFolders = [path.resolve(__dirname, "../src")];
+module.exports = config;
