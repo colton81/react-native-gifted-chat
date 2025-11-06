@@ -81,7 +81,7 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
     }),
     onInputTextChanged = null,
     maxInputLength = null,
-    inverted = true,
+    inverted = false,
     minComposerHeight = MIN_COMPOSER_HEIGHT,
     maxComposerHeight = MAX_COMPOSER_HEIGHT,
     isKeyboardInternallyHandled = true,
@@ -465,7 +465,7 @@ function GiftedChatWrapper<TMessage extends IMessage = IMessage>(
 GiftedChatWrapper.append = <TMessage extends IMessage>(
   currentMessages: TMessage[] = [],
   messages: TMessage[],
-  inverted = true,
+  inverted = false,
 ) => {
   if (!Array.isArray(messages)) { messages = [messages]; }
 
@@ -477,7 +477,7 @@ GiftedChatWrapper.append = <TMessage extends IMessage>(
 GiftedChatWrapper.prepend = <TMessage extends IMessage>(
   currentMessages: TMessage[] = [],
   messages: TMessage[],
-  inverted = true,
+  inverted = false,
 ) => {
   if (!Array.isArray(messages)) { messages = [messages]; }
 
