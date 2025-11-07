@@ -339,7 +339,9 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
   }, [infiniteScroll, loadEarlier, onLoadEarlier, isLoadingEarlier]);
 
   const keyExtractor = useCallback(
-    (item: unknown) => (item as TMessage)._id.toString(),
+    (item: TMessage, index: number) => {
+      return `${item._id}-${item.createdAt}-${index}`
+    },
     [],
   );
 
@@ -351,52 +353,52 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
   //     // @ts-expect-error - current message does exist
   //     const item = firstChild?.props?.currentMessage as IMessage | undefined;
 
-  //     // const handleOnLayout = (event: LayoutChangeEvent) => {
-  //     //   onLayoutProp?.(event);
+  //     const handleOnLayout = (event: LayoutChangeEvent) => {
+  //       onLayoutProp?.(event);
 
-  //     //   if (!item) { return; }
+  //       if (!item) { return; }
 
-  //     //   const { y, height } = event.nativeEvent.layout;
-  //     //   const id = item._id.toString();
+  //       const { y, height } = event.nativeEvent.layout;
+  //       const id = item._id.toString();
 
-  //     //   const newValue = {
-  //     //     y,
-  //     //     height,
-  //     //     createdAt: new Date(item.createdAt).getTime(),
-  //     //   };
+  //       const newValue = {
+  //         y,
+  //         height,
+  //         createdAt: new Date(item.createdAt).getTime(),
+  //       };
 
-  //     //   daysPositions.modify((value) => {
-  //     //     "worklet";
+  //       daysPositions.modify((value) => {
+  //         "worklet";
 
-  //     //     const isSameDay = (date1: number, date2: number) => {
-  //     //       const d1 = new Date(date1);
-  //     //       const d2 = new Date(date2);
+  //         const isSameDay = (date1: number, date2: number) => {
+  //           const d1 = new Date(date1);
+  //           const d2 = new Date(date2);
 
-  //     //       return (
-  //     //         d1.getDate() === d2.getDate() &&
-  //     //         d1.getMonth() === d2.getMonth() &&
-  //     //         d1.getFullYear() === d2.getFullYear()
-  //     //       );
-  //     //     };
+  //           return (
+  //             d1.getDate() === d2.getDate() &&
+  //             d1.getMonth() === d2.getMonth() &&
+  //             d1.getFullYear() === d2.getFullYear()
+  //           );
+  //         };
 
-  //     //     for (const [key, item] of Object.entries(value)) {
-  //     //       if (
-  //     //         isSameDay(newValue.createdAt, item.createdAt) &&
-  //     //         (inverted ? item.y <= newValue.y : item.y >= newValue.y)
-  //     //       ) {
-  //     //         delete value[key];
-  //     //         break;
-  //     //       }
-  //     //     }
+  //         for (const [key, item] of Object.entries(value)) {
+  //           if (
+  //             isSameDay(newValue.createdAt, item.createdAt) &&
+  //             (inverted ? item.y <= newValue.y : item.y >= newValue.y)
+  //           ) {
+  //             delete value[key];
+  //             break;
+  //           }
+  //         }
 
-  //     //     // @ts-expect-error: https://docs.swmansion.com/react-native-reanimated/docs/core/useSharedValue#remarks
-  //     //     value[id] = newValue;
-  //     //     return value;
-  //     //   });
-  //     // };
+  //         // @ts-expect-error: https://docs.swmansion.com/react-native-reanimated/docs/core/useSharedValue#remarks
+  //         value[id] = newValue;
+  //         return value;
+  //       });
+  //     };
 
   //     return (
-  //       <View {...props} >
+  //       <View {...props} onLayout={handleOnLayout} >
   //         {children}
   //       </View>
   //     );
@@ -460,13 +462,14 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
         onScroll={scrollHandler}
         scrollEventThrottle={1}
         onStartReached={onStartReached}
-        onStartReachedThreshold={0.1}
+        onStartReachedThreshold={0.05}
 
         {...listViewProps}
         onLayout={onLayoutList}
         // CellRendererComponent={renderCell}
         maintainVisibleContentPosition={{
           autoscrollToBottomThreshold: 0.2,
+          autoscrollToTopThreshold: 0.2,
           startRenderingFromBottom: true,
         }}
       />
