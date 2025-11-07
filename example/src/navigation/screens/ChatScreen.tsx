@@ -259,7 +259,6 @@ const ChatScreenContent: React.FC<ChatScreenProps> = () => {
 
         // Flatten all pages and reverse to get newest first
         const allMessages = data.pages.flatMap(page => page.messages);
-        console.log("All Messages:", allMessages);
 
         // GiftedChat expects newest messages first
         return allMessages.sort((a, b) => {
@@ -358,6 +357,7 @@ const ChatScreenContent: React.FC<ChatScreenProps> = () => {
 
     // Load earlier messages when scrolling to the top
     const onLoadEarlier = useCallback(() => {
+        console.log("Loading earlier messages...");
         if (hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
         }
@@ -491,9 +491,11 @@ const ChatScreenContent: React.FC<ChatScreenProps> = () => {
                         left: { color: "#8E8E93" },
                         right: { color: "#FFFFFF" },
                     }}
+                    infiniteScroll={true}
                     loadEarlier={hasNextPage}
                     onLoadEarlier={onLoadEarlier}
                     isLoadingEarlier={isFetchingNextPage}
+
                 />
             </KeyboardAvoidingView>
         </View>
