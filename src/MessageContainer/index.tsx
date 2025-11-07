@@ -326,7 +326,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     ],
   );
 
-  const onEndReached = useCallback(() => {
+  const onStartReached = useCallback(() => {
     if (
       infiniteScroll &&
       loadEarlier &&
@@ -459,8 +459,8 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
         ListHeaderComponent={ListHeaderComponent}
         onScroll={scrollHandler}
         scrollEventThrottle={1}
-        onEndReached={onEndReached}
-        onEndReachedThreshold={0.1}
+        onStartReached={onStartReached}
+        onStartReachedThreshold={0.1}
 
         {...listViewProps}
         onLayout={onLayoutList}
