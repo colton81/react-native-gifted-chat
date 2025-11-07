@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import {
-  CellRendererProps,
   LayoutChangeEvent,
   Platform,
   Pressable,
@@ -32,7 +31,7 @@ import Item from "./components/Item";
 import { ItemProps } from "./components/Item/types";
 import styles from "./styles";
 import { DaysPositions, MessageContainerProps } from "./types";
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export * from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,6 +65,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     scrollToBottomComponent: scrollToBottomComponentProp,
     renderDay: renderDayProp,
   } = props;
+  const insets = useSafeAreaInsets();
   const scrollToBottomOpacity = useSharedValue(0);
   const isScrollingDown = useSharedValue(false);
   const lastScrolledY = useSharedValue(0);
@@ -221,10 +221,10 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
       const { messages, ...restProps } = props;
 
       if (messages && user) {
-        const previousMessage =
-          (inverted ? messages[index + 1] : messages[index - 1]) || {};
-        const nextMessage =
-          (inverted ? messages[index - 1] : messages[index + 1]) || {};
+        const previousMessage = messages[index - 1]
+        //(inverted ? messages[index + 1] : messages[index - 1]) || {};
+        const nextMessage = messages[index + 1]
+        //(inverted ? messages[index - 1] : messages[index + 1]) || {};
 
         const messageProps: ItemProps<TMessage> = {
           ...restProps,
@@ -242,7 +242,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
 
       return null;
     },
-    [props, inverted, scrolledY, daysPositions, listHeight, user],
+    [props, scrolledY, daysPositions, listHeight, user],
   );
 
   const renderChatEmpty = useCallback(() => {
@@ -308,7 +308,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     (event: LayoutChangeEvent) => {
       listHeight.value = event.nativeEvent.layout.height;
 
-      if (!inverted && messages?.length && isScrollToBottomEnabled) {
+      if (messages?.length && isScrollToBottomEnabled) {
         setTimeout(() => {
           doScrollToBottom(false);
         }, 500);
@@ -317,7 +317,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
       listViewProps?.onLayout?.(event);
     },
     [
-      inverted,
+
       messages,
       doScrollToBottom,
       listHeight,
@@ -343,66 +343,66 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     [],
   );
 
-  const renderCell = useCallback(
-    (props: CellRendererProps<unknown>) => {
-      const { onLayout: onLayoutProp, children } = props;
-      const childArray = React.Children.toArray(children);
-      const firstChild = childArray[0] as React.ReactElement;
-      // @ts-expect-error - current message does exist
-      const item = firstChild?.props?.currentMessage as IMessage | undefined;
+  // const renderCell = useCallback(
+  //   (props: CellRendererProps<unknown>) => {
+  //     const { onLayout: onLayoutProp, children } = props;
+  //     const childArray = React.Children.toArray(children);
+  //     const firstChild = childArray[0] as React.ReactElement;
+  //     // @ts-expect-error - current message does exist
+  //     const item = firstChild?.props?.currentMessage as IMessage | undefined;
 
-      const handleOnLayout = (event: LayoutChangeEvent) => {
-        onLayoutProp?.(event);
+  //     // const handleOnLayout = (event: LayoutChangeEvent) => {
+  //     //   onLayoutProp?.(event);
 
-        if (!item) { return; }
+  //     //   if (!item) { return; }
 
-        const { y, height } = event.nativeEvent.layout;
-        const id = item._id.toString();
+  //     //   const { y, height } = event.nativeEvent.layout;
+  //     //   const id = item._id.toString();
 
-        const newValue = {
-          y,
-          height,
-          createdAt: new Date(item.createdAt).getTime(),
-        };
+  //     //   const newValue = {
+  //     //     y,
+  //     //     height,
+  //     //     createdAt: new Date(item.createdAt).getTime(),
+  //     //   };
 
-        daysPositions.modify((value) => {
-          "worklet";
+  //     //   daysPositions.modify((value) => {
+  //     //     "worklet";
 
-          const isSameDay = (date1: number, date2: number) => {
-            const d1 = new Date(date1);
-            const d2 = new Date(date2);
+  //     //     const isSameDay = (date1: number, date2: number) => {
+  //     //       const d1 = new Date(date1);
+  //     //       const d2 = new Date(date2);
 
-            return (
-              d1.getDate() === d2.getDate() &&
-              d1.getMonth() === d2.getMonth() &&
-              d1.getFullYear() === d2.getFullYear()
-            );
-          };
+  //     //       return (
+  //     //         d1.getDate() === d2.getDate() &&
+  //     //         d1.getMonth() === d2.getMonth() &&
+  //     //         d1.getFullYear() === d2.getFullYear()
+  //     //       );
+  //     //     };
 
-          for (const [key, item] of Object.entries(value)) {
-            if (
-              isSameDay(newValue.createdAt, item.createdAt) &&
-              (inverted ? item.y <= newValue.y : item.y >= newValue.y)
-            ) {
-              delete value[key];
-              break;
-            }
-          }
+  //     //     for (const [key, item] of Object.entries(value)) {
+  //     //       if (
+  //     //         isSameDay(newValue.createdAt, item.createdAt) &&
+  //     //         (inverted ? item.y <= newValue.y : item.y >= newValue.y)
+  //     //       ) {
+  //     //         delete value[key];
+  //     //         break;
+  //     //       }
+  //     //     }
 
-          // @ts-expect-error: https://docs.swmansion.com/react-native-reanimated/docs/core/useSharedValue#remarks
-          value[id] = newValue;
-          return value;
-        });
-      };
+  //     //     // @ts-expect-error: https://docs.swmansion.com/react-native-reanimated/docs/core/useSharedValue#remarks
+  //     //     value[id] = newValue;
+  //     //     return value;
+  //     //   });
+  //     // };
 
-      return (
-        <View {...props} onLayout={handleOnLayout}>
-          {children}
-        </View>
-      );
-    },
-    [daysPositions, inverted],
-  );
+  //     return (
+  //       <View {...props} >
+  //         {children}
+  //       </View>
+  //     );
+  //   },
+  //   [daysPositions, inverted],
+  // );
 
   const scrollHandler = useAnimatedScrollHandler(
     {
@@ -451,7 +451,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         automaticallyAdjustContentInsets={true}
-        contentInset={{ top: 0, bottom: 25 }}
+        contentInset={{ top: insets.top, bottom: insets.bottom }}
         contentInsetAdjustmentBehavior={"automatic"}
         {...invertibleScrollViewProps}
         ListEmptyComponent={renderChatEmpty}
@@ -461,9 +461,10 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
         scrollEventThrottle={1}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.1}
+
         {...listViewProps}
         onLayout={onLayoutList}
-        CellRendererComponent={renderCell}
+        // CellRendererComponent={renderCell}
         maintainVisibleContentPosition={{
           autoscrollToBottomThreshold: 0.2,
           startRenderingFromBottom: true,

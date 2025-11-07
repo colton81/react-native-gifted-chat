@@ -1,7 +1,7 @@
 import { createNativeBottomTabNavigator } from "@bottom-tabs/react-navigation";
 import {
-	createStaticNavigation,
-	StaticParamList,
+  createStaticNavigation,
+  StaticParamList,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -15,62 +15,63 @@ import { Home } from "./screens/Home";
 import { NotFound } from "./screens/NotFound";
 
 const ChatStack = createNativeStackNavigator({
-	screens: {
-		Chat: {
-			screen: ChatScreen,
-			options: {
-				title: "Chat",
-				headerShown: false,
-			},
-		},
-	},
+  screens: {
+    Chat: {
+      screen: ChatScreen,
+      options: {
+        title: "Chat",
+        headerShown: true,
+        headerTransparent: true
+      },
+    },
+  },
 });
 const ChatNonNativeStack = createStackNavigator({
-	screens: {
-		Chat: {
-			screen: ChatScreen,
-			options: {
-				title: "Chat",
-			},
-		},
-	},
+  screens: {
+    Chat: {
+      screen: ChatScreen,
+      options: {
+        title: "Chat",
+      },
+    },
+  },
 });
 const HomeTabs = createNativeBottomTabNavigator({
-	screens: {
-		NativeChat: {
-			screen: ChatStack,
-			options: {
-				tabBarIcon: () => ({ sfSymbol: "message.fill" }),
-			},
-		},
-		NonNativeChat: {
-			screen: ChatScreen,
-			options: {
-				headerShown: false,
-				tabBarIcon: () => ({ sfSymbol: "gear" }),
-			},
-		},
-	},
+  screens: {
+    NativeChat: {
+      screen: ChatStack,
+      options: {
+        tabBarIcon: () => ({ sfSymbol: "message.fill" }),
+      },
+    },
+    NonNativeChat: {
+      screen: ChatScreen,
+      options: {
+        headerShown: false,
+        tabBarIcon: () => ({ sfSymbol: "gear" }),
+      },
+    },
+  },
 });
 
 const RootStack = createNativeStackNavigator({
-	screens: {
-		HomeTabs: {
-			screen: HomeTabs,
-			options: {
-				headerShown: false,
-			},
-		},
-		NotFound: {
-			screen: NotFound,
-			options: {
-				title: "404",
-			},
-			linking: {
-				path: "*",
-			},
-		},
-	},
+  screens: {
+    HomeTabs: {
+      screen: HomeTabs,
+      options: {
+        headerShown: false,
+      },
+    },
+    NotFound: {
+      screen: NotFound,
+      options: {
+        title: "404",
+      },
+      linking: {
+        path: "*",
+      },
+    },
+  },
 });
 
 export const Navigation = createStaticNavigation(RootStack);
@@ -78,7 +79,7 @@ export const Navigation = createStaticNavigation(RootStack);
 type RootStackParamList = StaticParamList<typeof RootStack>;
 
 declare global {
-	namespace ReactNavigation {
-		interface RootParamList extends RootStackParamList {}
-	}
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList { }
+  }
 }

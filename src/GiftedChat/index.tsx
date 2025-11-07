@@ -98,6 +98,9 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
     () => props.textInputRef || createRef<TextInput>(),
     [props.textInputRef],
   );
+  useEffect(() => {
+    console.log("TextInput Ref: ", textInputRef);
+  }, [textInputRef]);
 
   const isTextInputWasFocused: RefObject<boolean> = useRef(false);
 
@@ -232,6 +235,7 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
   }, [onInputTextChanged]);
 
   const resetInputToolbar = useCallback(() => {
+    console.log("Resetting Input Toolbar");
     textInputRef.current?.clear();
 
     notifyInputTextReset();
@@ -340,9 +344,10 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
       textInputProps: {
         ...textInputProps,
         ref: textInputRef,
-        maxLength: isTypingDisabled ? 0 : maxInputLength,
+        maxLength: isTypingDisabled ? 0 : maxInputLength ?? undefined,
       },
     };
+    console.log("Typing disabled:", isTypingDisabled);
 
     if (renderInputToolbar) { return renderInputToolbar(inputToolbarProps); }
 

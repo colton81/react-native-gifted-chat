@@ -18,6 +18,7 @@ import {
 } from "../Item";
 import styles from "./styles";
 import { DayAnimatedProps } from "./types";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export * from "./types";
 
@@ -30,6 +31,7 @@ const DayAnimated = ({
 	isLoadingEarlier,
 	...rest
 }: DayAnimatedProps) => {
+	const insets = useSafeAreaInsets();
 	const opacity = useSharedValue(0);
 	const fadeOutOpacityTimeoutId = useSharedValue<
 		ReturnType<typeof setTimeout> | undefined
@@ -45,7 +47,7 @@ const DayAnimated = ({
 
 	const [createdAt, setCreatedAt] = useState<number | undefined>();
 
-	const dayTopOffset = useMemo(() => 10, []);
+	const dayTopOffset = useMemo(() => insets.top + 50, [insets]);
 	const dayBottomMargin = useMemo(() => 10, []);
 	const absoluteScrolledPositionToBottomOfDay =
 		useAbsoluteScrolledPositionToBottomOfDay(

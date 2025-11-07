@@ -1,13 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { FlashListProps } from "@shopify/flash-list";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-    FlatListProps,
     KeyboardAvoidingView,
     Platform,
-    SafeAreaView,
     StyleSheet,
     View,
+    ActivityIndicator,
 } from "react-native";
 import {
     Bubble,
@@ -17,146 +16,93 @@ import {
     Send,
     SystemMessage,
 } from "react-native-gifted-chat";
+import {
+    useInfiniteQuery,
+    useMutation,
+    useQueryClient,
+    QueryClient,
+    QueryClientProvider,
+} from "@tanstack/react-query";
 
-interface ChatScreenProps {
-    // Add any props you need
+// Types
+interface ChatMessage extends IMessage {
+    _id: string | number;
+    text: string;
+    createdAt: Date | number;
+    user: {
+        _id: string | number;
+        name?: string;
+        avatar?: string;
+    };
+    system?: boolean;
 }
 
-const ChatScreen: React.FC<ChatScreenProps> = () => {
-    const [messages, setMessages] = useState<IMessage[]>([]);
-    const [isTyping, setIsTyping] = useState(false);
-    const [isLoadingEarlier, setIsLoadingEarlier] = useState(false);
-    const [messageCounter, setMessageCounter] = useState(5);
+interface MessagesResponse {
+    messages: ChatMessage[];
+    nextCursor: string | null;
+    hasMore: boolean;
+}
 
-    // Initialize with some example messages
-    useEffect(() => {
-        setMessages([
-            {
-                _id: 1,
-                text: "Hello! How can I help you today?",
-                createdAt: new Date(),
-                user: {
-                    _id: 2,
-                    name: "Support Agent",
-                    avatar: "https://placeimg.com/140/140/any",
-                },
-            },
-            {
-                _id: 2,
-                text: "Welcome to the chat!",
-                createdAt: new Date(Date.now() - 60000),
-                system: true,
-                user: {
-                    _id: 2,
-                    name: "Support Agent",
-                    avatar: "https://placeimg.com/140/140/any",
-                },
-            },
-            {
-                _id: 3,
-                text: "Feel free to ask any questions.",
-                createdAt: new Date(Date.now() - 120000),
-                user: {
-                    _id: 2,
-                    name: "Support Agent",
-                    avatar: "https://placeimg.com/140/140/any",
-                },
-            },
-            {
-                _id: 4,
-                text: "This is a sample message.",
-                createdAt: new Date(Date.now() - 180000),
-                user: {
-                    _id: 2,
-                    name: "Support Agent",
-                    avatar: "https://placeimg.com/140/140/any",
-                },
-            },
-        ]);
-    }, []);
+// Mock API functions
+const mockApi = {
+    // Simulate fetching paginated messages
+    fetchMessages: async ({ cursor }: { cursor?: string }): Promise<MessagesResponse> => {
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 800));
 
-    // Auto-add a new message every 3 seconds
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const autoMessages = [
-                "This is an automated message",
-                "Just checking in!",
-                "How are things going?",
-                "Let me know if you need help",
-                "Here to assist you!",
-                "Any questions?",
-                "Hope you're having a great day!",
-                "Feel free to reach out anytime",
-            ];
+        const pageSize = 20;
+        const cursorNum = cursor ? parseInt(cursor) : 0;
 
-            const randomMessage =
-                autoMessages[Math.floor(Math.random() * autoMessages.length)];
+        // Generate mock messages based on cursor
+        const messages: ChatMessage[] = [];
+        const startId = cursorNum * pageSize;
 
-            const newMessage: IMessage = {
-                _id: messageCounter,
-                text: randomMessage,
-                createdAt: new Date().setSeconds(
-                    new Date().getSeconds() + (messageCounter * 10) * (messageCounter * 2),
-                ),
-                user: {
-                    _id: 2,
-                    name: "Support Agent",
-                    avatar: "https://placeimg.com/140/140/any",
-                },
-            };
+        for (let i = 0; i < pageSize; i++) {
+            const messageId = startId + i;
+            const timestamp = Date.now() - (messageId * 1200000); // Each message is 1 minute older
 
-            setMessages((previousMessages) =>
-                GiftedChat.append(previousMessages, [newMessage]),
-            );
-            setMessageCounter((prev) => prev + 1);
-        }, 3000);
+            // Add variety to messages
+            if (messageId === 0) {
+                // Most recent message
+                messages.push({
+                    _id: messageId,
+                    text: "Hello! How can I help you today?",
+                    createdAt: new Date(timestamp),
+                    user: {
+                        _id: 2,
+                        name: "Support Agent",
+                        avatar: "https://placeimg.com/140/140/any",
+                    },
+                });
+            } else if (messageId % 10 === 0) {
+                // System messages every 10 messages
+                messages.push({
+                    _id: messageId,
+                    text: `System notification #${messageId / 10}`,
+                    createdAt: new Date(timestamp),
+                    system: true,
+                    user: {
+                        _id: "system",
+                        name: "System",
+                    },
+                });
+            } else {
+                // Regular messages
+                const messageTemplates = [
+                    "Thanks for reaching out!",
+                    "Let me check that for you.",
+                    "Here's what I found:",
+                    "Is there anything else you need?",
+                    "I understand your concern.",
+                    "That's a great question!",
+                    "Let me explain how this works.",
+                    "Feel free to ask any questions.",
+                ];
 
-        return () => clearInterval(interval);
-    }, [messageCounter]);
-
-    const onSend = useCallback((newMessages: IMessage[] = []) => {
-        setMessages((previousMessages) =>
-            GiftedChat.append(previousMessages, newMessages),
-        );
-
-        // Simulate a response after 1 second
-        setIsTyping(true);
-        setTimeout(() => {
-            setIsTyping(false);
-            const replyMessage: IMessage = {
-                _id: Math.random().toString(),
-                text: "Thanks for your message! This is an automated response.",
-                createdAt: new Date(),
-                user: {
-                    _id: 2,
-                    name: "Support Agent",
-                    avatar: "https://placeimg.com/140/140/any",
-                },
-            };
-            setMessages((previousMessages) =>
-                GiftedChat.append(previousMessages, [replyMessage]),
-            );
-        }, 1500);
-    }, []);
-
-    // Load earlier messages when scrolling to the top
-    const onLoadEarlier = useCallback(() => {
-        setIsLoadingEarlier(true);
-
-        // Simulate loading older messages after a delay
-        setTimeout(() => {
-            const olderMessages: IMessage[] = [];
-            const currentOldestMessage = messages[messages.length - 1];
-            const oldestDate = currentOldestMessage?.createdAt
-                ? new Date(currentOldestMessage.createdAt).getTime()
-                : Date.now();
-
-            // Generate 5 older messages
-            for (let i = 0; i < 5; i++) {
-                olderMessages.push({
-                    _id: messageCounter + i,
-                    text: `This is an older message ${i + 1}`,
-                    createdAt: new Date(oldestDate - (i + 1) * 60000),
+                messages.push({
+                    _id: messageId,
+                    text: `${messageTemplates[messageId % messageTemplates.length]} (Message #${messageId})`,
+                    createdAt: new Date(timestamp),
                     user: {
                         _id: 2,
                         name: "Support Agent",
@@ -164,14 +110,258 @@ const ChatScreen: React.FC<ChatScreenProps> = () => {
                     },
                 });
             }
+        }
 
-            setMessages((previousMessages) =>
-                GiftedChat.prepend(previousMessages, olderMessages),
-            );
-            setMessageCounter((prev) => prev + 5);
-            setIsLoadingEarlier(false);
-        }, 1000);
-    }, [messages, messageCounter]);
+        // Simulate having 100 total messages (5 pages)
+        const hasMore = cursorNum < 4;
+        const nextCursor = hasMore ? String(cursorNum + 1) : null;
+
+        return {
+            messages,
+            nextCursor,
+            hasMore,
+        };
+    },
+
+    // Simulate sending a message
+    sendMessage: async (message: ChatMessage): Promise<ChatMessage> => {
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Return the message with server-assigned properties
+        return {
+            ...message,
+            _id: `sent_${Date.now()}`,
+            createdAt: new Date(),
+        };
+    },
+
+    // Simulate getting a bot response
+    getBotResponse: async (userMessage: string): Promise<ChatMessage> => {
+        // Simulate processing delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        const responses = [
+            "Thanks for your message! I've received it successfully.",
+            "I understand what you're saying. Let me help you with that.",
+            "That's interesting! Tell me more about it.",
+            "I'll look into that for you right away.",
+            "Great question! Here's what I think...",
+        ];
+
+        return {
+            _id: `bot_${Date.now()}`,
+            text: responses[Math.floor(Math.random() * responses.length)],
+            createdAt: new Date(),
+            user: {
+                _id: 2,
+                name: "Support Agent",
+                avatar: "https://placeimg.com/140/140/any",
+            },
+        };
+    },
+};
+
+// Chat Screen Component
+interface ChatScreenProps {
+    // Add any props you need
+}
+
+const ChatScreenContent: React.FC<ChatScreenProps> = () => {
+    const [isTyping, setIsTyping] = useState(false);
+    const queryClient = useQueryClient();
+
+    // Fetch messages with infinite query
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading,
+        isError,
+        error,
+        refetch,
+    } = useInfiniteQuery({
+        queryKey: ["chatMessages"],
+        queryFn: ({ pageParam }) => mockApi.fetchMessages({ cursor: pageParam }),
+        initialPageParam: undefined as string | undefined,
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        staleTime: 1000 * 60 * 5, // Consider data stale after 5 minutes
+        gcTime: 1000 * 60 * 10, // Keep in cache for 10 minutes
+    });
+
+    // Send message mutation
+    const sendMessageMutation = useMutation({
+        mutationFn: mockApi.sendMessage,
+        onMutate: async (newMessage) => {
+            // Cancel any outgoing refetches
+            await queryClient.cancelQueries({ queryKey: ["chatMessages"] });
+
+            // Snapshot the previous value
+            const previousMessages = queryClient.getQueryData(["chatMessages"]);
+
+            // Optimistically update to the new value
+            queryClient.setQueryData(["chatMessages"], (old: any) => {
+                if (!old) return old;
+
+                const newPages = [...old.pages];
+                newPages[0] = {
+                    ...newPages[0],
+                    messages: [newMessage, ...newPages[0].messages],
+                };
+
+                return {
+                    ...old,
+                    pages: newPages,
+                };
+            });
+
+            // Return a context object with the snapshotted value
+            return { previousMessages };
+        },
+        onError: (err, newMessage, context) => {
+            // If the mutation fails, use the context returned from onMutate to roll back
+            if (context?.previousMessages) {
+                queryClient.setQueryData(["chatMessages"], context.previousMessages);
+            }
+        },
+        onSuccess: async (sentMessage) => {
+            // Trigger bot response
+            setIsTyping(true);
+
+            try {
+                const botResponse = await mockApi.getBotResponse(sentMessage.text);
+
+                // Add bot response to the messages
+                queryClient.setQueryData(["chatMessages"], (old: any) => {
+                    if (!old) return old;
+
+                    const newPages = [...old.pages];
+                    newPages[0] = {
+                        ...newPages[0],
+                        messages: [botResponse, ...newPages[0].messages],
+                    };
+
+                    return {
+                        ...old,
+                        pages: newPages,
+                    };
+                });
+            } finally {
+                setIsTyping(false);
+            }
+        },
+    });
+
+    // Transform paginated data to flat array for GiftedChat
+    const messages = useMemo(() => {
+        if (!data?.pages) return [];
+
+        // Flatten all pages and reverse to get newest first
+        const allMessages = data.pages.flatMap(page => page.messages);
+        console.log("All Messages:", allMessages);
+
+        // GiftedChat expects newest messages first
+        return allMessages.sort((a, b) => {
+            const aTime = new Date(a.createdAt).getTime();
+            const bTime = new Date(b.createdAt).getTime();
+            return aTime - bTime;
+        });
+    }, [data]);
+
+    // Auto-add new messages periodically (simulate real-time updates)
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const autoMessages = [
+                "📢 New notification!",
+                "💬 Someone joined the chat",
+                "✨ Special announcement",
+                "🔔 Reminder: Check your settings",
+                "📧 You have a new message",
+                "🚀 Update: New features available",
+                "🎉 Congrats! You've unlocked a badge",
+                "⚠️ Alert: Please verify your email",
+                "🔒 Security: Your password has been changed",
+                "🌟 Tip: Customize your profile for better experience",
+                "📅 Event: Don't miss our upcoming webinar",
+                "🛠️ Maintenance: Scheduled downtime tonight",
+                "💡 Did you know? You can use shortcuts",
+                "📊 Stats: Your activity summary is ready",
+                "🎁 Gift: Claim your reward now",
+                "📰 News: Latest updates in your feed",
+                "📍 Location: New places added to explore",
+                "🎶 Music: Check out the new playlist",
+                "📷 Photo: New images uploaded",
+                "🎬 Video: Watch the latest clips",
+                "🛍️ Shop: Check out the latest deals",
+                "🍔 Food: New recipes to try",
+                "🏆 Achievement: You've reached a new level!",
+                "📚 Learning: New courses available",
+                "🌐 Connection: New friends suggested",
+                "💼 Career: Job opportunities for you",
+                "🏡 Home: New listings in your area",
+                "🌍 Travel: Explore new destinations",
+                "💪 Fitness: New workout plans",
+                "🧘 Wellness: Tips for a healthier you",
+            ];
+
+            const randomMessage = autoMessages[Math.floor(Math.random() * autoMessages.length)];
+
+            const newMessage: ChatMessage = {
+                _id: `auto_${Date.now()}`,
+                text: randomMessage,
+                createdAt: new Date(),
+                user: {
+                    _id: 2,
+                    name: "Support Agent",
+                    avatar: "https://placeimg.com/140/140/any",
+                },
+            };
+
+            // Add to the first page of messages
+            queryClient.setQueryData(["chatMessages"], (old: any) => {
+                if (!old) return old;
+
+                const newPages = [...old.pages];
+                newPages[0] = {
+                    ...newPages[0],
+                    messages: [newMessage, ...newPages[0].messages],
+                };
+
+                return {
+                    ...old,
+                    pages: newPages,
+                };
+            });
+        }, 10000); // Every 10 seconds
+
+        return () => clearInterval(interval);
+    }, [queryClient]);
+
+    // Handle sending messages
+    const onSend = useCallback((newMessages: IMessage[] = []) => {
+        const message = newMessages[0];
+        if (message) {
+            const messageToSend: ChatMessage = {
+                ...message,
+                _id: `temp_${Date.now()}`,
+                createdAt: new Date(),
+                user: {
+                    _id: 1,
+                    name: "User",
+                },
+            };
+
+            sendMessageMutation.mutate(messageToSend);
+        }
+    }, [sendMessageMutation]);
+
+    // Load earlier messages when scrolling to the top
+    const onLoadEarlier = useCallback(() => {
+        if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+        }
+    }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
     // Custom bubble styling
     const renderBubble = (props: any) => {
@@ -224,30 +414,51 @@ const ChatScreen: React.FC<ChatScreenProps> = () => {
     const renderSystemMessage = (props: any) => {
         return <SystemMessage {...props} textStyle={styles.systemMessage} />;
     };
+
     const listProps: Partial<FlashListProps<IMessage>> = {
         contentInsetAdjustmentBehavior: "automatic",
+
         viewabilityConfig: {
             minimumViewTime: 200,
             viewAreaCoveragePercentThreshold: 0.1,
             waitForInteraction: false
         },
-        // onViewableItemsChanged,
         contentContainerStyle: {
             flexGrow: 1,
             justifyContent: "flex-start"
         },
         keyboardDismissMode: "interactive",
-        // Performance optimizations
-
         removeClippedSubviews: true,
-        //maxToRenderPerBatch: 20,
-        //updateCellsBatchingPeriod: 50,
-        //initialNumToRender: 20,
-        //getItemLayout: undefined, // Let FlatList calculate this for variable height messages
         onEndReachedThreshold: 0.9,
-        //contentInset: { top: Platform.OS === "ios" ? -bottomoffsetHeight - 30 : 500 },
-
     };
+
+    // Loading state
+    if (isLoading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#007AFF" />
+            </View>
+        );
+    }
+
+    // Error state
+    if (isError) {
+        return (
+            <View style={styles.errorContainer}>
+                <Ionicons name="alert-circle" size={48} color="#FF3B30" />
+                <View style={styles.errorText}>
+                    <Text style={styles.errorTitle}>Failed to load messages</Text>
+                    <Text style={styles.errorMessage}>
+                        {error?.message || "An unexpected error occurred"}
+                    </Text>
+                </View>
+                <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
+                    <Text style={styles.retryButtonText}>Retry</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView
@@ -280,26 +491,62 @@ const ChatScreen: React.FC<ChatScreenProps> = () => {
                         left: { color: "#8E8E93" },
                         right: { color: "#FFFFFF" },
                     }}
-                    loadEarlier={true}
+                    loadEarlier={hasNextPage}
                     onLoadEarlier={onLoadEarlier}
-                    isLoadingEarlier={isLoadingEarlier}
-                // Quick replies example (uncomment to use)
-                // quickReplyStyle={{
-                //   backgroundColor: '#007AFF',
-                // }}
-                // renderQuickReplies={(props) => (
-                //   <QuickReplies {...props} />
-                // )}
+                    isLoadingEarlier={isFetchingNextPage}
                 />
             </KeyboardAvoidingView>
         </View>
     );
 };
 
+// Add missing imports for Text and TouchableOpacity
+import { Text, TouchableOpacity } from "react-native";
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#FFFFFF",
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#FFFFFF",
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#FFFFFF",
+        padding: 20,
+    },
+    errorText: {
+        marginTop: 16,
+        alignItems: "center",
+    },
+    errorTitle: {
+        fontSize: 18,
+        fontWeight: "600",
+        color: "#000000",
+        marginBottom: 8,
+    },
+    errorMessage: {
+        fontSize: 14,
+        color: "#8E8E93",
+        textAlign: "center",
+    },
+    retryButton: {
+        marginTop: 24,
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        backgroundColor: "#007AFF",
+        borderRadius: 8,
+    },
+    retryButtonText: {
+        color: "#FFFFFF",
+        fontWeight: "600",
+        fontSize: 16,
     },
     sendButton: {
         marginRight: 10,
@@ -322,5 +569,26 @@ const styles = StyleSheet.create({
         fontWeight: "500",
     },
 });
+
+// Main component wrapped with QueryClient
+const ChatScreen: React.FC<ChatScreenProps> = (props) => {
+    const [queryClient] = useState(
+        () =>
+            new QueryClient({
+                defaultOptions: {
+                    queries: {
+                        retry: 2,
+                        refetchOnWindowFocus: false,
+                    },
+                },
+            })
+    );
+
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ChatScreenContent {...props} />
+        </QueryClientProvider>
+    );
+};
 
 export default ChatScreen;
