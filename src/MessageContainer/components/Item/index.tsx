@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useMemo } from "react";
-import { LayoutChangeEvent, View } from "react-native";
+import { LayoutChangeEvent, Text, View } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -170,9 +170,7 @@ const Item = <TMessage extends IMessage>(props: ItemProps<TMessage>) => {
   return (
     // do not remove key. it helps to get correct position of the day container
     <View key={props.currentMessage._id.toString()}>
-      <Animated.View style={style} onLayout={handleLayoutDayContainer}>
-        <DayWrapper {...(rest as MessageProps<TMessage>)} />
-      </Animated.View>
+
       {renderMessageProp ? (
         renderMessageProp(rest as MessageProps<TMessage>)
       ) : (

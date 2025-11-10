@@ -192,22 +192,7 @@ const DayAnimated = ({
 	return (
 		<Animated.View
 			style={[stylesCommon.centerItems, styles.dayAnimated, {
-				top: interpolate(
-					relativeScrolledPositionToBottomOfDay.value,
-					[
-						-dayTopOffset,
-						-0.0001,
-						0,
-						isLoadingEarlierAnim.value ? 0 : containerHeight.value + dayTopOffset,
-					],
-					[
-						dayTopOffset,
-						dayTopOffset,
-						-containerHeight.value,
-						isLoadingEarlierAnim.value ? -containerHeight.value : dayTopOffset,
-					],
-					"clamp",
-				)
+				top: 50 + insets.top
 			}]}
 			onLayout={handleLayout}
 		>
