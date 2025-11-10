@@ -92,6 +92,7 @@ export interface GiftedChatProps<TMessage extends IMessage> extends Partial<Mess
     renderMessageAudio?(props: MessageAudioProps<TMessage>): React.ReactNode;
     renderCustomView?(props: BubbleProps<TMessage>): React.ReactNode;
     renderDay?(props: DayProps): React.ReactNode;
+    renderFloatingDay?(props: DayProps): React.ReactNode;
     renderTime?(props: TimeProps<TMessage>): React.ReactNode;
     renderFooter?(props: MessageContainerProps<TMessage>): React.ReactNode;
     renderChatEmpty?(): React.ReactNode;
