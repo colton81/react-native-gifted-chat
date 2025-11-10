@@ -1,6 +1,6 @@
 import { ActionSheetOptions } from "@expo/react-native-action-sheet";
 import React, { RefObject } from "react";
-import { StyleProp, TextInput, TextStyle, ViewStyle } from "react-native";
+import { FlatList, StyleProp, TextInput, TextStyle, ViewStyle } from "react-native";
 import { LightboxProps } from "react-native-lightbox-v2";
 import { ActionsProps } from "../Actions";
 import { AvatarProps } from "../Avatar";
@@ -17,10 +17,9 @@ import { SendProps } from "../Send";
 import { SystemMessageProps } from "../SystemMessage";
 import { TimeProps } from "../Time";
 import { IMessage, LeftRightStyle, MessageAudioProps, MessageContainerProps, MessageVideoProps, Reply, User } from "../types";
-import { FlashListRef } from "@shopify/flash-list";
 import { ListViewProps } from "../MessageContainer";
 export interface GiftedChatProps<TMessage extends IMessage> extends Partial<MessageContainerProps<TMessage>> {
-    messageContainerRef?: RefObject<FlashListRef<TMessage>>;
+    messageContainerRef?: RefObject<FlatList<TMessage>>;
     textInputRef?: RefObject<TextInput>;
     messages?: TMessage[];
     isTyping?: boolean;

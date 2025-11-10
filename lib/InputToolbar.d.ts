@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
-import { ComposerProps } from './Composer';
-import { SendProps } from './Send';
-import { ActionsProps } from './Actions';
-import { IMessage } from './types';
+import React from "react";
+import { StyleProp, ViewStyle } from "react-native";
+import { ActionsProps } from "./Actions";
+import { ComposerProps } from "./Composer";
+import { SendProps } from "./Send";
+import { IMessage } from "./types";
 export interface InputToolbarProps<TMessage extends IMessage> {
     options?: {
         [key: string]: () => void;
