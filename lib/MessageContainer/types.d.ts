@@ -24,6 +24,7 @@ export interface MessageContainerProps<TMessage extends IMessage = IMessage> {
     renderFooter?(props: MessageContainerProps<TMessage>): React.ReactNode;
     renderMessage?(props: MessageProps<TMessage>): React.ReactElement;
     renderDay?(props: DayProps): React.ReactNode;
+    renderFloatingDayProp?(props: DayProps): React.ReactNode;
     renderLoadEarlier?(props: LoadEarlierProps): React.ReactNode;
     renderTypingIndicator?(): React.ReactNode;
     scrollToBottomComponent?(): React.ReactNode;
