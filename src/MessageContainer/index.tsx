@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import {
+  CellRendererProps,
   LayoutChangeEvent,
   Platform,
   Pressable,
@@ -345,66 +346,87 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     [],
   );
 
-  // const renderCell = useCallback(
-  //   (props: CellRendererProps<unknown>) => {
-  //     const { onLayout: onLayoutProp, children } = props;
-  //     const childArray = React.Children.toArray(children);
-  //     const firstChild = childArray[0] as React.ReactElement;
-  //     // @ts-expect-error - current message does exist
-  //     const item = firstChild?.props?.currentMessage as IMessage | undefined;
+  const renderCell = useCallback(
+    (props: CellRendererProps<unknown>) => {
+      const { onLayout: onLayoutProp, children } = props;
+      const childArray = React.Children.toArray(children);
+      const firstChild = childArray[0] as React.ReactElement;
+      // @ts-expect-error - current message does exist
+      const item = firstChild?.props?.currentMessage as IMessage | undefined;
 
-  //     const handleOnLayout = (event: LayoutChangeEvent) => {
-  //       onLayoutProp?.(event);
+      /**
+       * Handles the layout event for a message item, updating the shared value with position information.
+       * 
+       * This function tracks the vertical position and height of message items, managing a collection
+       * of day positions by removing outdated entries for the same day and adding the current item's
+       * layout data. It ensures only the most relevant position data is kept based on the inverted
+       * scroll direction.
+       * 
+       * @param event - The layout change event containing the new layout measurements
+       * @param event.nativeEvent.layout - Layout object with position and dimension data
+       * @param event.nativeEvent.layout.y - The y-coordinate of the item relative to its parent
+       * @param event.nativeEvent.layout.height - The height of the item in pixels
+       * 
+       * @remarks
+       * - Calls the optional `onLayoutProp` callback if provided
+       * - Returns early if no `item` is available
+       * - Uses a worklet function to modify shared values for optimal performance
+       * - Removes existing entries for the same day based on scroll direction (inverted vs normal)
+       * - Stores position data indexed by the item's string ID
+       */
+      const handleOnLayout = (event: LayoutChangeEvent) => {
+        onLayoutProp?.(event);
 
-  //       if (!item) { return; }
+        if (!item) { return; }
 
-  //       const { y, height } = event.nativeEvent.layout;
-  //       const id = item._id.toString();
+        const { y, height } = event.nativeEvent.layout;
+        const id = item._id.toString();
 
-  //       const newValue = {
-  //         y,
-  //         height,
-  //         createdAt: new Date(item.createdAt).getTime(),
-  //       };
+        const newValue = {
+          y,
+          height,
+          createdAt: new Date(item.createdAt).getTime(),
+        };
 
-  //       daysPositions.modify((value) => {
-  //         "worklet";
+        daysPositions.modify((value) => {
+          "worklet";
 
-  //         const isSameDay = (date1: number, date2: number) => {
-  //           const d1 = new Date(date1);
-  //           const d2 = new Date(date2);
+          const isSameDay = (date1: number, date2: number) => {
+            const d1 = new Date(date1);
+            const d2 = new Date(date2);
 
-  //           return (
-  //             d1.getDate() === d2.getDate() &&
-  //             d1.getMonth() === d2.getMonth() &&
-  //             d1.getFullYear() === d2.getFullYear()
-  //           );
-  //         };
+            return (
+              d1.getDate() === d2.getDate() &&
+              d1.getMonth() === d2.getMonth() &&
+              d1.getFullYear() === d2.getFullYear()
+            );
+          };
 
-  //         for (const [key, item] of Object.entries(value)) {
-  //           if (
-  //             isSameDay(newValue.createdAt, item.createdAt) &&
-  //             (inverted ? item.y <= newValue.y : item.y >= newValue.y)
-  //           ) {
-  //             delete value[key];
-  //             break;
-  //           }
-  //         }
+          for (const [key, item] of Object.entries(value)) {
+            if (
+              !isSameDay(newValue.createdAt, item.createdAt) &&
+              item.y <= newValue.y
+            ) {
+              console.log("Removing day position for key:", key);
+              delete value[key];
+              break;
+            }
+          }
 
-  //         // @ts-expect-error: https://docs.swmansion.com/react-native-reanimated/docs/core/useSharedValue#remarks
-  //         value[id] = newValue;
-  //         return value;
-  //       });
-  //     };
+          // @ts-expect-error: https://docs.swmansion.com/react-native-reanimated/docs/core/useSharedValue#remarks
+          value[id] = newValue;
+          return value;
+        });
+      };
 
-  //     return (
-  //       <View {...props} onLayout={handleOnLayout} >
-  //         {children}
-  //       </View>
-  //     );
-  //   },
-  //   [daysPositions, inverted],
-  // );
+      return (
+        <View {...props} onLayout={handleOnLayout} >
+          {children}
+        </View>
+      );
+    },
+    [daysPositions, inverted],
+  );
 
   const scrollHandler = useAnimatedScrollHandler(
     {
@@ -466,7 +488,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
 
         {...listViewProps}
         onLayout={onLayoutList}
-        // CellRendererComponent={renderCell}
+        CellRendererComponent={renderCell}
         maintainVisibleContentPosition={{
           autoscrollToBottomThreshold: 0.2,
           autoscrollToTopThreshold: 0.2,
