@@ -10,15 +10,15 @@ import { DayProps } from "../Day";
 import { InputToolbarProps } from "../InputToolbar";
 import { LoadEarlierProps } from "../LoadEarlier";
 import { MessageProps } from "../Message";
-import { ListViewProps, MessageContainerProps } from "../MessageContainer/index.original";
 import { MessageImageProps } from "../MessageImage";
 import { MessageTextProps } from "../MessageText";
 import { QuickRepliesProps } from "../QuickReplies";
 import { SendProps } from "../Send";
 import { SystemMessageProps } from "../SystemMessage";
 import { TimeProps } from "../Time";
-import { IMessage, LeftRightStyle, MessageAudioProps, MessageVideoProps, Reply, User } from "../types";
+import { IMessage, LeftRightStyle, MessageAudioProps, MessageContainerProps, MessageVideoProps, Reply, User } from "../types";
 import { FlashListRef } from "@shopify/flash-list";
+import { ListViewProps } from "../MessageContainer";
 export interface GiftedChatProps<TMessage extends IMessage> extends Partial<MessageContainerProps<TMessage>> {
     messageContainerRef?: RefObject<FlashListRef<TMessage>>;
     textInputRef?: RefObject<TextInput>;

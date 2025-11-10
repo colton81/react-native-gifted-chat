@@ -70,7 +70,6 @@ export function Composer({
 		[determineInputSizeChange],
 	);
 
-	console.log(textInputProps);
 	return (
 		<TextInput
 			testID={placeholder}
@@ -81,10 +80,7 @@ export function Composer({
 			multiline={multiline}
 			editable={!disableComposer}
 			onContentSizeChange={handleContentSizeChange}
-			onChangeText={(text) => {
-				console.log("Composer onChangeText:", text);
-				onTextChanged?.(text);
-			}}
+			onChangeText={onTextChanged}
 			style={[
 				stylesCommon.fill,
 				styles.textInput,
@@ -105,8 +101,6 @@ export function Composer({
 			enablesReturnKeyAutomatically
 			underlineColorAndroid="transparent"
 			keyboardAppearance={keyboardAppearance}
-			ref={null}
-			maxLength={10000}
 			{...textInputProps}
 		/>
 	);

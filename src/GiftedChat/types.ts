@@ -1,6 +1,12 @@
 import { ActionSheetOptions } from "@expo/react-native-action-sheet";
 import React, { RefObject } from "react";
-import { StyleProp, TextInput, TextStyle, ViewStyle } from "react-native";
+import {
+  FlatList,
+  StyleProp,
+  TextInput,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
 import { LightboxProps } from "react-native-lightbox-v2";
 import { ActionsProps } from "../Actions";
 import { AvatarProps } from "../Avatar";
@@ -10,10 +16,7 @@ import { DayProps } from "../Day";
 import { InputToolbarProps } from "../InputToolbar";
 import { LoadEarlierProps } from "../LoadEarlier";
 import { MessageProps } from "../Message";
-import {
-  ListViewProps,
-  MessageContainerProps,
-} from "../MessageContainer/index.original";
+
 import { MessageImageProps } from "../MessageImage";
 import { MessageTextProps } from "../MessageText";
 import { QuickRepliesProps } from "../QuickReplies";
@@ -24,16 +27,17 @@ import {
   IMessage,
   LeftRightStyle,
   MessageAudioProps,
+  MessageContainerProps,
   MessageVideoProps,
   Reply,
   User,
 } from "../types";
-import { FlashListRef } from "@shopify/flash-list";
+import { ListViewProps } from "../MessageContainer";
 
 export interface GiftedChatProps<TMessage extends IMessage>
   extends Partial<MessageContainerProps<TMessage>> {
   /* Message container ref */
-  messageContainerRef?: RefObject<FlashListRef<TMessage>>;
+  messageContainerRef?: RefObject<FlatList<TMessage>>;
   /* text input ref */
   textInputRef?: RefObject<TextInput>;
   /* Messages to display */

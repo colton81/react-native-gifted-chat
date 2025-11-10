@@ -7,9 +7,11 @@ import {
     StyleSheet,
     View,
     ActivityIndicator,
+    SafeAreaView,
 } from "react-native";
 import {
     Bubble,
+    Day,
     GiftedChat,
     IMessage,
     InputToolbar,
@@ -264,7 +266,7 @@ const ChatScreenContent: React.FC<ChatScreenProps> = () => {
         return allMessages.sort((a, b) => {
             const aTime = new Date(a.createdAt).getTime();
             const bTime = new Date(b.createdAt).getTime();
-            return aTime - bTime;
+            return bTime - aTime;
         });
     }, [data]);
 
@@ -416,7 +418,7 @@ const ChatScreenContent: React.FC<ChatScreenProps> = () => {
     };
 
     const listProps: Partial<FlashListProps<IMessage>> = {
-        contentInsetAdjustmentBehavior: "automatic",
+
 
         viewabilityConfig: {
             minimumViewTime: 200,
@@ -460,45 +462,61 @@ const ChatScreenContent: React.FC<ChatScreenProps> = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <KeyboardAvoidingView
-                style={styles.container}
-                behavior={Platform.OS === "ios" ? "padding" : undefined}
-                keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
-            >
-                <GiftedChat
-                    messages={messages}
-                    onSend={(messages) => onSend(messages)}
-                    user={{
-                        _id: 1,
-                        name: "User",
-                    }}
-                    isTyping={isTyping}
-                    renderBubble={renderBubble}
-                    renderSend={renderSend}
-                    renderInputToolbar={renderInputToolbar}
-                    renderSystemMessage={renderSystemMessage}
-                    alwaysShowSend
-                    scrollToBottom
-                    scrollToBottomComponent={() => (
-                        <Ionicons name="chevron-down" size={24} color="#007AFF" />
-                    )}
-                    listViewProps={listProps}
-                    placeholder="Type a message..."
-                    showUserAvatar
-                    renderUsernameOnMessage
-                    timeTextStyle={{
-                        left: { color: "#8E8E93" },
-                        right: { color: "#FFFFFF" },
-                    }}
-                    infiniteScroll={true}
-                    loadEarlier={hasNextPage}
-                    onLoadEarlier={onLoadEarlier}
-                    isLoadingEarlier={isFetchingNextPage}
+        <SafeAreaView style={styles.container}>
 
-                />
-            </KeyboardAvoidingView>
-        </View>
+            <GiftedChat
+                messages={messages}
+                onSend={(messages) => onSend(messages)}
+                user={{
+                    _id: 1,
+                    name: "User",
+                }}
+                isTyping={isTyping}
+                renderBubble={renderBubble}
+                renderSend={renderSend}
+                renderDay={(props) => {
+                    <Day
+                        textStyle={{
+                            color: "black",
+                            fontSize: 16
+                        }}
+                        wrapperStyle={{
+                            backgroundColor: "transparent"
+                        }}
+                        containerStyle={{
+                            backgroundColor: "transparent",
+                            alignItems: "flex-start",
+                            borderBottomColor: "#8E8E93",
+                            borderBottomWidth: 1
+                        }}
+                        createdAt={props.createdAt}
+                    />
+                }}
+                renderInputToolbar={renderInputToolbar}
+                renderSystemMessage={renderSystemMessage}
+                alwaysShowSend
+                scrollToBottom
+                scrollToBottomComponent={() => (
+                    <Ionicons name="chevron-down" size={24} color="#007AFF" />
+                )}
+
+                listViewProps={listProps}
+                placeholder="Type a message..."
+                showUserAvatar
+                renderUsernameOnMessage
+                timeTextStyle={{
+                    left: { color: "#8E8E93" },
+                    right: { color: "#FFFFFF" },
+                }}
+                infiniteScroll={true}
+                loadEarlier={hasNextPage}
+                onLoadEarlier={onLoadEarlier}
+                isLoadingEarlier={isFetchingNextPage}
+                dayOffset={{ top: 50 }}
+
+            />
+
+        </SafeAreaView>
     );
 };
 

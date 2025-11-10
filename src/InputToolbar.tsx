@@ -69,7 +69,7 @@ export function InputToolbar<TMessage extends IMessage = IMessage>(
 	}, [renderComposer, props]);
 
 	return (
-		<View style={[styles.container, containerStyle, { marginBottom: 75 }]}>
+		<View style={[styles.container, containerStyle]}>
 			<View style={[styles.primary, props.primaryStyle]}>
 				{actionsFragment}
 				{composerFragment}

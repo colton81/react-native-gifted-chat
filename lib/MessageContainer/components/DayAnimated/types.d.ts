@@ -14,4 +14,8 @@ export interface DayAnimatedProps extends Omit<DayProps, "createdAt"> {
     renderDay?: (props: DayProps) => React.ReactNode;
     messages: IMessage[];
     isLoadingEarlier: boolean;
+    offset?: {
+        top?: number;
+        bottom?: number;
+    };
 }

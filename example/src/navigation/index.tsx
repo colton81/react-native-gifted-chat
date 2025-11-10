@@ -20,7 +20,7 @@ const ChatStack = createNativeStackNavigator({
       screen: ChatScreen,
       options: {
         title: "Chat",
-        headerShown: true,
+        headerShown: false,
         headerTransparent: true
       },
     },

@@ -1,62 +1,67 @@
-import {
-  ActionSheetProvider,
-  ActionSheetProviderRef,
-} from "@expo/react-native-action-sheet";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import React, {
   createRef,
-  RefObject,
-  useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
-} from "react";
-import { LayoutChangeEvent, Platform, TextInput, View } from "react-native";
+  useCallback,
+  RefObject,
+} from 'react'
 import {
-  KeyboardProvider,
-  useReanimatedKeyboardAnimation,
-} from "react-native-keyboard-controller";
+  ActionSheetProvider,
+  ActionSheetProviderRef,
+} from '@expo/react-native-action-sheet'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import {
+  Platform,
+  TextInput,
+  View,
+  LayoutChangeEvent,
+  FlatList,
+} from 'react-native'
+import { Actions } from '../Actions'
+import { Avatar } from '../Avatar'
+import Bubble from '../Bubble'
+import { Composer } from '../Composer'
+import { MAX_COMPOSER_HEIGHT, MIN_COMPOSER_HEIGHT, TEST_ID } from '../Constant'
+import { Day } from '../Day'
+import { GiftedAvatar } from '../GiftedAvatar'
+import { GiftedChatContext } from '../GiftedChatContext'
+import { InputToolbar } from '../InputToolbar'
+import { LoadEarlier } from '../LoadEarlier'
+import Message from '../Message'
+import MessageContainer from '../MessageContainer'
+import { MessageImage } from '../MessageImage'
+import { MessageText } from '../MessageText'
+import {
+  IMessage,
+} from '../types'
+import { Send } from '../Send'
+import { SystemMessage } from '../SystemMessage'
+import { Time } from '../Time'
+import * as utils from '../utils'
 import Animated, {
-  runOnJS,
-  useAnimatedReaction,
   useAnimatedStyle,
+  useAnimatedReaction,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
-import { Actions } from "../Actions";
-import { Avatar } from "../Avatar";
-import Bubble from "../Bubble";
-import { Composer } from "../Composer";
-import { MAX_COMPOSER_HEIGHT, MIN_COMPOSER_HEIGHT, TEST_ID } from "../Constant";
-import { Day } from "../Day";
-import { GiftedAvatar } from "../GiftedAvatar";
-import { GiftedChatContext } from "../GiftedChatContext";
-import { InputToolbar } from "../InputToolbar";
-import { LoadEarlier } from "../LoadEarlier";
-import Message from "../Message";
-import MessageContainer from "../MessageContainer/index";
-import { MessageImage } from "../MessageImage";
-import { MessageText } from "../MessageText";
-import { Send } from "../Send";
-import { SystemMessage } from "../SystemMessage";
-import stylesCommon from "../styles";
-import { Time } from "../Time";
-import { IMessage } from "../types";
-import * as utils from "../utils";
-import styles from "./styles";
-import { GiftedChatProps } from "./types";
-import { FlashListRef } from "@shopify/flash-list";
+  runOnJS,
+} from 'react-native-reanimated'
+import { KeyboardProvider, useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller'
+import { GiftedChatProps } from './types'
 
-dayjs.extend(localizedFormat);
+import stylesCommon from '../styles'
+import styles from './styles'
+
+dayjs.extend(localizedFormat)
 
 function GiftedChat<TMessage extends IMessage = IMessage>(
-  props: GiftedChatProps<TMessage>,
+  props: GiftedChatProps<TMessage>
 ) {
   const {
     messages = [],
-    initialText = "",
+    initialText = '',
     isTyping,
 
     // "random" function from here: https://stackoverflow.com/a/8084248/3452513
@@ -66,7 +71,7 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
 
     user = {},
     onSend,
-    locale = "en",
+    locale = 'en',
     renderLoading,
     actionSheet = null,
     textInputProps,
@@ -75,47 +80,43 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
     bottomOffset = 0,
     focusOnInputWhenOpeningKeyboard = true,
     keyboardShouldPersistTaps = Platform.select({
-      ios: "never",
-      android: "always",
-      default: "never",
+      ios: 'never',
+      android: 'always',
+      default: 'never',
     }),
     onInputTextChanged = null,
-    maxInputLength = null,
-    inverted = false,
+    maxInputLength = undefined,
+    inverted = true,
     minComposerHeight = MIN_COMPOSER_HEIGHT,
     maxComposerHeight = MAX_COMPOSER_HEIGHT,
     isKeyboardInternallyHandled = true,
-  } = props;
+  } = props
 
-  const actionSheetRef = useRef<ActionSheetProviderRef>(null);
+  const actionSheetRef = useRef<ActionSheetProviderRef>(null)
 
   const messageContainerRef = useMemo(
-    () => props.messageContainerRef || createRef<FlashListRef<TMessage>>(),
-    [props.messageContainerRef],
-  ) as RefObject<FlashListRef<TMessage>>;
+    () => props.messageContainerRef || createRef<FlatList<TMessage>>(),
+    [props.messageContainerRef]
+  ) as RefObject<FlatList<TMessage>>
 
   const textInputRef = useMemo(
     () => props.textInputRef || createRef<TextInput>(),
-    [props.textInputRef],
-  );
-  useEffect(() => {
-    console.log("TextInput Ref: ", textInputRef);
-  }, [textInputRef]);
+    [props.textInputRef]
+  )
 
-  const isTextInputWasFocused: RefObject<boolean> = useRef(false);
+  const isTextInputWasFocused: RefObject<boolean> = useRef(false)
 
-  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false)
   const [composerHeight, setComposerHeight] = useState<number>(
-    minComposerHeight!,
-  );
-  const [text, setText] = useState<string | undefined>(() => props.text || "");
-  const [isTypingDisabled, setIsTypingDisabled] = useState<boolean>(false);
+    minComposerHeight!
+  )
+  const [text, setText] = useState<string | undefined>(() => props.text || '')
+  const [isTypingDisabled, setIsTypingDisabled] = useState<boolean>(false)
 
-  const keyboard = useReanimatedKeyboardAnimation();
-  const trackingKeyboardMovement = useSharedValue(false);
-  const debounceEnableTypingTimeoutId =
-    useRef<ReturnType<typeof setTimeout>>(undefined);
-  const keyboardOffsetBottom = useSharedValue(0);
+  const keyboard = useReanimatedKeyboardAnimation()
+  const trackingKeyboardMovement = useSharedValue(false)
+  const debounceEnableTypingTimeoutId = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const keyboardOffsetBottom = useSharedValue(0)
 
   const contentStyleAnim = useAnimatedStyle(
     () => ({
@@ -123,17 +124,19 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
         { translateY: keyboard.height.value - keyboardOffsetBottom.value },
       ],
     }),
-    [keyboard, keyboardOffsetBottom],
-  );
+    [keyboard, keyboardOffsetBottom]
+  )
 
   const getTextFromProp = useCallback(
     (fallback: string) => {
-      if (props.text === undefined) { return fallback; }
+      if (props.text === undefined) {
+        return fallback
+      }
 
-      return props.text;
+      return props.text
     },
-    [props.text],
-  );
+    [props.text]
+  )
 
   /**
    * Store text input focus status when keyboard hide to retrieve
@@ -144,9 +147,9 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
   const handleTextInputFocusWhenKeyboardHide = useCallback(() => {
     if (!isTextInputWasFocused.current) {
       isTextInputWasFocused.current =
-        textInputRef.current?.isFocused() || false;
+        textInputRef.current?.isFocused() || false
     }
-  }, [textInputRef]);
+  }, [textInputRef])
 
   /**
    * Refocus the text input only if it was focused before showing keyboard.
@@ -158,51 +161,55 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
       isTextInputWasFocused.current &&
       !textInputRef.current.isFocused()
     ) {
-      textInputRef.current.focus();
+      textInputRef.current.focus()
     }
 
     // Reset the indicator since the keyboard is shown
-    isTextInputWasFocused.current = false;
-  }, [textInputRef]);
+    isTextInputWasFocused.current = false
+  }, [textInputRef])
 
   const disableTyping = useCallback(() => {
-    clearTimeout(debounceEnableTypingTimeoutId.current);
-    setIsTypingDisabled(true);
-  }, []);
+    clearTimeout(debounceEnableTypingTimeoutId.current)
+    setIsTypingDisabled(true)
+  }, [])
 
   const enableTyping = useCallback(() => {
-    clearTimeout(debounceEnableTypingTimeoutId.current);
-    setIsTypingDisabled(false);
-  }, []);
+    clearTimeout(debounceEnableTypingTimeoutId.current)
+    setIsTypingDisabled(false)
+  }, [])
 
   const debounceEnableTyping = useCallback(() => {
-    clearTimeout(debounceEnableTypingTimeoutId.current);
+    clearTimeout(debounceEnableTypingTimeoutId.current)
     debounceEnableTypingTimeoutId.current = setTimeout(() => {
-      enableTyping();
-    }, 50);
-  }, [enableTyping]);
+      enableTyping()
+    }, 50)
+  }, [enableTyping])
 
   const scrollToBottom = useCallback(
     (isAnimated = true) => {
-      if (!messageContainerRef?.current) { return; }
+      if (!messageContainerRef?.current) {
+        return
+      }
 
       if (inverted) {
         messageContainerRef.current.scrollToOffset({
           offset: 0,
           animated: isAnimated,
-        });
-        return;
+        })
+        return
       }
 
-      messageContainerRef.current.scrollToEnd({ animated: isAnimated });
+      messageContainerRef.current.scrollToEnd({ animated: isAnimated })
     },
-    [inverted, messageContainerRef],
-  );
+    [inverted, messageContainerRef]
+  )
 
   const renderMessages = useMemo(() => {
-    if (!isInitialized) { return null; }
+    if (!isInitialized) {
+      return null
+    }
 
-    const { messagesContainerStyle, ...messagesContainerProps } = props;
+    const { messagesContainerStyle, ...messagesContainerProps } = props
 
     return (
       <View style={[stylesCommon.fill, messagesContainerStyle]}>
@@ -218,7 +225,7 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
         />
         {renderChatFooter?.()}
       </View>
-    );
+    )
   }, [
     isInitialized,
     isTyping,
@@ -228,111 +235,109 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
     keyboardShouldPersistTaps,
     messageContainerRef,
     renderChatFooter,
-  ]);
+  ])
 
   const notifyInputTextReset = useCallback(() => {
-    onInputTextChanged?.("");
-  }, [onInputTextChanged]);
+    onInputTextChanged?.('')
+  }, [onInputTextChanged])
 
   const resetInputToolbar = useCallback(() => {
-    console.log("Resetting Input Toolbar");
-    textInputRef.current?.clear();
+    textInputRef.current?.clear()
 
-    notifyInputTextReset();
+    notifyInputTextReset()
 
-    setComposerHeight(minComposerHeight!);
-    setText(getTextFromProp(""));
-    enableTyping();
+    setComposerHeight(minComposerHeight!)
+    setText(getTextFromProp(''))
+    enableTyping()
   }, [
     minComposerHeight,
     getTextFromProp,
     textInputRef,
     notifyInputTextReset,
     enableTyping,
-  ]);
+  ])
 
   const _onSend = useCallback(
     (messages: TMessage[] = [], shouldResetInputToolbar = false) => {
-      if (!Array.isArray(messages)) { messages = [messages]; }
+      if (!Array.isArray(messages)) {
+        messages = [messages]
+      }
 
-      const newMessages: TMessage[] = messages.map((message) => {
+      const newMessages: TMessage[] = messages.map(message => {
         return {
           ...message,
           user: user!,
           createdAt: new Date(),
           _id: messageIdGenerator?.(),
-        };
-      });
+        }
+      })
 
       if (shouldResetInputToolbar === true) {
-        disableTyping();
+        disableTyping()
 
-        resetInputToolbar();
+        resetInputToolbar()
       }
 
-      onSend?.(newMessages);
+      onSend?.(newMessages)
 
-      setTimeout(() => scrollToBottom(), 10);
+      setTimeout(() => scrollToBottom(), 10)
     },
-    [
-      messageIdGenerator,
-      onSend,
-      user,
-      resetInputToolbar,
-      disableTyping,
-      scrollToBottom,
-    ],
-  );
+    [messageIdGenerator, onSend, user, resetInputToolbar, disableTyping, scrollToBottom]
+  )
 
   const onInputSizeChanged = useCallback(
     (size: { height: number }) => {
       const newComposerHeight = Math.max(
         minComposerHeight!,
-        Math.min(maxComposerHeight!, size.height),
-      );
+        Math.min(maxComposerHeight!, size.height)
+      )
 
-      setComposerHeight(newComposerHeight);
+      setComposerHeight(newComposerHeight)
     },
-    [maxComposerHeight, minComposerHeight],
-  );
+    [maxComposerHeight, minComposerHeight]
+  )
 
   const _onInputTextChanged = useCallback(
     (_text: string) => {
-      if (isTypingDisabled) { return; }
+      if (isTypingDisabled) {
+        return
+      }
 
-      onInputTextChanged?.(_text);
+      onInputTextChanged?.(_text)
 
       // Only set state if it's not being overridden by a prop.
-      if (props.text === undefined) { setText(_text); }
+      if (props.text === undefined) {
+        setText(_text)
+      }
     },
-    [onInputTextChanged, isTypingDisabled, props.text],
-  );
+    [onInputTextChanged, isTypingDisabled, props.text]
+  )
 
   const onInitialLayoutViewLayout = useCallback(
     (e: LayoutChangeEvent) => {
-      if (isInitialized) { return; }
+      if (isInitialized) {
+        return
+      }
 
-      const { layout } = e.nativeEvent;
+      const { layout } = e.nativeEvent
 
-      if (layout.height <= 0) { return; }
+      if (layout.height <= 0) {
+        return
+      }
 
-      notifyInputTextReset();
+      notifyInputTextReset()
 
-      setIsInitialized(true);
-      setComposerHeight(minComposerHeight!);
-      setText(getTextFromProp(initialText));
+      setIsInitialized(true)
+      setComposerHeight(minComposerHeight!)
+      setText(getTextFromProp(initialText))
     },
-    [
-      isInitialized,
-      initialText,
-      minComposerHeight,
-      notifyInputTextReset,
-      getTextFromProp,
-    ],
-  );
+    [isInitialized, initialText, minComposerHeight, notifyInputTextReset, getTextFromProp]
+  )
 
   const inputToolbarFragment = useMemo(() => {
-    if (!isInitialized) { return null; }
+    if (!isInitialized) {
+      return null
+    }
 
     const inputToolbarProps = {
       ...props,
@@ -344,14 +349,15 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
       textInputProps: {
         ...textInputProps,
         ref: textInputRef,
-        maxLength: isTypingDisabled ? 0 : maxInputLength ?? undefined,
+        maxLength: isTypingDisabled ? 0 : maxInputLength,
       },
-    };
-    console.log("Typing disabled:", isTypingDisabled);
+    }
 
-    if (renderInputToolbar) { return renderInputToolbar(inputToolbarProps); }
+    if (renderInputToolbar) {
+      return renderInputToolbar(inputToolbarProps)
+    }
 
-    return <InputToolbar {...inputToolbarProps} />;
+    return <InputToolbar {...inputToolbarProps} />
   }, [
     isInitialized,
     _onSend,
@@ -367,7 +373,7 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
     textInputRef,
     textInputProps,
     _onInputTextChanged,
-  ]);
+  ])
 
   const contextValues = useMemo(
     () => ({
@@ -379,40 +385,44 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
         })),
       getLocale: () => locale,
     }),
-    [actionSheet, locale],
-  );
+    [actionSheet, locale]
+  )
 
   useEffect(() => {
-    if (props.text != null) { setText(props.text); }
-  }, [props.text]);
+    if (props.text != null) {
+      setText(props.text)
+    }
+  }, [props.text])
 
   useAnimatedReaction(
     () => -keyboard.height.value,
     (value, prevValue) => {
       if (prevValue !== null && value !== prevValue) {
-        const isKeyboardMovingUp = value > prevValue;
+        const isKeyboardMovingUp = value > prevValue
         if (isKeyboardMovingUp !== trackingKeyboardMovement.value) {
-          trackingKeyboardMovement.value = isKeyboardMovingUp;
+          trackingKeyboardMovement.value = isKeyboardMovingUp
           keyboardOffsetBottom.value = withTiming(
             isKeyboardMovingUp ? bottomOffset : 0,
             {
               // If `bottomOffset` exists, we change the duration to a smaller value to fix the delay in the keyboard animation speed
               duration: bottomOffset ? 150 : 400,
-            },
-          );
+            }
+          )
 
           if (focusOnInputWhenOpeningKeyboard) {
             if (isKeyboardMovingUp) {
-              runOnJS(handleTextInputFocusWhenKeyboardShow)();
+              runOnJS(handleTextInputFocusWhenKeyboardShow)()
             }
-            else { runOnJS(handleTextInputFocusWhenKeyboardHide)(); }
+            else {
+              runOnJS(handleTextInputFocusWhenKeyboardHide)()
+            }
           }
 
           if (value === 0) {
-            runOnJS(enableTyping)();
+            runOnJS(enableTyping)()
           } else {
-            runOnJS(disableTyping)();
-            runOnJS(debounceEnableTyping)();
+            runOnJS(disableTyping)()
+            runOnJS(debounceEnableTyping)()
           }
         }
       }
@@ -427,8 +437,8 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
       disableTyping,
       debounceEnableTyping,
       bottomOffset,
-    ],
-  );
+    ]
+  )
 
   return (
     <GiftedChatContext.Provider value={contextValues}>
@@ -438,60 +448,59 @@ function GiftedChat<TMessage extends IMessage = IMessage>(
           style={[stylesCommon.fill, styles.contentContainer]}
           onLayout={onInitialLayoutViewLayout}
         >
-          {isInitialized ? (
-            <Animated.View
-              style={[
-                stylesCommon.fill,
-                isKeyboardInternallyHandled && contentStyleAnim,
-              ]}
-            >
-              {renderMessages}
-              {inputToolbarFragment}
-            </Animated.View>
-          ) : (
-            renderLoading?.()
-          )}
+          {isInitialized
+            ? (
+              <Animated.View style={[stylesCommon.fill, isKeyboardInternallyHandled && contentStyleAnim]}>
+                {renderMessages}
+                {inputToolbarFragment}
+              </Animated.View>
+            )
+            : (
+              renderLoading?.()
+            )}
         </View>
       </ActionSheetProvider>
     </GiftedChatContext.Provider>
-  );
+  )
 }
 
-function GiftedChatWrapper<TMessage extends IMessage = IMessage>(
-  props: GiftedChatProps<TMessage>,
-) {
+function GiftedChatWrapper<TMessage extends IMessage = IMessage>(props: GiftedChatProps<TMessage>) {
   return (
     <KeyboardProvider>
       <GiftedChat<TMessage> {...props} />
     </KeyboardProvider>
-  );
+  )
 }
 
 GiftedChatWrapper.append = <TMessage extends IMessage>(
   currentMessages: TMessage[] = [],
   messages: TMessage[],
-  inverted = false,
+  inverted = true
 ) => {
-  if (!Array.isArray(messages)) { messages = [messages]; }
+  if (!Array.isArray(messages)) {
+    messages = [messages]
+  }
 
   return inverted
     ? messages.concat(currentMessages)
-    : currentMessages.concat(messages);
-};
+    : currentMessages.concat(messages)
+}
 
 GiftedChatWrapper.prepend = <TMessage extends IMessage>(
   currentMessages: TMessage[] = [],
   messages: TMessage[],
-  inverted = false,
+  inverted = true
 ) => {
-  if (!Array.isArray(messages)) { messages = [messages]; }
+  if (!Array.isArray(messages)) {
+    messages = [messages]
+  }
 
   return inverted
     ? currentMessages.concat(messages)
-    : messages.concat(currentMessages);
-};
+    : messages.concat(currentMessages)
+}
 
-export * from "../types";
+export * from '../types'
 
 export {
   GiftedChatWrapper as GiftedChat,
@@ -510,5 +519,5 @@ export {
   Send,
   Time,
   GiftedAvatar,
-  utils,
-};
+  utils
+}

@@ -1,13 +1,9 @@
-import { FlashList } from "@shopify/flash-list";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CellRendererProps,
+  FlatList,
   LayoutChangeEvent,
+  ListRenderItemInfo,
   Platform,
   Pressable,
   Text,
@@ -32,51 +28,13 @@ import Item from "./components/Item";
 import { ItemProps } from "./components/Item/types";
 import styles from "./styles";
 import { DaysPositions, MessageContainerProps } from "./types";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Day } from "../Day";
+
 export * from "./types";
 
-// Type for list items that can be either a message or a date header
-type ListItem<TMessage extends IMessage = IMessage> =
-  | { type: 'message'; data: TMessage; index: number }
-  | { type: 'header'; data: { date: Date | number }; index: number };
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const AnimatedFlashList = Animated.createAnimatedComponent(FlashList<any>);
-
-// Helper function to transform messages into a list with date headers
-function createMessagesWithHeaders<TMessage extends IMessage>(
-  messages: TMessage[],
-): ListItem<TMessage>[] {
-  const result: ListItem<TMessage>[] = [];
-  let lastDate: Date | null = null;
-
-  messages.forEach((message) => {
-    const messageDate = new Date(message.createdAt);
-    const shouldAddHeader =
-      !lastDate ||
-      messageDate.getDate() !== lastDate.getDate() ||
-      messageDate.getMonth() !== lastDate.getMonth() ||
-      messageDate.getFullYear() !== lastDate.getFullYear();
-
-    if (shouldAddHeader) {
-      result.push({
-        type: 'header',
-        data: { date: message.createdAt },
-        index: result.length,
-      });
-      lastDate = new Date(messageDate);
-    }
-
-    result.push({
-      type: 'message',
-      data: message,
-      index: result.length,
-    });
-  });
-
-  return result;
-}
+const AnimatedFlatList = Animated.createAnimatedComponent(
+  FlatList,
+) as React.ComponentType<any>;
 
 function MessageContainer<TMessage extends IMessage = IMessage>(
   props: MessageContainerProps<TMessage>,
@@ -87,7 +45,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     isTyping = false,
     renderChatEmpty: renderChatEmptyProp,
     onLoadEarlier,
-    inverted = false,
+    inverted = true,
     loadEarlier = false,
     listViewProps,
     invertibleScrollViewProps,
@@ -104,10 +62,10 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     forwardRef,
     handleOnScroll: handleOnScrollProp,
     scrollToBottomComponent: scrollToBottomComponentProp,
-    renderDay: renderDayProp,
-    renderFloatingDay,
+    renderFloatingDay: renderFloatingDayProp,
+    dayOffset
   } = props;
-  const insets = useSafeAreaInsets();
+
   const scrollToBottomOpacity = useSharedValue(0);
   const isScrollingDown = useSharedValue(false);
   const lastScrolledY = useSharedValue(0);
@@ -123,20 +81,14 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
   const listHeight = useSharedValue(0);
   const scrolledY = useSharedValue(0);
 
-  // Transform messages to include date headers
-  const listData = useMemo(
-    () => createMessagesWithHeaders(messages),
-    [messages],
-  );
-
   const renderTypingIndicator = useCallback(() => {
-    if (renderTypingIndicatorProp) { return <>{renderTypingIndicatorProp()}</>; }
+    if (renderTypingIndicatorProp) { return renderTypingIndicatorProp(); }
 
     return <TypingIndicator isTyping={isTyping} />;
   }, [isTyping, renderTypingIndicatorProp]);
 
   const ListFooterComponent = useMemo(() => {
-    if (renderFooterProp) { return <>{renderFooterProp(props)}</>; }
+    if (renderFooterProp) { return renderFooterProp(props); }
 
     return renderTypingIndicator();
   }, [renderFooterProp, renderTypingIndicator, props]);
@@ -241,26 +193,9 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
   const renderItem = useCallback(
     ({
       item,
-    }: {
-      item: ListItem<TMessage>;
-      index: number;
-    }): React.ReactElement | null => {
-      // Render date header
-      if (item.type === 'header') {
-        const dayProps = {
-          ...props,
-          createdAt: item.data.date,
-        };
-
-        return renderDayProp ? (
-          <View>{renderDayProp(dayProps)}</View>
-        ) : (
-          <Day {...dayProps} />
-        );
-      }
-
-      // Render message
-      const messageItem = item.data;
+      index,
+    }: ListRenderItemInfo<unknown>): React.ReactElement | null => {
+      const messageItem = item as TMessage;
 
       if (!messageItem._id && messageItem._id !== 0) {
         warning(
@@ -283,10 +218,10 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
       const { messages, ...restProps } = props;
 
       if (messages && user) {
-        // Find the actual message index in the original messages array
-        const messageIndex = messages.findIndex((m) => m._id === messageItem._id);
-        const previousMessage = messages[messageIndex - 1];
-        const nextMessage = messages[messageIndex + 1];
+        const previousMessage =
+          (inverted ? messages[index + 1] : messages[index - 1]) || {};
+        const nextMessage =
+          (inverted ? messages[index - 1] : messages[index + 1]) || {};
 
         const messageProps: ItemProps<TMessage> = {
           ...restProps,
@@ -304,7 +239,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
 
       return null;
     },
-    [props, scrolledY, daysPositions, listHeight, user, renderDayProp],
+    [props, inverted, scrolledY, daysPositions, listHeight, user],
   );
 
   const renderChatEmpty = useCallback(() => {
@@ -370,7 +305,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     (event: LayoutChangeEvent) => {
       listHeight.value = event.nativeEvent.layout.height;
 
-      if (messages?.length && isScrollToBottomEnabled) {
+      if (!inverted && messages?.length && isScrollToBottomEnabled) {
         setTimeout(() => {
           doScrollToBottom(false);
         }, 500);
@@ -379,7 +314,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
       listViewProps?.onLayout?.(event);
     },
     [
-
+      inverted,
       messages,
       doScrollToBottom,
       listHeight,
@@ -388,7 +323,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     ],
   );
 
-  const onStartReached = useCallback(() => {
+  const onEndReached = useCallback(() => {
     if (
       infiniteScroll &&
       loadEarlier &&
@@ -401,70 +336,24 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
   }, [infiniteScroll, loadEarlier, onLoadEarlier, isLoadingEarlier]);
 
   const keyExtractor = useCallback(
-    (item: ListItem<TMessage>, index: number) => {
-      if (item.type === 'header') {
-        return `header-${new Date(item.data.date).toDateString()}-${index}`;
-      }
-      return `message-${item.data._id}-${item.data.createdAt}-${index}`;
-    },
+    (item: unknown) => (item as TMessage)._id.toString(),
     [],
   );
 
-  const getItemType = useCallback((item: ListItem<TMessage>) => {
-    return item.type;
-  }, []);
-
   const renderCell = useCallback(
     (props: CellRendererProps<unknown>) => {
-      const { onLayout: onLayoutProp, children } = props;
-      const childArray = React.Children.toArray(children);
-      const firstChild = childArray[0] as React.ReactElement;
+      const { item, onLayout: onLayoutProp, children } = props;
+      const id = (item as IMessage)._id.toString();
 
-      // Check if this is a header or message item
-      // @ts-expect-error - currentMessage exists on message items
-      const item = firstChild?.props?.currentMessage as IMessage | undefined;
-
-      // If no currentMessage, this is likely a header - just render without tracking
-      if (!item) {
-        return (
-          <View {...props} onLayout={onLayoutProp}>
-            {children}
-          </View>
-        );
-      }
-
-      /**
-       * Handles the layout event for a message item, updating the shared value with position information.
-       * 
-       * This function tracks the vertical position and height of message items, managing a collection
-       * of day positions by removing outdated entries for the same day and adding the current item's
-       * layout data. It ensures only the most relevant position data is kept based on the inverted
-       * scroll direction.
-       * 
-       * @param event - The layout change event containing the new layout measurements
-       * @param event.nativeEvent.layout - Layout object with position and dimension data
-       * @param event.nativeEvent.layout.y - The y-coordinate of the item relative to its parent
-       * @param event.nativeEvent.layout.height - The height of the item in pixels
-       * 
-       * @remarks
-       * - Calls the optional `onLayoutProp` callback if provided
-       * - Returns early if no `item` is available
-       * - Uses a worklet function to modify shared values for optimal performance
-       * - Removes existing entries for the same day based on scroll direction (inverted vs normal)
-       * - Stores position data indexed by the item's string ID
-       */
       const handleOnLayout = (event: LayoutChangeEvent) => {
         onLayoutProp?.(event);
 
-        if (!item) { return; }
-
         const { y, height } = event.nativeEvent.layout;
-        const id = item._id.toString();
 
         const newValue = {
           y,
           height,
-          createdAt: new Date(item.createdAt).getTime(),
+          createdAt: new Date((item as IMessage).createdAt).getTime(),
         };
 
         daysPositions.modify((value) => {
@@ -483,10 +372,9 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
 
           for (const [key, item] of Object.entries(value)) {
             if (
-              !isSameDay(newValue.createdAt, item.createdAt) &&
-              item.y <= newValue.y
+              isSameDay(newValue.createdAt, item.createdAt) &&
+              (inverted ? item.y <= newValue.y : item.y >= newValue.y)
             ) {
-              console.log("Removing day position for key:", key);
               delete value[key];
               break;
             }
@@ -499,7 +387,7 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
       };
 
       return (
-        <View {...props} onLayout={handleOnLayout} >
+        <View {...props} onLayout={handleOnLayout}>
           {children}
         </View>
       );
@@ -541,7 +429,6 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
     });
   }, [messages, daysPositions, inverted]);
 
-
   return (
     <View
       style={[
@@ -549,42 +436,40 @@ function MessageContainer<TMessage extends IMessage = IMessage>(
         alignTop ? styles.containerAlignTop : stylesCommon.fill,
       ]}
     >
-      <AnimatedFlashList
-        ref={forwardRef}
-        data={listData}
+      <AnimatedFlatList
         extraData={extraData}
-        renderItem={renderItem}
+        ref={forwardRef}
         keyExtractor={keyExtractor}
-        getItemType={getItemType}
-        automaticallyAdjustContentInsets={true}
-        contentInset={{ top: insets.top, bottom: insets.bottom }}
-        contentInsetAdjustmentBehavior={"automatic"}
+        data={messages}
+        renderItem={renderItem}
+        inverted={inverted}
+        automaticallyAdjustContentInsets={false}
+        style={stylesCommon.fill}
         {...invertibleScrollViewProps}
         ListEmptyComponent={renderChatEmpty}
-        ListFooterComponent={ListFooterComponent}
-        ListHeaderComponent={ListHeaderComponent}
+        ListFooterComponent={
+          inverted ? ListHeaderComponent : ListFooterComponent
+        }
+        ListHeaderComponent={
+          inverted ? ListFooterComponent : ListHeaderComponent
+        }
         onScroll={scrollHandler}
         scrollEventThrottle={1}
-        onStartReached={onStartReached}
-        onStartReachedThreshold={0.05}
-
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.1}
         {...listViewProps}
         onLayout={onLayoutList}
         CellRendererComponent={renderCell}
-        maintainVisibleContentPosition={{
-          autoscrollToBottomThreshold: 0.2,
-          autoscrollToTopThreshold: 0.2,
-          startRenderingFromBottom: true,
-        }}
       />
       <ScrollToBottomWrapper />
       <DayAnimated
         scrolledY={scrolledY}
         daysPositions={daysPositions}
         listHeight={listHeight}
-        renderDay={renderFloatingDay}
+        renderDay={renderFloatingDayProp}
         messages={messages}
         isLoadingEarlier={isLoadingEarlier}
+        offset={dayOffset}
       />
     </View>
   );

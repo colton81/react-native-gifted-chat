@@ -1,17 +1,16 @@
-import { FlashListProps, FlashListRef } from "@shopify/flash-list";
 import React, { RefObject } from "react";
-import { StyleProp, ViewStyle } from "react-native";
+import { FlatList, FlatListProps, StyleProp, ViewStyle } from "react-native";
 import { ReanimatedScrollEvent } from "react-native-reanimated/lib/typescript/hook/commonTypes";
 import { LoadEarlierProps } from "../LoadEarlier";
 import { MessageProps } from "../Message";
 import { DayProps, IMessage, Reply, User } from "../types";
 
 export type ListViewProps<TMessage extends IMessage = IMessage> = Partial<
-  FlashListProps<TMessage>
+  FlatListProps<TMessage>
 >;
 
 export interface MessageContainerProps<TMessage extends IMessage = IMessage> {
-  forwardRef?: RefObject<FlashListRef<TMessage>>;
+  forwardRef?: RefObject<FlatList<TMessage>>;
   messages?: TMessage[];
   isTyping?: boolean;
   user?: User;
@@ -37,6 +36,8 @@ export interface MessageContainerProps<TMessage extends IMessage = IMessage> {
   infiniteScroll?: boolean;
   isLoadingEarlier?: boolean;
   handleOnScroll?(event: ReanimatedScrollEvent): void;
+  renderFloatingDay?(props: DayProps): React.ReactNode;
+  dayOffset?: { top?: number; bottom?: number };
 }
 
 export interface State {

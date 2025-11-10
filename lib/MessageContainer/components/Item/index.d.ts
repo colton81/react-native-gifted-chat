@@ -1,8 +1,8 @@
-import React from "react";
-import { IMessage } from "../../../types";
-import { DaysPositions } from "../../types";
-import { ItemProps } from "./types";
-export * from "./types";
+import React from 'react';
+import { IMessage } from '../../../types';
+import { DaysPositions } from '../../types';
+import { ItemProps } from './types';
+export * from './types';
 export declare const useAbsoluteScrolledPositionToBottomOfDay: (listHeight: {
     value: number;
 }, scrolledY: {
