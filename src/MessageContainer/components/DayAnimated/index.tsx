@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { LayoutChangeEvent } from "react-native";
 import Animated, {
-	interpolate,
 	runOnJS,
 	useAnimatedReaction,
 	useAnimatedStyle,
@@ -9,16 +8,13 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Day } from "../../../Day";
 import stylesCommon from "../../../styles";
 import { isSameDay } from "../../../utils";
-import {
-	useAbsoluteScrolledPositionToBottomOfDay,
-	useRelativeScrolledPositionToBottomOfDay,
-} from "../Item";
+import { useAbsoluteScrolledPositionToBottomOfDay } from "../Item";
 import styles from "./styles";
 import { DayAnimatedProps } from "./types";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export * from "./types";
 
@@ -57,15 +53,15 @@ const DayAnimated = ({
 			dayBottomMargin,
 			dayTopOffset,
 		);
-	const relativeScrolledPositionToBottomOfDay =
-		useRelativeScrolledPositionToBottomOfDay(
-			listHeight,
-			scrolledY,
-			daysPositions,
-			containerHeight,
-			dayBottomMargin,
-			dayTopOffset,
-		);
+	// const relativeScrolledPositionToBottomOfDay =
+	// 	useRelativeScrolledPositionToBottomOfDay(
+	// 		listHeight,
+	// 		scrolledY,
+	// 		daysPositions,
+	// 		containerHeight,
+	// 		dayBottomMargin,
+	// 		dayTopOffset,
+	// 	);
 
 	const messagesDates = useMemo(() => {
 		const messagesDates: number[] = [];
@@ -105,32 +101,32 @@ const DayAnimated = ({
 		dayBottomMargin,
 	]);
 
-	const style = useAnimatedStyle(
-		() => ({
-			top: interpolate(
-				relativeScrolledPositionToBottomOfDay.value,
-				[
-					-dayTopOffset,
-					-0.0001,
-					0,
-					isLoadingEarlierAnim.value ? 0 : containerHeight.value + dayTopOffset,
-				],
-				[
-					dayTopOffset,
-					dayTopOffset,
-					-containerHeight.value,
-					isLoadingEarlierAnim.value ? -containerHeight.value : dayTopOffset,
-				],
-				"clamp",
-			),
-		}),
-		[
-			relativeScrolledPositionToBottomOfDay,
-			containerHeight,
-			dayTopOffset,
-			isLoadingEarlierAnim,
-		],
-	);
+	// const style = useAnimatedStyle(
+	// 	() => ({
+	// 		top: interpolate(
+	// 			relativeScrolledPositionToBottomOfDay.value,
+	// 			[
+	// 				-dayTopOffset,
+	// 				-0.0001,
+	// 				0,
+	// 				isLoadingEarlierAnim.value ? 0 : containerHeight.value + dayTopOffset,
+	// 			],
+	// 			[
+	// 				dayTopOffset,
+	// 				dayTopOffset,
+	// 				-containerHeight.value,
+	// 				isLoadingEarlierAnim.value ? -containerHeight.value : dayTopOffset,
+	// 			],
+	// 			"clamp",
+	// 		),
+	// 	}),
+	// 	[
+	// 		relativeScrolledPositionToBottomOfDay,
+	// 		containerHeight,
+	// 		dayTopOffset,
+	// 		isLoadingEarlierAnim,
+	// 	],
+	// );
 
 	const contentStyle = useAnimatedStyle(
 		() => ({
@@ -166,7 +162,9 @@ const DayAnimated = ({
 				return;
 			}
 
-			if (value[0] === prevValue?.[0]) { return; }
+			if (value[0] === prevValue?.[0]) {
+				return;
+			}
 
 			opacity.value = withTiming(1, { duration: 500 });
 
@@ -178,7 +176,9 @@ const DayAnimated = ({
 	useAnimatedReaction(
 		() => createdAtDate.value,
 		(value, prevValue) => {
-			if (value && value !== prevValue) { runOnJS(setCreatedAt)(value); }
+			if (value && value !== prevValue) {
+				runOnJS(setCreatedAt)(value);
+			}
 		},
 		[createdAtDate],
 	);
@@ -187,13 +187,19 @@ const DayAnimated = ({
 		isLoadingEarlierAnim.value = isLoadingEarlier;
 	}, [isLoadingEarlierAnim, isLoadingEarlier]);
 
-	if (!createdAt) { return null; }
+	if (!createdAt) {
+		return null;
+	}
 
 	return (
 		<Animated.View
-			style={[stylesCommon.centerItems, styles.dayAnimated, {
-				top: 50 + insets.top
-			}]}
+			style={[
+				stylesCommon.centerItems,
+				styles.dayAnimated,
+				{
+					top: 50 + insets.top,
+				},
+			]}
 			onLayout={handleLayout}
 		>
 			<Animated.View style={contentStyle} pointerEvents="none">

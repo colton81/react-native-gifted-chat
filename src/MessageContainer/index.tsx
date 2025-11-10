@@ -51,7 +51,7 @@ function createMessagesWithHeaders<TMessage extends IMessage>(
   const result: ListItem<TMessage>[] = [];
   let lastDate: Date | null = null;
 
-  messages.forEach((message, index) => {
+  messages.forEach((message) => {
     const messageDate = new Date(message.createdAt);
     const shouldAddHeader =
       !lastDate ||
