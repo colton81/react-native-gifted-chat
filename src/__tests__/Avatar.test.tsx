@@ -1,13 +1,17 @@
-import "react-native";
-import React from "react";
-import renderer from "react-test-renderer";
+import React from 'react'
+import { render } from '@testing-library/react-native'
 
-import { Avatar } from "../GiftedChat";
+import { Avatar } from '..'
+import { DEFAULT_TEST_MESSAGE } from './data'
 
-it("should render <Avatar /> and compare with snapshot", () => {
-	const tree = renderer
-		.create(<Avatar renderAvatar={() => "renderAvatar"} position="left" />)
-		.toJSON();
+it('should render <Avatar /> and compare with snapshot', () => {
+  const { toJSON } = render(
+    <Avatar
+      renderAvatar={() => 'renderAvatar'}
+      position='left'
+      currentMessage={DEFAULT_TEST_MESSAGE}
+    />
+  )
 
-	expect(tree).toMatchSnapshot();
-});
+  expect(toJSON()).toMatchSnapshot()
+})

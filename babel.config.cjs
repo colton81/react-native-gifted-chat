@@ -1,16 +1,15 @@
 module.exports = function (api) {
-	api.cache(true);
+  api.cache(true)
 
-	return {
-		presets: [
-			"@babel/preset-env",
-			"module:@react-native/babel-preset",
-			"@babel/preset-typescript",
-		],
-		plugins: [
-			"@babel/plugin-transform-unicode-property-regex",
-			"@babel/plugin-transform-react-jsx",
-			"react-native-reanimated/plugin",
-		],
-	};
-};
+  return {
+    presets: [
+      'module:@react-native/babel-preset',
+      '@babel/preset-typescript',
+    ],
+    plugins: [
+      '@babel/plugin-transform-unicode-property-regex',
+      '@babel/plugin-transform-react-jsx',
+      'react-native-reanimated/plugin',
+    ],
+  }
+}

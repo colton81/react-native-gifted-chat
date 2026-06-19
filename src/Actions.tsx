@@ -1,113 +1,108 @@
-import React, { ReactNode, useCallback } from "react";
+import React, { ReactNode, useCallback } from 'react'
 import {
-	StyleProp,
-	StyleSheet,
-	Text,
-	TextStyle,
-	TouchableOpacity,
-	View,
-	ViewStyle,
-} from "react-native";
-import Color from "./Color";
-import { useChatContext } from "./GiftedChatContext";
-
-import stylesCommon from "./styles";
+  StyleSheet,
+  View,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  Text } from 'react-native'
+import { Color } from './Color'
+import { TouchableOpacity } from './components/TouchableOpacity'
+import { useChatContext } from './GiftedChatContext'
+import stylesCommon from './styles'
 
 export interface ActionsProps {
-	options?: { [key: string]: () => void };
-	optionTintColor?: string;
-	icon?: () => ReactNode;
-	wrapperStyle?: StyleProp<ViewStyle>;
-	iconTextStyle?: StyleProp<TextStyle>;
-	containerStyle?: StyleProp<ViewStyle>;
-	onPressActionButton?(): void;
+  actions?: Array<{ title: string, action: () => void }>
+  actionSheetOptionTintColor?: string
+  icon?: () => ReactNode
+  wrapperStyle?: StyleProp<ViewStyle>
+  iconTextStyle?: StyleProp<TextStyle>
+  buttonStyle?: StyleProp<ViewStyle>
+  onPressActionButton?(): void
 }
 
-export function Actions({
-	options,
-	optionTintColor = Color.optionTintColor,
-	icon,
-	wrapperStyle,
-	iconTextStyle,
-	onPressActionButton,
-	containerStyle,
+export function Actions ({
+  actions,
+  actionSheetOptionTintColor = Color.optionTintColor,
+  icon,
+  wrapperStyle,
+  iconTextStyle,
+  onPressActionButton,
+  buttonStyle,
 }: ActionsProps) {
-	const { actionSheet } = useChatContext();
+  const { actionSheet } = useChatContext()
 
-	const onActionsPress = useCallback(() => {
-		if (!options) {
-			return;
-		}
+  const handlePress = useCallback(() => {
+    if (onPressActionButton) {
+      onPressActionButton()
+      return
+    }
 
-		const optionKeys = Object.keys(options);
-		const cancelButtonIndex = optionKeys.indexOf("Cancel");
+    if (!actions?.length)
+      return
 
-		actionSheet().showActionSheetWithOptions(
-			{
-				options: optionKeys,
-				cancelButtonIndex,
-				tintColor: optionTintColor,
-			},
-			(buttonIndex: number | undefined) => {
-				if (buttonIndex === undefined) {
-					return;
-				}
+    const titles = actions.map(item => item.title)
 
-				const key = optionKeys[buttonIndex];
-				if (key) {
-					options[key]();
-				}
-			},
-		);
-	}, [actionSheet, options, optionTintColor]);
+    actionSheet().showActionSheetWithOptions(
+      {
+        options: titles,
+        cancelButtonIndex: titles.length - 1,
+        tintColor: actionSheetOptionTintColor,
+      },
+      (buttonIndex?: number) => {
+        if (buttonIndex === undefined)
+          return
 
-	const renderIcon = useCallback(() => {
-		if (icon) {
-			return icon();
-		}
+        const item = actions[buttonIndex]
+        item.action?.()
+      }
+    )
+  }, [actionSheet, actions, actionSheetOptionTintColor, onPressActionButton])
 
-		return (
-			<View
-				style={[
-					stylesCommon.fill,
-					stylesCommon.centerItems,
-					styles.wrapper,
-					wrapperStyle,
-				]}
-			>
-				<Text style={[styles.iconText, iconTextStyle]}>{"+"}</Text>
-			</View>
-		);
-	}, [icon, iconTextStyle, wrapperStyle]);
+  const renderIcon = useCallback(() => {
+    if (icon)
+      return icon()
 
-	return (
-		<TouchableOpacity
-			style={[styles.container, containerStyle]}
-			onPress={onPressActionButton || onActionsPress}
-		>
-			{renderIcon()}
-		</TouchableOpacity>
-	);
+    return (
+      <View style={[stylesCommon.centerItems, styles.wrapper, wrapperStyle]}>
+        <Text style={[styles.iconText, iconTextStyle]}>{'+'}</Text>
+      </View>
+    )
+  }, [icon, iconTextStyle, wrapperStyle])
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={handlePress}
+        style={[styles.button, buttonStyle]}
+      >
+        {renderIcon()}
+      </TouchableOpacity>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-	container: {
-		width: 26,
-		height: 26,
-		marginLeft: 10,
-		marginBottom: 10,
-	},
-	wrapper: {
-		borderRadius: 13,
-		borderColor: Color.defaultColor,
-		borderWidth: 2,
-	},
-	iconText: {
-		color: Color.defaultColor,
-		fontWeight: "bold",
-		fontSize: 16,
-		lineHeight: 16,
-		backgroundColor: Color.backgroundTransparent,
-		textAlign: "center",
-	},
-});
+  container: {
+    alignItems: 'flex-end',
+  },
+  button: {
+    paddingLeft: 10,
+    paddingRight: 4,
+    paddingVertical: 7,
+  },
+
+  wrapper: {
+    borderColor: Color.defaultColor,
+    borderWidth: 2,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+  },
+  iconText: {
+    color: Color.defaultColor,
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 16,
+  },
+})

@@ -2,12 +2,12 @@
 node_modules/
 .expo/
 npm-debug.log
+lib/
 TODO.md
 .idea
 .vscode
 Exponent-*.app
 *.log
-
 coverage/
 web-build/
 .eslintcache

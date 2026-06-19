@@ -1,15 +1,10 @@
-import "react-native";
-import React from "react";
-import renderer from "react-test-renderer";
+import React from 'react'
+import { render } from '@testing-library/react-native'
 
-import { GiftedAvatar } from "../GiftedChat";
+import { GiftedAvatar } from '..'
 
-it("should render <GiftedAvatar /> and compare with snapshot", () => {
-	let tree;
+it('should render <GiftedAvatar /> and compare with snapshot', () => {
+  const { toJSON } = render(<GiftedAvatar />)
 
-	renderer.act(() => {
-		tree = renderer.create(<GiftedAvatar />);
-	});
-
-	expect(tree.toJSON()).toMatchSnapshot();
-});
+  expect(toJSON()).toMatchSnapshot()
+})

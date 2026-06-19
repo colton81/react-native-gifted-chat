@@ -1,190 +1,186 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useMemo } from 'react'
 import {
-	Image,
-	ImageStyle,
-	StyleProp,
-	StyleSheet,
-	Text,
-	TextStyle,
-	TouchableOpacity,
-	View,
-} from "react-native";
-import Color from "./Color";
-import stylesCommon from "./styles";
-import { User } from "./types";
+  Image,
+  View,
+  StyleSheet,
+  StyleProp,
+  ImageStyle,
+  TextStyle,
+  Text } from 'react-native'
+import { Color } from './Color'
+import { TouchableOpacity } from './components/TouchableOpacity'
+import { User } from './Models'
+import stylesCommon from './styles'
 
 const {
-	carrot,
-	emerald,
-	peterRiver,
-	wisteria,
-	alizarin,
-	turquoise,
-	midnightBlue,
-} = Color;
+  carrot,
+  emerald,
+  peterRiver,
+  wisteria,
+  alizarin,
+  turquoise,
+  midnightBlue,
+} = Color
 
 const styles = StyleSheet.create({
-	avatarStyle: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
-	},
-	avatarTransparent: {
-		backgroundColor: Color.backgroundTransparent,
-	},
-	textStyle: {
-		color: Color.white,
-		fontSize: 16,
-		backgroundColor: Color.backgroundTransparent,
-		fontWeight: "100",
-	},
-});
+  avatarStyle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  avatarTransparent: {
+    backgroundColor: Color.backgroundTransparent,
+  },
+  textStyle: {
+    color: Color.white,
+    fontSize: 16,
+    backgroundColor: Color.backgroundTransparent,
+    fontWeight: '100',
+  },
+})
 
 export interface GiftedAvatarProps {
-	user?: User;
-	avatarStyle?: StyleProp<ImageStyle>;
-	textStyle?: StyleProp<TextStyle>;
-	onPress?: (props: GiftedAvatarProps) => void;
-	onLongPress?: (props: GiftedAvatarProps) => void;
+  user?: User
+  avatarStyle?: StyleProp<ImageStyle>
+  textStyle?: StyleProp<TextStyle>
+  onPress?: (props: GiftedAvatarProps) => void
+  onLongPress?: (props: GiftedAvatarProps) => void
 }
 
-export function GiftedAvatar(props: GiftedAvatarProps) {
-	const [avatarName, setAvatarName] = useState<string | undefined>(undefined);
-	const [backgroundColor, setBackgroundColor] = useState<string | undefined>(
-		undefined,
-	);
+export function GiftedAvatar (
+  props: GiftedAvatarProps
+) {
+  const {
+    user,
+    avatarStyle,
+    textStyle,
+    onPress,
+  } = props
 
-	const { user, avatarStyle, textStyle, onPress } = props;
+  const avatarName = useMemo(() => {
+    const userName = user?.name || ''
+    const name = userName.toUpperCase().split(' ')
 
-	const setAvatarColor = useCallback(() => {
-		if (backgroundColor) {
-			return;
-		}
+    if (name.length === 1)
+      return `${name[0].charAt(0)}`
+    else if (name.length > 1)
+      return `${name[0].charAt(0)}${name[1].charAt(0)}`
+    else
+      return ''
+  }, [user?.name])
 
-		const userName = user?.name || "";
-		const name = userName.toUpperCase().split(" ");
+  const backgroundColor = useMemo(() => {
+    let sumChars = 0
+    if (user?.name)
+      for (let i = 0; i < user.name.length; i += 1)
+        sumChars += user.name.charCodeAt(i)
 
-		if (name.length === 1) {
-			setAvatarName(`${name[0].charAt(0)}`);
-		} else if (name.length > 1) {
-			setAvatarName(`${name[0].charAt(0)}${name[1].charAt(0)}`);
-		} else {
-			setAvatarName("");
-		}
+    // inspired by https://github.com/wbinnssmith/react-user-avatar
+    // colors from https://flatuicolors.com/
+    const colors = [
+      carrot,
+      emerald,
+      peterRiver,
+      wisteria,
+      alizarin,
+      turquoise,
+      midnightBlue,
+    ]
 
-		let sumChars = 0;
-		for (let i = 0; i < userName.length; i += 1) {
-			sumChars += userName.charCodeAt(i);
-		}
+    return colors[sumChars % colors.length]
+  }, [user?.name])
 
-		// inspired by https://github.com/wbinnssmith/react-user-avatar
-		// colors from https://flatuicolors.com/
-		const colors = [
-			carrot,
-			emerald,
-			peterRiver,
-			wisteria,
-			alizarin,
-			turquoise,
-			midnightBlue,
-		];
+  const renderAvatar = useCallback(() => {
+    switch (typeof user?.avatar) {
+      case 'function':
+        return user.avatar([stylesCommon.centerItems, styles.avatarStyle, avatarStyle])
+      case 'string':
+        return (
+          <Image
+            source={{ uri: user.avatar }}
+            style={[stylesCommon.centerItems, styles.avatarStyle, avatarStyle]}
+          />
+        )
+      case 'number':
+        return (
+          <Image
+            source={user.avatar}
+            style={[stylesCommon.centerItems, styles.avatarStyle, avatarStyle]}
+          />
+        )
+      default:
+        return null
+    }
+  }, [user, avatarStyle])
 
-		setBackgroundColor(colors[sumChars % colors.length]);
-	}, [user?.name, backgroundColor]);
+  const renderInitials = useCallback(() => {
+    return (
+      <Text style={[styles.textStyle, textStyle]}>
+        {avatarName}
+      </Text>
+    )
+  }, [textStyle, avatarName])
 
-	const renderAvatar = useCallback(() => {
-		switch (typeof user?.avatar) {
-			case "function":
-				return user.avatar([
-					stylesCommon.centerItems,
-					styles.avatarStyle,
-					avatarStyle,
-				]);
-			case "string":
-				return (
-					<Image
-						source={{ uri: user.avatar }}
-						style={[stylesCommon.centerItems, styles.avatarStyle, avatarStyle]}
-					/>
-				);
-			case "number":
-				return (
-					<Image
-						source={user.avatar}
-						style={[stylesCommon.centerItems, styles.avatarStyle, avatarStyle]}
-					/>
-				);
-			default:
-				return null;
-		}
-	}, [user, avatarStyle]);
+  const handleOnPress = useCallback(() => {
+    const {
+      onPress,
+      ...rest
+    } = props
 
-	const renderInitials = useCallback(() => {
-		return <Text style={[styles.textStyle, textStyle]}>{avatarName}</Text>;
-	}, [textStyle, avatarName]);
+    onPress?.(rest)
+  }, [props])
 
-	const handleOnPress = () => {
-		const { onPress, ...rest } = props;
+  const handleOnLongPress = useCallback(() => {
+    const {
+      onLongPress,
+      ...rest
+    } = props
 
-		if (onPress) {
-			onPress(rest);
-		}
-	};
+    if (onLongPress)
+      onLongPress(rest)
+  }, [props])
 
-	const handleOnLongPress = () => {
-		const { onLongPress, ...rest } = props;
+  const placeholderView = useMemo(() => (
+    <View
+      style={[
+        stylesCommon.centerItems,
+        styles.avatarStyle,
+        styles.avatarTransparent,
+        avatarStyle,
+      ]}
+      accessibilityRole='image'
+    />
+  ), [avatarStyle])
 
-		if (onLongPress) {
-			onLongPress(rest);
-		}
-	};
+  if (!user || (!user.name && !user.avatar))
+    return placeholderView
 
-	useEffect(() => {
-		setAvatarColor();
-	}, [setAvatarColor]);
+  if (user.avatar)
+    return (
+      <TouchableOpacity
+        enabled={!!onPress}
+        onPress={handleOnPress}
+        onLongPress={handleOnLongPress}
+        accessibilityRole='image'
+      >
+        {renderAvatar()}
+      </TouchableOpacity>
+    )
 
-	if (!user || (!user.name && !user.avatar)) {
-		// render placeholder
-		return (
-			<View
-				style={[
-					stylesCommon.centerItems,
-					styles.avatarStyle,
-					styles.avatarTransparent,
-					avatarStyle,
-				]}
-				accessibilityRole="image"
-			/>
-		);
-	}
-
-	if (user.avatar) {
-		return (
-			<TouchableOpacity
-				disabled={!onPress}
-				onPress={handleOnPress}
-				onLongPress={handleOnLongPress}
-				accessibilityRole="image"
-			>
-				{renderAvatar()}
-			</TouchableOpacity>
-		);
-	}
-
-	return (
-		<TouchableOpacity
-			disabled={!onPress}
-			onPress={handleOnPress}
-			onLongPress={handleOnLongPress}
-			style={[
-				stylesCommon.centerItems,
-				styles.avatarStyle,
-				{ backgroundColor },
-				avatarStyle,
-			]}
-			accessibilityRole="image"
-		>
-			{renderInitials()}
-		</TouchableOpacity>
-	);
+  return (
+    <TouchableOpacity
+      enabled={!!onPress}
+      onPress={handleOnPress}
+      onLongPress={handleOnLongPress}
+      style={[
+        stylesCommon.centerItems,
+        styles.avatarStyle,
+        { backgroundColor },
+        avatarStyle,
+      ]}
+      accessibilityRole='image'
+    >
+      {renderInitials()}
+    </TouchableOpacity>
+  )
 }

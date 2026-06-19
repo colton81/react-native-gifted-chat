@@ -1,74 +1,62 @@
-import dayjs from "dayjs";
-import React from "react";
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { useMemo } from 'react'
+import { StyleSheet, View, ViewStyle, TextStyle , Text } from 'react-native'
+import dayjs from 'dayjs'
+import { Color } from './Color'
+import { TIME_FORMAT } from './Constant'
+import { useChatContext } from './GiftedChatContext'
+import { LeftRightStyle, IMessage } from './Models'
+import { getStyleWithPosition } from './styles'
 
-import Color from "./Color";
-import { TIME_FORMAT } from "./Constant";
-import { useChatContext } from "./GiftedChatContext";
-import { IMessage, LeftRightStyle } from "./types";
-
-const { containerStyle } = StyleSheet.create({
-	containerStyle: {
-		marginLeft: 10,
-		marginRight: 10,
-		marginBottom: 5,
-	},
-});
-
-const { textStyle } = StyleSheet.create({
-	textStyle: {
-		fontSize: 10,
-		textAlign: "right",
-	},
-});
-
-const styles = {
-	left: StyleSheet.create({
-		container: {
-			...containerStyle,
-		},
-		text: {
-			color: Color.timeTextColor,
-			...textStyle,
-		},
-	}),
-	right: StyleSheet.create({
-		container: {
-			...containerStyle,
-		},
-		text: {
-			color: Color.white,
-			...textStyle,
-		},
-	}),
-};
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 10,
+    textAlign: 'right',
+  },
+  text_left: {
+    color: Color.timeTextColor,
+  },
+  text_right: {
+    color: Color.white,
+  },
+})
 
 export interface TimeProps<TMessage extends IMessage> {
-	position?: "left" | "right";
-	currentMessage: TMessage;
-	containerStyle?: LeftRightStyle<ViewStyle>;
-	timeTextStyle?: LeftRightStyle<TextStyle>;
-	timeFormat?: string;
+  position?: 'left' | 'right'
+  currentMessage: TMessage
+  containerStyle?: LeftRightStyle<ViewStyle>
+  timeTextStyle?: LeftRightStyle<TextStyle>
+  timeFormat?: string
 }
 
-export function Time<TMessage extends IMessage = IMessage>({
-	position = "left",
-	containerStyle,
-	currentMessage,
-	timeFormat = TIME_FORMAT,
-	timeTextStyle,
-}: TimeProps<TMessage>) {
-	const { getLocale } = useChatContext();
+export const Time = <TMessage extends IMessage = IMessage>({
+  position = 'left',
+  containerStyle,
+  currentMessage,
+  timeFormat = TIME_FORMAT,
+  timeTextStyle,
+}: TimeProps<TMessage>) => {
+  const { getLocale } = useChatContext()
 
-	if (currentMessage == null) {
-		return null;
-	}
+  const formattedTime = useMemo(() => {
+    if (!currentMessage)
+      return null
 
-	return (
-		<View style={[styles[position].container, containerStyle?.[position]]}>
-			<Text style={[styles[position].text, timeTextStyle?.[position]]}>
-				{dayjs(currentMessage.createdAt).locale(getLocale()).format(timeFormat)}
-			</Text>
-		</View>
-	);
+    return dayjs(currentMessage.createdAt).locale(getLocale()).format(timeFormat)
+  }, [currentMessage, getLocale, timeFormat])
+
+  if (!currentMessage)
+    return null
+
+  return (
+    <View style={containerStyle?.[position]}>
+      <Text
+        style={[
+          getStyleWithPosition(styles, 'text', position),
+          timeTextStyle?.[position],
+        ]}
+      >
+        {formattedTime}
+      </Text>
+    </View>
+  )
 }

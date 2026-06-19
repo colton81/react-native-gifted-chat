@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should render <LoadEarlier /> and compare with snapshot 1`] = `
+exports[`should render <LoadEarlierMessages /> and compare with snapshot 1`] = `
 <View
   accessibilityRole="button"
   accessibilityState={
@@ -21,7 +21,6 @@ exports[`should render <LoadEarlier /> and compare with snapshot 1`] = `
     }
   }
   accessible={true}
-  collapsable={false}
   focusable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
@@ -31,12 +30,21 @@ exports[`should render <LoadEarlier /> and compare with snapshot 1`] = `
   onResponderTerminationRequest={[Function]}
   onStartShouldSetResponder={[Function]}
   style={
-    {
-      "alignItems": "center",
-      "marginBottom": 10,
-      "marginTop": 5,
-      "opacity": 1,
-    }
+    [
+      [
+        {
+          "alignItems": "center",
+          "marginVertical": 10,
+        },
+        undefined,
+      ],
+      {
+        "opacity": 1,
+      },
+      {
+        "pointerEvents": "none",
+      },
+    ]
   }
 >
   <View
@@ -49,28 +57,37 @@ exports[`should render <LoadEarlier /> and compare with snapshot 1`] = `
         {
           "backgroundColor": "#b2b2b2",
           "borderRadius": 15,
-          "height": 30,
-          "paddingLeft": 10,
-          "paddingRight": 10,
+          "paddingHorizontal": 10,
+          "paddingVertical": 5,
         },
         undefined,
       ]
     }
   >
-    <Text
+    <View
       style={
-        [
-          {
-            "backgroundColor": "transparent",
-            "color": "#fff",
-            "fontSize": 12,
-          },
-          undefined,
-        ]
+        {
+          "paddingBottom": 4,
+          "paddingTop": 3,
+        }
       }
     >
-      Load earlier messages
-    </Text>
+      <Text
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "color": "#fff",
+              "fontSize": 12,
+              "lineHeight": 13,
+            },
+            undefined,
+          ]
+        }
+      >
+        Load earlier messages
+      </Text>
+    </View>
   </View>
 </View>
 `;

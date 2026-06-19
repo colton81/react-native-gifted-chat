@@ -1,90 +1,114 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo, useCallback, useEffect } from 'react'
 import {
-	StyleProp,
-	StyleSheet,
-	Text,
-	TextStyle,
-	TouchableOpacity,
-	TouchableOpacityProps,
-	View,
-	ViewStyle,
-} from "react-native";
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  Text } from 'react-native'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 
-import Color from "./Color";
-import { TEST_ID } from "./Constant";
-import { IMessage } from "./types";
-
-const styles = StyleSheet.create({
-	container: {
-		height: 44,
-		justifyContent: "flex-end",
-	},
-	text: {
-		color: Color.defaultBlue,
-		fontWeight: "600",
-		fontSize: 17,
-		backgroundColor: Color.backgroundTransparent,
-		marginBottom: 12,
-		marginLeft: 10,
-		marginRight: 10,
-	},
-});
+import { Color } from './Color'
+import { TouchableOpacity, TouchableOpacityProps } from './components/TouchableOpacity'
+import { TEST_ID } from './Constant'
+import { useColorScheme } from './hooks/useColorScheme'
+import { IMessage } from './Models'
+import { getColorSchemeStyle } from './styles'
 
 export interface SendProps<TMessage extends IMessage> {
-	text?: string;
-	label?: string;
-	containerStyle?: StyleProp<ViewStyle>;
-	textStyle?: StyleProp<TextStyle>;
-	children?: React.ReactNode;
-	alwaysShowSend?: boolean;
-	disabled?: boolean;
-	sendButtonProps?: Partial<TouchableOpacityProps>;
-	onSend?(
-		messages: Partial<TMessage> | Partial<TMessage>[],
-		shouldResetInputToolbar: boolean,
-	): void;
+  text?: string
+  label?: string
+  containerStyle?: StyleProp<ViewStyle>
+  textStyle?: StyleProp<TextStyle>
+  children?: React.ReactNode
+  /** Always show send button, even when text is empty */
+  isSendButtonAlwaysVisible?: boolean
+  /** Text is optional, allow sending empty messages (useful for media-only messages) */
+  isTextOptional?: boolean
+  sendButtonProps?: Partial<TouchableOpacityProps>
+  onSend?(
+    messages: Partial<TMessage> | Partial<TMessage>[],
+    shouldResetInputToolbar: boolean,
+  ): void
 }
 
 export const Send = <TMessage extends IMessage = IMessage>({
-	text,
-	containerStyle,
-	children,
-	textStyle,
-	label = "Send",
-	alwaysShowSend = false,
-	disabled = false,
-	sendButtonProps,
-	onSend,
+  text,
+  containerStyle,
+  children,
+  textStyle,
+  label = 'Send',
+  isSendButtonAlwaysVisible = false,
+  isTextOptional = false,
+  sendButtonProps,
+  onSend,
 }: SendProps<TMessage>) => {
-	const handleOnPress = useCallback(() => {
-		if (text && onSend) {
-			onSend({ text: text.trim() } as Partial<TMessage>, true);
-		}
-	}, [text, onSend]);
+  const colorScheme = useColorScheme()
+  const opacity = useSharedValue(0)
 
-	const showSend = useMemo(
-		() => alwaysShowSend || (text && text.trim().length > 0),
-		[alwaysShowSend, text],
-	);
+  const handleOnPress = useCallback(() => {
+    const trimmedText = text?.trim() ?? ''
+    const message = { text: trimmedText } as Partial<TMessage>
 
-	if (!showSend) {
-		return null;
-	}
+    if (onSend && (trimmedText.length || isTextOptional))
+      onSend(message, true)
+  }, [text, onSend, isTextOptional])
 
-	return (
-		<TouchableOpacity
-			testID={TEST_ID.SEND_TOUCHABLE}
-			accessible
-			accessibilityLabel="send"
-			style={[styles.container, containerStyle]}
-			onPress={handleOnPress}
-			accessibilityRole="button"
-			disabled={disabled}
-			{...sendButtonProps}
-		>
-			<View>
-				{children || <Text style={[styles.text, textStyle]}>{label}</Text>}
-			</View>
-		</TouchableOpacity>
-	);
-};
+  const isVisible = useMemo(
+    () => isSendButtonAlwaysVisible || !!text?.trim().length,
+    [isSendButtonAlwaysVisible, text]
+  )
+
+  useEffect(() => {
+    opacity.value = withTiming(isVisible ? 1 : 0, { duration: 200 })
+  }, [isVisible, opacity])
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }), [opacity])
+
+  return (
+    <Animated.View style={[styles.container, containerStyle, animatedStyle]} pointerEvents={isVisible ? 'auto' : 'none'}>
+      <TouchableOpacity
+        testID={TEST_ID.SEND_TOUCHABLE}
+        style={styles.touchable}
+        onPress={handleOnPress}
+        accessible
+        accessibilityLabel='send'
+        accessibilityRole='button'
+        {...sendButtonProps}
+      >
+        {
+          children ||
+          <Text
+            style={[
+              getColorSchemeStyle(styles, 'text', colorScheme),
+              textStyle,
+            ]}
+          >
+            {label}
+          </Text>
+        }
+      </TouchableOpacity>
+    </Animated.View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'flex-end',
+  },
+  touchable: {
+    justifyContent: 'flex-end',
+  },
+  text: {
+    color: Color.defaultBlue,
+    fontWeight: '600',
+    fontSize: 17,
+    backgroundColor: Color.backgroundTransparent,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+  },
+  text_dark: {
+    color: '#4da6ff',
+  },
+})

@@ -1,131 +1,108 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
-	NativeSyntheticEvent,
-	Platform,
-	StyleSheet,
-	TextInput,
-	TextInputContentSizeChangeEventData,
-	TextInputProps,
-} from "react-native";
-import Color from "./Color";
-import { DEFAULT_PLACEHOLDER, MIN_COMPOSER_HEIGHT } from "./Constant";
-import stylesCommon from "./styles";
+  Platform,
+  StyleSheet,
+  TextInputChangeEvent,
+  TextInputContentSizeChangeEvent,
+  TextInputProps,
+  View,
+} from 'react-native'
+import { TextInput } from 'react-native-gesture-handler'
+import { Color } from './Color'
+import { useColorScheme } from './hooks/useColorScheme'
+import stylesCommon, { getColorSchemeStyle } from './styles'
 
 export interface ComposerProps {
-	composerHeight?: number;
-	text?: string;
-	placeholder?: string;
-	placeholderTextColor?: string;
-	textInputProps?: Partial<TextInputProps>;
-	textInputStyle?: TextInputProps["style"];
-	textInputAutoFocus?: boolean;
-	keyboardAppearance?: TextInputProps["keyboardAppearance"];
-	multiline?: boolean;
-	disableComposer?: boolean;
-	onTextChanged?(text: string): void;
-	onInputSizeChanged?(layout: { width: number; height: number }): void;
+  composerHeight?: number
+  text?: string
+  textInputProps?: Partial<TextInputProps>
 }
 
-export function Composer({
-	composerHeight = MIN_COMPOSER_HEIGHT,
-	disableComposer = false,
-	keyboardAppearance = "default",
-	multiline = true,
-	onInputSizeChanged,
-	onTextChanged,
-	placeholder = DEFAULT_PLACEHOLDER,
-	placeholderTextColor = Color.defaultColor,
-	text = "",
-	textInputAutoFocus = false,
-	textInputProps,
-	textInputStyle,
+export function Composer ({
+  text = '',
+  textInputProps,
 }: ComposerProps): React.ReactElement {
-	const dimensionsRef = useRef<{ width: number; height: number }>(null);
+  const colorScheme = useColorScheme()
+  const isDark = colorScheme === 'dark'
 
-	const determineInputSizeChange = useCallback(
-		(dimensions: { width: number; height: number }) => {
-			// Support earlier versions of React Native on Android.
-			if (!dimensions) {
-				return;
-			}
+  const placeholder = textInputProps?.placeholder ?? 'Type a message...'
 
-			if (
-				!dimensionsRef.current ||
-				(dimensionsRef.current &&
-					(dimensionsRef.current.width !== dimensions.width ||
-						dimensionsRef.current.height !== dimensions.height))
-			) {
-				dimensionsRef.current = dimensions;
-				onInputSizeChanged?.(dimensions);
-			}
-		},
-		[onInputSizeChanged],
-	);
+  const minHeight = useMemo(() =>
+    Platform.select({
+      web: styles.textInput.lineHeight + styles.textInput.paddingTop + styles.textInput.paddingBottom,
+      default: undefined,
+    })
+  , [])
 
-	const handleContentSizeChange = useCallback(
-		({
-			nativeEvent: { contentSize },
-		}: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) =>
-			determineInputSizeChange(contentSize),
-		[determineInputSizeChange],
-	);
+  const [height, setHeight] = useState<number | undefined>(minHeight)
 
-	return (
-		<TextInput
-			testID={placeholder}
-			accessible
-			accessibilityLabel={placeholder}
-			placeholder={placeholder}
-			placeholderTextColor={placeholderTextColor}
-			multiline={multiline}
-			editable={!disableComposer}
-			onContentSizeChange={handleContentSizeChange}
-			onChangeText={onTextChanged}
-			style={[
-				stylesCommon.fill,
-				styles.textInput,
-				textInputStyle,
-				{
-					height: composerHeight,
-					...Platform.select({
-						web: {
-							outlineWidth: 0,
-							outlineColor: "transparent",
-							outlineOffset: 0,
-						},
-					}),
-				},
-			]}
-			autoFocus={textInputAutoFocus}
-			value={text}
-			enablesReturnKeyAutomatically
-			underlineColorAndroid="transparent"
-			keyboardAppearance={keyboardAppearance}
-			{...textInputProps}
-		/>
-	);
+  // Reset the (web) auto-grown height back to its minimum once the text is
+  // cleared, e.g. after sending. Without this the composer stays expanded at
+  // the height of the previously sent multiline message. (#2716)
+  useEffect(() => {
+    if (Platform.OS === 'web' && text.length === 0)
+      setHeight(minHeight)
+  }, [text, minHeight])
+
+  const handleContentSizeChange = useMemo(() => {
+    if (Platform.OS === 'web')
+      return (e: TextInputContentSizeChangeEvent) => {
+        const contentHeight = e.nativeEvent.contentSize.height
+        setHeight(Math.max(minHeight ?? 0, contentHeight))
+      }
+
+    return undefined
+  }, [minHeight])
+
+  const handleChange = useCallback((event: TextInputChangeEvent) => {
+    if (Platform.OS === 'web')
+      // Reset height to 0 to get the correct scrollHeight
+      requestAnimationFrame(() => {
+        // @ts-expect-error - web-specific code
+        event.nativeEvent.target.style.height = '0px'
+        // @ts-expect-error - web-specific code
+        event.nativeEvent.target.style.height = `${event.nativeEvent.target.scrollHeight}px`
+      })
+  }, [])
+
+  return (
+    <View style={stylesCommon.fill}>
+      <TextInput
+        testID={placeholder}
+        accessible
+        accessibilityLabel={placeholder}
+        placeholderTextColor={textInputProps?.placeholderTextColor ?? (isDark ? '#888' : Color.defaultColor)}
+        value={text}
+        enablesReturnKeyAutomatically
+        underlineColorAndroid='transparent'
+        keyboardAppearance={isDark ? 'dark' : 'default'}
+        multiline
+        placeholder={placeholder}
+        onContentSizeChange={handleContentSizeChange}
+        onChange={handleChange}
+        {...textInputProps}
+        style={[getColorSchemeStyle(styles, 'textInput', colorScheme), stylesWeb.textInput, { height }, textInputProps?.style]}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-	textInput: {
-		marginLeft: 10,
-		fontSize: 16,
-		lineHeight: 22,
-		...Platform.select({
-			web: {
-				paddingTop: 6,
-				paddingLeft: 4,
-			},
-		}),
-		marginTop: Platform.select({
-			ios: 6,
-			android: 0,
-			web: 6,
-		}),
-		marginBottom: Platform.select({
-			ios: 5,
-			android: 3,
-			web: 4,
-		}),
-	},
-});
+  textInput: {
+    fontSize: 16,
+    lineHeight: 22,
+    paddingTop: 8,
+    paddingBottom: 10,
+    paddingHorizontal: 8,
+  },
+  textInput_dark: {
+    color: '#fff',
+  },
+})
+
+const stylesWeb = StyleSheet.create({
+  textInput: {
+    /* @ts-expect-error - web-specific styles */
+    outlineStyle: 'none',
+  },
+})

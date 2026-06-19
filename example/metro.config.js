@@ -1,33 +1,50 @@
-// Learn more https://docs.expo.io/guides/customizing-metro
-/** biome-ignore-all lint/style/noCommonJs: <explanation> */
-const { getDefaultConfig } = require("expo/metro-config");
-const path = require("path");
-/** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(__dirname);
-config.resolver.blockList = [
-	...Array.from(config.resolver.blockList ?? []),
-	new RegExp(path.resolve("..", "node_modules", "react")),
-	new RegExp(path.resolve("..", "node_modules", "react-native")),
-	new RegExp(path.resolve("..", "node_modules", "@react-navigation")),
-];
+const escape = require('escape-string-regexp')
+const { getDefaultConfig } = require('expo/metro-config')
+const fs = require('fs')
+const path = require('path')
 
-config.resolver.extraNodeModules = {
-	get: (target, name) => {
-		// console.log(`example/metro name: ${name}`, Object.prototype.hasOwnProperty.call(target, name))
-		if (Object.hasOwn(target, name)) {
-			return target[name];
-		}
+const config = getDefaultConfig(__dirname)
+const { transformer, resolver } = config
+const defaultWatchFolders = config.watchFolders ?? []
 
-		if (name === "react-native-gifted-chat") {
-			return path.join(process.cwd(), "../src");
-		}
+const root = path.resolve(__dirname, '..')
+const rootPak = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
 
-		return path.join(process.cwd(), `node_modules/${name}`);
-	},
-};
-config.resolver.nodeModulesPaths = [
-	path.resolve(__dirname, "./node_modules"),
-	path.resolve(__dirname, "../node_modules"),
-];
-config.watchFolders = [path.resolve(__dirname, "../src")];
-module.exports = config;
+const modules = [
+  '@babel/runtime',
+  'metro-runtime',
+  'react-native-web',
+  ...Object.keys({
+    ...rootPak.dependencies,
+    ...rootPak.peerDependencies,
+  }),
+]
+
+module.exports = {
+  ...config,
+
+  projectRoot: __dirname,
+  watchFolders: [...defaultWatchFolders, root],
+
+  // We need to make sure that only one version is loaded for peerDependencies
+  // So we blocklist them at the root, and alias them to the versions in example's node_modules
+  resolver: {
+    ...resolver,
+    blockList: [new RegExp(`^${escape(path.join(root, 'node_modules'))}\\/.*$`)],
+    extraNodeModules: modules.reduce((acc, name) => {
+      acc[name] = path.join(__dirname, 'node_modules', name)
+      return acc
+    }, {}),
+    unstable_enablePackageExports: false,
+  },
+
+  transformer: {
+    ...transformer,
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true,
+      },
+    }),
+  },
+}
