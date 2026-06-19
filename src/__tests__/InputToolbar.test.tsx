@@ -1,11 +1,10 @@
-import "react-native";
-import React from "react";
-import renderer from "react-test-renderer";
+import React from 'react'
+import { render } from '@testing-library/react-native'
 
-import { InputToolbar } from "../GiftedChat";
+import { InputToolbar } from '..'
 
-it("should render <InputToolbar /> and compare with snapshot", () => {
-	const tree = renderer.create(<InputToolbar />).toJSON();
+it('should render <InputToolbar /> and compare with snapshot', () => {
+  const { toJSON } = render(<InputToolbar />)
 
-	expect(tree).toMatchSnapshot();
-});
+  expect(toJSON()).toMatchSnapshot()
+})

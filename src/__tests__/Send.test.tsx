@@ -1,22 +1,21 @@
-import "react-native";
-import React from "react";
-import renderer from "react-test-renderer";
+import React from 'react'
+import { render } from '@testing-library/react-native'
 
-import { Send } from "../GiftedChat";
+import { Send } from '..'
 
-describe("Send", () => {
-	it("should not render <Send /> and compare with snapshot", () => {
-		const tree = renderer.create(<Send />).toJSON();
-		expect(tree).toMatchSnapshot();
-	});
+describe('Send', () => {
+  it('should not render <Send /> and compare with snapshot', () => {
+    const { toJSON } = render(<Send />)
+    expect(toJSON()).toMatchSnapshot()
+  })
 
-	it("should always render <Send /> and compare with snapshot", () => {
-		const tree = renderer.create(<Send alwaysShowSend />).toJSON();
-		expect(tree).toMatchSnapshot();
-	});
+  it('should always render <Send /> and compare with snapshot', () => {
+    const { toJSON } = render(<Send isSendButtonAlwaysVisible />)
+    expect(toJSON()).toMatchSnapshot()
+  })
 
-	it("should render <Send /> where there is input and compare with snapshot", () => {
-		const tree = renderer.create(<Send text="test input" />).toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-});
+  it('should render <Send /> where there is input and compare with snapshot', () => {
+    const { toJSON } = render(<Send text='test input' />)
+    expect(toJSON()).toMatchSnapshot()
+  })
+})

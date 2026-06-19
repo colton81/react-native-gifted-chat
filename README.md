@@ -1,181 +1,163 @@
-<p align="center" >
-<p align="center" >
-   <a href="https://reactnative.gallery/FaridSafi/gifted-chat">
-    <img alt="react-native-gifted-chat" src="https://thumbs.gfycat.com/AbsoluteSadDobermanpinscher-size_restricted.gif" width="260" height="510" />
- </a>
-
+<p align="center">
+  <a href="https://www.npmjs.com/package/react-native-gifted-chat"><img alt="npm version" src="https://badge.fury.io/js/react-native-gifted-chat.svg"/></a>
+  <a href="https://www.npmjs.com/package/react-native-gifted-chat"><img alt="npm downloads" src="https://img.shields.io/npm/dm/react-native-gifted-chat.svg"/></a>
+  <a href="https://circleci.com/gh/FaridSafi/react-native-gifted-chat"><img src="https://circleci.com/gh/FaridSafi/react-native-gifted-chat.svg?style=shield" alt="build"></a>
+  <img src="https://img.shields.io/badge/platforms-iOS%20%7C%20Android%20%7C%20Web-lightgrey.svg" alt="platforms">
+  <img src="https://img.shields.io/badge/TypeScript-supported-blue.svg" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Expo-compatible-000020.svg" alt="Expo compatible">
 </p>
 
-<h3 align="center">
-  💬 Gifted Chat
-</h3>
+<h1 align="center">React Native Gifted Chat</h1>
+
 <p align="center">
   The most complete chat UI for React Native & Web
 </p>
+
 <p align="center">
-  <a href="https://www.npmjs.com/package/react-native-gifted-chat">
-  <img alt="npm downloads" src="https://img.shields.io/npm/dm/react-native-gifted-chat.svg"/></a>
-  <a href="https://www.npmjs.com/package/react-native-gifted-chat"><img alt="npm version" src="https://badge.fury.io/js/react-native-gifted-chat.svg"/></a>
-</p>
-<p align="center">
-  <a href="https://circleci.com/gh/FaridSafi/react-native-gifted-chat"><img src="https://circleci.com/gh/FaridSafi/react-native-gifted-chat.svg?style=shield" alt="build"></a>
-  <a title='License' href="https://github.com/FaridSafi/react-native-gifted-chat/blob/master/LICENSE" height="18">
-    <img src='https://img.shields.io/badge/license-MIT-blue.svg' />
+  <a href="https://snack.expo.dev/@kesha-antonov/gifted-chat-playground" target="_blank">
+    <img src="https://img.shields.io/badge/▶️_Try_in_Browser-4630EB?style=for-the-badge&logo=expo&logoColor=white" alt="Try GiftedChat on Expo Snack"/>
   </a>
-  <a href="#hire-an-expert"><img src="https://img.shields.io/badge/%F0%9F%92%AA-hire%20an%20expert-brightgreen"/></a>
 </p>
 
+---
+
+## ✨ Features
+
+- 🎨 **[Fully Customizable](#-props-reference)** - Override any component with your own implementation
+- 📎 **[Composer Actions](#actions--action-sheet)** - Attach photos, files, or trigger custom actions
+- ↩️ **[Reply to Messages](#reply-to-messages)** - Swipe-to-reply with reply preview and message threading
+- ⏮️ **[Load Earlier Messages](#load-earlier-messages)** - Infinite scroll with pagination support
+- 📋 **[Copy to Clipboard](#copy-to-clipboard)** - Long-press messages to copy text
+- 🔗 **[Smart Link Parsing](#smart-link-parsing)** - Auto-detect URLs, emails, phone numbers, hashtags, mentions
+- 👤 **[Avatars](#avatars)** - User initials or custom avatar images
+- 🌍 **[Localized Dates](#date--time)** - Full i18n support via Day.js
+- ⌨️ **[Keyboard Handling](#keyboard--layout)** - Smart keyboard avoidance for all platforms
+- 💬 **[System Messages](#system-messages)** - Display system notifications in chat
+- ⚡ **[Quick Replies](#quick-replies)** - Bot-style quick reply buttons
+- 😀 **[Emoji Reactions](#emoji-reactions)** - Long-press to react, with reaction pills and an optional full emoji browser
+- ✍️ **[Typing Indicator](#typing-indicator)** - Show when users are typing
+- ✅ **[Message Status](#message-status)** - Tick indicators for sent/delivered/read states
+- ⬇️ **[Scroll to Bottom](#scroll-to-bottom)** - Quick navigation button
+- 🌐 **[Web Support](#web-react-native-web)** - Works with react-native-web
+- 📱 **[Expo Support](#expo-projects)** - Easy integration with Expo projects
+- 📝 **[TypeScript](#typescript)** - Complete TypeScript definitions included
+
 <p align="center">
-  <a href="https://reverent-bardeen-47c862.netlify.com/" target="_blank">Demo Web 🖥</a>
-</p>
-<p align="center">
-  <a href="https://snack.expo.io/@xcarpentier/giftedchat-playground" target="_blank">Snack GiftedChat playground</a>
-  <img height="18" src="https://snack.expo.io/favicon.ico" />
+  <img width="200" src="https://github.com/user-attachments/assets/c9da88f5-0b20-471c-8cd7-373bdb767517" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img width="200" src="https://github.com/user-attachments/assets/f72b17f1-6c2e-43b5-87e7-477011aa3b07" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img width="200" src="https://github.com/user-attachments/assets/86711e73-ee3c-4527-b38d-e4dab47a44fe" />
 </p>
 
-## Sponsor
+---
+
+<h3 align="center">Sponsors</h3>
+
+<table align="center" border="0" cellspacing="20">
+  <tr>
+    <td align="center" valign="middle">
+      <a href="https://www.lereacteur.io" target="_blank"><img src="https://raw.githubusercontent.com/FaridSafi/react-native-gifted-chat/master/media/logo_sponsor.png" height="50"></a>
+    </td>
+    <td align="center" valign="middle">
+      <a href="https://getstream.io/chat/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_Chat&utm_term=react-native-gifted-chat" target="_blank"><img src="https://raw.githubusercontent.com/FaridSafi/react-native-gifted-chat/master/media/stream-logo.png" height="35"></a>
+    </td>
+    <td align="center" valign="middle">
+      <a href="https://www.ethora.com" target="_blank"><img src="https://www.dappros.com/wp-content/uploads/2023/12/Ethora-Logo.png" height="50"></a>
+    </td>
+  </tr>
+</table>
 
 <p align="center">
-  <br/>
-  <a href="https://www.lereacteur.io" target="_blank">
-    <img src="https://raw.githubusercontent.com/FaridSafi/react-native-gifted-chat/master/media/logo_sponsor.png">
-  </a>
+  <a href="https://www.lereacteur.io" target="_blank"><strong>Le Reacteur</strong></a> - Coding Bootcamp in Paris co-founded by Farid Safi
   <br>
-  <p align="center">
-    Coding Bootcamp in Paris co-founded by Farid Safi
-  </p>
-  <a href="https://www.lereacteur.io" target="_blank">
-    <p align="center">
-      Click to learn more
-    </p>
-  </a>
-</p>
-
-<p align="center">
-  <br/>
-  <a href="https://getstream.io/chat/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_Chat&utm_term=react-native-gifted-chat" target="_blank">
-    <img src="https://raw.githubusercontent.com/FaridSafi/react-native-gifted-chat/master/media/stream-logo.png" height="50">
-  </a>
+  <a href="https://getstream.io/chat/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_Chat&utm_term=react-native-gifted-chat" target="_blank"><strong>Stream</strong></a> - Scalable chat API/Server written in Go (<a href="https://getstream.io/chat/get_started/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_Chat&utm_term=react-native-gifted-chat" target="_blank">API Tour</a> | <a href="https://dev.to/nickparsons/react-native-chat-with-chuck-norris-3h7m?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_Chat&utm_term=react-native-gifted-chat" target="_blank">Tutorial</a>)
   <br>
-  <p align="center">
-    Scalable <a href="https://getstream.io/chat/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_Chat&utm_term=react-native-gifted-chat" target="_blank">chat API/Server</a> written in Go
-  </p>
-  <p align="center">
-    <a href="https://getstream.io/chat/get_started/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_Chat&utm_term=react-native-gifted-chat" target="_blank">API Tour</a> | <a href="https://dev.to/nickparsons/react-native-chat-with-chuck-norris-3h7m?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_Chat&utm_term=react-native-gifted-chat" target="_blank">React Native Gifted tutorial</a>
-  </p>
+  <a href="https://www.ethora.com" target="_blank"><strong>Ethora</strong></a> - A complete app engine featuring GiftedChat (<a href="https://bit.ly/ethorachat" target="_blank">GitHub</a>)
+  <br><br>
+  📚 <a href="https://amzn.to/3ZmTyb2" target="_blank">React Key Concepts (2nd ed.)</a>
 </p>
 
-<p align="center">
-  <br/>
-  <a href="https://www.ethora.com" target="_blank">
-    <img src="https://www.dappros.com/wp-content/uploads/2023/12/Ethora-Logo.png" width="300px">
-  </a>
-  <br>
-  <p align="center">
-    A complete app engine featuring GiftedChat
-  </p>
-  <p align="center">
-    <a href="https://bit.ly/ethorachat" target="_blank">Check out our GitHub</a>
-  </p>
-</p>
-<br>
-<p align="center">
- <a href="https://amzn.to/3ZmTyb2" target="_blank">React Key Concepts: Consolidate your knowledge of React’s core features (2nd ed. Edition)</a>
-</p>
+---
 
-## Features
+## 📖 Table of Contents
 
-- 🎉 **_`react-native-web`able_ (since 0.10.0)** [web configuration](#react-native-web)
-- Write with **TypeScript** (since 0.8.0)
-- Fully customizable components
-- Composer actions (to attach photos, etc.)
-- Load earlier messages
-- Copy messages to clipboard
-- Touchable links using [react-native-parsed-text](https://github.com/taskrabbit/react-native-parsed-text)
-- Avatar as user's initials
-- Localized dates
-- Multi-line TextInput
-- InputToolbar avoiding keyboard
-- Redux support
-- System message
-- Quick Reply messages (bot)
-- Typing indicator
+- [Features](#-features)
+- [Requirements](#-requirements)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Props Reference](#-props-reference)
+- [Data Structure](#-data-structure)
+- [Platform Notes](#-platform-notes)
+- [Example App](#-example-app)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+- [Authors](#-authors)
+- [License](#-license)
 
-# Getting started
+---
 
-## 🚧👷 Important notice
+## 📋 Requirements
 
-There's currently WIP going on to make the library more performant, modern in terms of chat UI and easier to maintain. If you have any issues, please report them. If you want to contribute, please do so.
+| Requirement | Version |
+|-------------|---------|
+| React Native | >= 0.70.0 |
+| iOS | >= 13.4 |
+| Android | API 21+ (Android 5.0) |
+| Expo | SDK 50+ |
+| TypeScript | >= 5.0 (optional) |
 
-The most stable version is `2.6.5`. If you want to use the latest version, please be aware that it's a work in progress.
+---
 
-Readme for this version: [2.6.5 readme](https://github.com/FaridSafi/react-native-gifted-chat/blob/eebab3751fcbe07715135e6e7b2aa3f76a10d8ac/README.md)
+## 📦 Installation
 
-## Installation
-
-### Install dependencies
-
-Yarn:
-```bash
-yarn add react-native-gifted-chat react-native-reanimated react-native-keyboard-controller
-```
-
-Npm:
+### Expo Projects
 
 ```bash
-npm install --save react-native-gifted-chat react-native-reanimated react-native-keyboard-controller
+npx expo install react-native-gifted-chat react-native-reanimated react-native-gesture-handler react-native-safe-area-context react-native-keyboard-controller
 ```
 
-Expo
+### Bare React Native Projects
+
+**Step 1:** Install the packages
+
+Using yarn:
 ```bash
-npx expo install react-native-gifted-chat react-native-reanimated react-native-keyboard-controller
+yarn add react-native-gifted-chat react-native-reanimated react-native-gesture-handler react-native-safe-area-context react-native-keyboard-controller
 ```
 
-### Non-expo users
+Using npm:
+```bash
+npm install --save react-native-gifted-chat react-native-reanimated react-native-gesture-handler react-native-safe-area-context react-native-keyboard-controller
+```
+
+**Step 2:** Install iOS pods
 
 ```bash
 npx pod-install
 ```
 
-### Setup react-native-reanimated
+**Step 3:** Configure react-native-reanimated
 
-Follow guide: [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/#step-2-add-reanimateds-babel-plugin)
+Follow the [react-native-reanimated installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/#step-2-add-reanimateds-babel-plugin) to add the Babel plugin.
 
-## Testing
-`TEST_ID` is exported as constants that can be used in your testing library of choice
+---
 
-Gifted Chat uses `onLayout` to determine the height of the chat container. To trigger `onLayout` during your tests, you can run the following bits of code.
+## 🚀 Usage
 
-```typescript
-const WIDTH = 200; // or any number
-const HEIGHT = 2000; // or any number
-
-const loadingWrapper = getByTestId(TEST_ID.LOADING_WRAPPER)
-fireEvent(loadingWrapper, 'layout', {
-  nativeEvent: {
-    layout: {
-      width: WIDTH,
-      height: HEIGHT,
-    },
-  },
-})
-```
-
-## You have a question?
-
-1. Please check this readme and may find a response
-1. Please ask on StackOverflow first: https://stackoverflow.com/questions/tagged/react-native-gifted-chat
-1. Find response on existing issues
-1. Try to keep issues for issues
-
-## Example
+### Basic Example
 
 ```jsx
 import React, { useState, useCallback, useEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
+import { useHeaderHeight } from '@react-navigation/elements'
 
 export function Example() {
   const [messages, setMessages] = useState([])
+
+  // keyboardVerticalOffset = distance from screen top to GiftedChat container
+  // useHeaderHeight() returns status bar + navigation header height
+  const headerHeight = useHeaderHeight()
 
   useEffect(() => {
     setMessages([
@@ -185,7 +167,7 @@ export function Example() {
         createdAt: new Date(),
         user: {
           _id: 2,
-          name: 'React Native',
+          name: 'John Doe',
           avatar: 'https://placeimg.com/140/140/any',
         },
       },
@@ -205,25 +187,25 @@ export function Example() {
       user={{
         _id: 1,
       }}
+      keyboardAvoidingViewProps={{ keyboardVerticalOffset: headerHeight }}
     />
   )
 }
 ```
 
-## Advanced example
+> **💡 Tip:** Check out more examples in the [`example`](example) directory including Slack-style messages, quick replies, and custom components.
 
-See [`App.tsx`](https://github.com/FaridSafi/react-native-gifted-chat/blob/master/example/App.tsx) for a working demo!
+---
 
-## "Slack" example
+## 📊 Data Structure
 
-See the files in [`example/example-slack-message`](example/example-slack-message) for an example of how to override the default UI to make something that looks more like Slack -- with usernames displayed and all messages on the left.
+Messages, system messages, and quick replies follow the structure defined in [Models.ts](src/Models.ts).
 
-## Message object
+<details>
+<summary><strong>Message Object Structure</strong></summary>
 
-> e.g. Chat Message
-
-```ts
-export interface IMessage {
+```typescript
+interface IMessage {
   _id: string | number
   text: string
   createdAt: Date | number
@@ -237,287 +219,656 @@ export interface IMessage {
   pending?: boolean
   quickReplies?: QuickReplies
 }
-```
 
-```js
-{
-  _id: 1,
-  text: 'My message',
-  createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-  user: {
-    _id: 2,
-    name: 'React Native',
-    avatar: 'https://facebook.github.io/react/img/logo_og.png',
-  },
-  image: 'https://facebook.github.io/react/img/logo_og.png',
-  // You can also add a video prop:
-  video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-  // Mark the message as sent, using one tick
-  sent: true,
-  // Mark the message as received, using two tick
-  received: true,
-  // Mark the message as pending with a clock loader
-  pending: true,
-  // Any additional custom parameters are passed through
+interface User {
+  _id: string | number
+  name?: string
+  avatar?: string | number | (() => React.ReactNode)
 }
 ```
 
-> e.g. System Message
+</details>
 
-```js
-{
-  _id: 1,
-  text: 'This is a system message',
-  createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-  system: true,
-  // Any additional custom parameters are passed through
-}
-```
+---
 
-> e.g. Chat Message with Quick Reply options
+## 📖 Props Reference
 
-See PR [#1211](https://github.com/FaridSafi/react-native-gifted-chat/pull/1211)
+### Core Configuration
 
-```ts
-interface Reply {
-  title: string
-  value: string
-  messageId?: number | string
-}
-
-interface QuickReplies {
-  type: 'radio' | 'checkbox'
-  values: Reply[]
-  keepIt?: boolean
-}
-```
-
-```js
-  {
-    _id: 1,
-    text: 'This is a quick reply. Do you love Gifted Chat? (radio) KEEP IT',
-    createdAt: new Date(),
-    quickReplies: {
-      type: 'radio', // or 'checkbox',
-      keepIt: true,
-      values: [
-        {
-          title: '😋 Yes',
-          value: 'yes',
-        },
-        {
-          title: '📷 Yes, let me show you with a picture!',
-          value: 'yes_picture',
-        },
-        {
-          title: '😞 Nope. What?',
-          value: 'no',
-        },
-      ],
-    },
-    user: {
-      _id: 2,
-      name: 'React Native',
-    },
-  },
-  {
-    _id: 2,
-    text: 'This is a quick reply. Do you love Gifted Chat? (checkbox)',
-    createdAt: new Date(),
-    quickReplies: {
-      type: 'checkbox', // or 'radio',
-      values: [
-        {
-          title: 'Yes',
-          value: 'yes',
-        },
-        {
-          title: 'Yes, let me show you with a picture!',
-          value: 'yes_picture',
-        },
-        {
-          title: 'Nope. What?',
-          value: 'no',
-        },
-      ],
-    },
-    user: {
-      _id: 2,
-      name: 'React Native',
-    },
-  }
-```
-
-## Props
-
-- **`messageContainerRef`** _(FlatList ref)_ - Ref to the flatlist
-- **`textInputRef`** _(TextInput ref)_ - Ref to the text input
 - **`messages`** _(Array)_ - Messages to display
-- **`isTyping`** _(Bool)_ - Typing Indicator state; default `false`. If you use`renderFooter` it will override this.
-- **`isKeyboardInternallyHandled`** _(Bool)_ - Determine whether to handle keyboard awareness inside the plugin. If you have your own keyboard handling outside the plugin set this to false; default is `true`
-- **`text`** _(String)_ - Input text; default is `undefined`, but if specified, it will override GiftedChat's internal state (e.g. for redux; [see notes below](#notes-for-redux))
-- **`placeholder`** _(String)_ - Placeholder when `text` is empty; default is `'Type a message...'`
-- **`messageIdGenerator`** _(Function)_ - Generate an id for new messages. Defaults to UUID v4, generated by [uuid](https://github.com/kelektiv/node-uuid)
 - **`user`** _(Object)_ - User sending the messages: `{ _id, name, avatar }`
 - **`onSend`** _(Function)_ - Callback when sending a message
-- **`alwaysShowSend`** _(Bool)_ - Always show send button in input text composer; default `false`, show only when text input is not empty
+- **`messageIdGenerator`** _(Function)_ - Generate an id for new messages. Defaults to a simple random string generator.
 - **`locale`** _(String)_ - Locale to localize the dates. You need first to import the locale you need (ie. `require('dayjs/locale/de')` or `import 'dayjs/locale/fr'`)
-- **`timeFormat`** _(String)_ - Format to use for rendering times; default is `'LT'` (see [Day.js Format](https://day.js.org/docs/en/display/format))
-- **`dateFormat`** _(String)_ - Format to use for rendering dates; default is `'D MMMM'` (see [Day.js Format](https://day.js.org/docs/en/display/format))
-- **`dateFormatCalendar`** _(Object)_ - Format to use for rendering relative times; default is `{ sameDay: '[Today]' }` (see [Day.js Calendar](https://day.js.org/docs/en/plugin/calendar))
-- **`loadEarlier`** _(Bool)_ - Enables the "load earlier messages" button, required for `infiniteScroll`
-- **`onLoadEarlier`** _(Function)_ - Callback when loading earlier messages
-- **`isLoadingEarlier`** _(Bool)_ - Display an `ActivityIndicator` when loading earlier messages
-- **`renderLoading`** _(Function)_ - Render a loading view when initializing
-- **`renderLoadEarlier`** _(Function)_ - Custom "Load earlier messages" button
-- **`renderAvatar`** _(Function)_ - Custom message avatar; set to `null` to not render any avatar for the message
-- **`showUserAvatar`** _(Bool)_ - Whether to render an avatar for the current user; default is `false`, only show avatars for other users
-- **`showAvatarForEveryMessage`** _(Bool)_ - When false, avatars will only be displayed when a consecutive message is from the same user on the same day; default is `false`
-- **`onPressAvatar`** _(Function(`user`))_ - Callback when a message avatar is tapped
-- **`onLongPressAvatar`** _(Function(`user`))_ - Callback when a message avatar is long-pressed
-- **`renderAvatarOnTop`** _(Bool)_ - Render the message avatar at the top of consecutive messages, rather than the bottom; default is `false`
-- **`renderBubble`** _(Function)_ - Custom message bubble
-- **`renderTicks`** _(Function(`message`))_ - Custom ticks indicator to display message status
-- **`renderSystemMessage`** _(Function)_ - Custom system message
-- **`onPress`** _(Function(`context`, `message`))_ - Callback when a message bubble is pressed
-- **`onLongPress`** _(Function(`context`, `message`))_ - Callback when a message bubble is long-pressed (see [example using `showActionSheetWithOptions()`](https://github.com/FaridSafi/react-native-gifted-chat/blob/master@%7B2017-09-25%7D/src/Bubble.js#L96-L119))
-- **`inverted`** _(Bool)_ - Reverses display order of `messages`; default is `true`
-- **`renderUsernameOnMessage`** _(Bool)_ - Indicate whether to show the user's username inside the message bubble; default is `false`
-- **`renderUsername`** _(Function)_ - Custom Username container
-- **`renderMessage`** _(Function)_ - Custom message container
-- **`renderMessageText`** _(Function)_ - Custom message text
-- **`renderMessageImage`** _(Function)_ - Custom message image
-- **`renderMessageVideo`** _(Function)_ - Custom message video
-- **`imageProps`** _(Object)_ - Extra props to be passed to the [`<Image>`](https://facebook.github.io/react-native/docs/image.html) component created by the default `renderMessageImage`
-- **`videoProps`** _(Object)_ - Extra props to be passed to the video component created by the required `renderMessageVideo`
-- **`lightboxProps`** _(Object)_ - Extra props to be passed to the `MessageImage`'s [Lightbox](https://github.com/oblador/react-native-lightbox)
-- **`isCustomViewBottom`** _(Bool)_ - Determine whether renderCustomView is displayed before or after the text, image and video views; default is `false`
-- **`renderCustomView`** _(Function)_ - Custom view inside the bubble
-- **`renderDay`** _(Function)_ - Custom day above a message
-- **`renderTime`** _(Function)_ - Custom time inside a message
-- **`renderFooter`** _(Function)_ - Custom footer component on the ListView, e.g. `'User is typing...'`; see [App.tsx](/example/App.tsx) for an example. Overrides default typing indicator that triggers when `isTyping` is true.
-- **`renderChatEmpty`** _(Function)_ - Custom component to render in the ListView when messages are empty
-- **`renderChatFooter`** _(Function)_ - Custom component to render below the MessageContainer (separate from the ListView)
-- **`renderInputToolbar`** _(Function)_ - Custom message composer container
-- **`renderComposer`** _(Function)_ - Custom text input message composer
-- **`renderActions`** _(Function)_ - Custom action button on the left of the message composer
-- **`renderSend`** _(Function)_ - Custom send button; you can pass children to the original `Send` component quite easily, for example, to use a custom icon ([example](https://github.com/FaridSafi/react-native-gifted-chat/pull/487))
-- **`renderAccessory`** _(Function)_ - Custom second line of actions below the message composer
-- **`onPressActionButton`** _(Function)_ - Callback when the Action button is pressed (if set, the default `actionSheet` will not be used)
-- **`bottomOffset`** _(Integer)_ - Distance of the chat from the bottom of the screen (e.g. useful if you display a tab bar)
-- **`focusOnInputWhenOpeningKeyboard`** _(Bool)_ - Focus on <TextInput> automatically when opening the keyboard; default `true`
-- **`minInputToolbarHeight`** _(Integer)_ - Minimum height of the input toolbar; default is `44`
-- **`listViewProps`** _(Object)_ - Extra props to be passed to the messages [`<ListView>`](https://facebook.github.io/react-native/docs/listview.html); some props can't be overridden, see the code in `MessageContainer.render()` for details
-- **`textInputProps`** _(Object)_ - Extra props to be passed to the [`<TextInput>`](https://facebook.github.io/react-native/docs/textinput.html)
-- **`textInputStyle`** _(Object)_ - Custom style to be passed to the [`<TextInput>`](https://facebook.github.io/react-native/docs/textinput.html)
-- **`multiline`** _(Bool)_ - Indicates whether to allow the [`<TextInput>`](https://facebook.github.io/react-native/docs/textinput.html) to be multiple lines or not; default `true`.
-- **`keyboardShouldPersistTaps`** _(Enum)_ - Determines whether the keyboard should stay visible after a tap; see [`<ScrollView>`](https://facebook.github.io/react-native/docs/scrollview.html) docs
-- **`onInputTextChanged`** _(Function)_ - Callback when the input text changes
-- **`maxInputLength`** _(Integer)_ - Max message composer TextInput length
-- **`parsePatterns`** _(Function)_ - Custom parse patterns for [react-native-parsed-text](https://github.com/taskrabbit/react-native-parsed-text) used to linking message content (like URLs and phone numbers), e.g.:
+- **`colorScheme`** _('light' | 'dark')_ - Force color scheme (light/dark mode). When set to `'light'` or `'dark'`, it overrides the system color scheme. When `undefined`, it uses the system color scheme. Default is `undefined`.
 
-```js
- <GiftedChat
-   parsePatterns={(linkStyle) => [
-     { type: 'phone', style: linkStyle, onPress: this.onPressPhoneNumber },
-     { pattern: /#(\w+)/, style: { ...linkStyle, styles.hashtag }, onPress: this.onPressHashtag },
-   ]}
- />
+### Refs
+
+- **`messagesContainerRef`** _(FlatList ref)_ - Ref to the flatlist
+- **`textInputRef`** _(TextInput ref)_ - Ref to the text input
+
+### Keyboard & Layout
+
+- **`keyboardProviderProps`** _(Object)_ - Props to be passed to the [`KeyboardProvider`](https://kirillzyusko.github.io/react-native-keyboard-controller/docs/api/keyboard-provider) for keyboard handling. Default values:
+  - `statusBarTranslucent: true` - Required on Android for correct keyboard height calculation when status bar is translucent (edge-to-edge mode)
+  - `navigationBarTranslucent: true` - Required on Android for correct keyboard height calculation when navigation bar is translucent (edge-to-edge mode)
+- **`disableKeyboardProvider`** _(Bool)_ - Skip rendering the built-in `KeyboardProvider` wrapper; default is `false`. Enable this when your app already mounts its own `KeyboardProvider` (e.g. once at the root), or when the default edge-to-edge behavior causes a layout shift, flicker on mount, or a header/content jump on Android/Expo. See [Using your own `KeyboardProvider`](#using-your-own-keyboardprovider) below.
+- **`keyboardAvoidingViewProps`** _(Object)_ - Props to be passed to the [`KeyboardAvoidingView`](https://kirillzyusko.github.io/react-native-keyboard-controller/docs/api/components/keyboard-avoiding-view). See **keyboardVerticalOffset** below for proper keyboard handling.
+- **`isAlignedTop`** _(Boolean)_ Controls whether or not the message bubbles appear at the top of the chat (Default is false - bubbles align to bottom)
+- **`isInverted`** _(Bool)_ - Reverses display order of `messages`; default is `true`
+
+#### Understanding `keyboardVerticalOffset`
+
+The [`keyboardVerticalOffset`](https://kirillzyusko.github.io/react-native-keyboard-controller/docs/api/components/keyboard-avoiding-view#keyboardverticaloffset) tells the KeyboardAvoidingView where its container starts relative to the top of the screen. This is essential when GiftedChat is not positioned at the very top of the screen (e.g., when you have a navigation header).
+
+**Default value:** `insets.top` (status bar height from `useSafeAreaInsets()`). This works correctly only when GiftedChat fills the entire screen without a navigation header. If you have a navigation header, you need to pass the correct offset via `keyboardAvoidingViewProps`.
+
+**What the value means:** The offset equals the distance (in points) from the top of the screen to the top of your GiftedChat container. This typically includes:
+- Status bar height
+- Navigation header height (on iOS, `useHeaderHeight()` already includes status bar)
+
+**How to use:**
+
+```jsx
+import { useHeaderHeight } from '@react-navigation/elements'
+
+function ChatScreen() {
+  // useHeaderHeight() returns status bar + navigation header height on iOS
+  const headerHeight = useHeaderHeight()
+
+  return (
+    <GiftedChat
+      keyboardAvoidingViewProps={{ keyboardVerticalOffset: headerHeight }}
+      // ... other props
+    />
+  )
+}
 ```
 
-- **`extraData`** _(Object)_ - Extra props for re-rendering FlatList on demand. This will be useful for rendering footer etc.
+> **Note:** `useHeaderHeight()` requires your chat component to be rendered inside a proper navigation screen (not conditional rendering). If it returns `0`, ensure your chat screen is a real navigation screen with a visible header.
+
+**Why this matters:** Without the correct offset, the keyboard may overlap the input field or leave extra space. The KeyboardAvoidingView uses this value to calculate how much to shift the content when the keyboard appears.
+
+#### Using your own `KeyboardProvider`
+
+By default GiftedChat wraps itself in a [`KeyboardProvider`](https://kirillzyusko.github.io/react-native-keyboard-controller/docs/api/keyboard-provider) with `statusBarTranslucent` and `navigationBarTranslucent` enabled. On some Android/Expo (edge-to-edge) setups this can cause the screen to shift down, flicker on mount, or distort a navigation header - especially when another `KeyboardProvider` already exists higher in the tree.
+
+Set **`disableKeyboardProvider`** to skip the built-in wrapper:
+
+```jsx
+import { KeyboardProvider } from 'react-native-keyboard-controller'
+
+// Mount a single KeyboardProvider once, near the root of your app
+function App() {
+  return (
+    <KeyboardProvider>
+      {/* ...navigation / screens... */}
+    </KeyboardProvider>
+  )
+}
+
+function ChatScreen() {
+  return (
+    <GiftedChat
+      disableKeyboardProvider
+      // ... other props
+    />
+  )
+}
+```
+
+> **Important:** GiftedChat's keyboard avoidance relies on a `KeyboardProvider` being present in the tree. When you set `disableKeyboardProvider`, you **must** mount your own `KeyboardProvider` above GiftedChat - otherwise the keyboard will cover the input. Mounting exactly one provider (yours) is what avoids the double edge-to-edge shift.
+
+### Text Input & Composer
+
+- **`text`** _(String)_ - Input text; default is `undefined`, but if specified, it will override GiftedChat's internal state. Useful for managing text state outside of GiftedChat (e.g. with Redux). Don't forget to implement `textInputProps.onChangeText` to update the text state.
+- **`initialText`** _(String)_ - Initial text to display in the input field
+- **`isSendButtonAlwaysVisible`** _(Bool)_ - Always show send button in input text composer; default `false`, show only when text input is not empty
+- **`isTextOptional`** _(Bool)_ - Allow sending messages without text (useful for media-only messages); default `false`. Use with `isSendButtonAlwaysVisible` for media attachments.
 - **`minComposerHeight`** _(Object)_ - Custom min-height of the composer.
 - **`maxComposerHeight`** _(Object)_ - Custom max height of the composer.
+- **`minInputToolbarHeight`** _(Integer)_ - Minimum height of the input toolbar; default is `44`
+- **`renderInputToolbar`** _(Component | Function)_ - Custom message composer container
+- **`renderComposer`** _(Component | Function)_ - Custom text input message composer
+- **`renderSend`** _(Component | Function)_ - Custom send button; you can pass children to the original `Send` component quite easily, for example, to use a custom icon ([example](https://github.com/FaridSafi/react-native-gifted-chat/pull/487))
+- **`renderActions`** _(Component | Function)_ - Custom action button on the left of the message composer
+- **`renderAccessory`** _(Component | Function)_ - Custom second line of actions below the message composer
+- **`textInputProps`** _(Object)_ - props to be passed to the [`<TextInput>`](https://reactnative.dev/docs/textinput).
 
-* **`isScrollToBottomEnabled`** _(Bool)_ - Enables the scroll to bottom Component (Default is false)
-* **`scrollToBottomComponent`** _(Function)_ - Custom Scroll To Bottom Component container
-* **`scrollToBottomOffset`** _(Integer)_ - Custom Height Offset upon which to begin showing Scroll To Bottom Component (Default is 200)
-* **`scrollToBottomStyle`** _(Object)_ - Custom style for Bottom Component container
-* **`alignTop`** _(Boolean)_ Controls whether or not the message bubbles appear at the top of the chat (Default is false - bubbles align to bottom)
-* **`onQuickReply`** _(Function)_ - Callback when sending a quick reply (to backend server)
-* **`renderQuickReplies`** _(Function)_ - Custom all quick reply view
-* **`quickReplyStyle`** _(StyleProp<ViewStyle>)_ - Custom quick reply view style
-* **`renderQuickReplySend`** _(Function)_ - Custom quick reply **send** view
-* **`shouldUpdateMessage`** _(Function)_ - Lets the message component know when to update outside of normal cases.
-* **`infiniteScroll`** _(Bool)_ - infinite scroll up when reach the top of messages container, automatically call onLoadEarlier function if exist (not yet supported for the web). You need to add `loadEarlier` prop too.
+### Actions & Action Sheet
 
-## Notes for [Redux](https://github.com/reactjs/redux)
+- **`onPressActionButton`** _(Function)_ - Callback when the Action button is pressed (if set, the default `actionSheet` will not be used)
+- **`actionSheet`** _(Function)_ - Custom action sheet interface for showing action options
+- **`actions`** _(Array)_ - Custom action options for the input toolbar action button; array of objects with `title` (string) and `action` (function) properties
+- **`actionSheetOptionTintColor`** _(String)_ - Tint color for action sheet options
 
-The `messages` prop should work out-of-the-box with Redux. In most cases, this is all you need.
+### Messages & Message Container
 
-If you decide to specify a `text` prop, GiftedChat will no longer manage its own internal `text` state and will defer entirely to your prop.
-This is great for using a tool like Redux, but there's one extra step you'll need to take:
-simply implement `onInputTextChanged` to receive typing events and reset events (e.g. to clear the text `onSend`):
+- **`messagesContainerStyle`** _(Object)_ - Custom style for the messages container
+- **`renderMessage`** _(Component | Function)_ - Custom message container
+- **`renderLoading`** _(Component | Function)_ - Render a loading view when initializing
+- **`renderChatEmpty`** _(Component | Function)_ - Custom component to render in the ListView when messages are empty
+- **`renderChatFooter`** _(Component | Function)_ - Custom component to render below the MessagesContainer (separate from the ListView)
+- **`listProps`** _(Object)_ - Extra props to be passed to the messages [`<FlatList>`](https://reactnative.dev/docs/flatlist). Supports all FlatList props including `maintainVisibleContentPosition` for keeping scroll position when new messages arrive (useful for AI chatbots).
 
-```js
+### Message Bubbles & Content
+
+- **`renderBubble`** _(Component | Function(`props: BubbleProps`))_ - Custom message bubble. Receives [BubbleProps](src/Bubble/types.ts) as parameter.
+- **`renderMessageText`** _(Component | Function)_ - Custom message text
+- **`renderMessageImage`** _(Component | Function)_ - Custom message image
+- **`renderMessageVideo`** _(Component | Function)_ - Custom message video
+- **`renderMessageAudio`** _(Component | Function)_ - Custom message audio
+- **`renderCustomView`** _(Component | Function)_ - Custom view inside the bubble
+- **`isCustomViewBottom`** _(Bool)_ - Determine whether renderCustomView is displayed before or after the text, image and video views; default is `false`
+- **`onPressMessage`** _(Function(`context`, `message`))_ - Callback when a message bubble is pressed
+- **`onLongPressMessage`** _(Function(`context`, `message`))_ - Callback when a message bubble is long-pressed; you can use this to show action sheets (e.g., copy, delete, reply)
+- **`imageProps`** _(Object)_ - Extra props to be passed to the [`<Image>`](https://reactnative.dev/docs/image) component created by the default `renderMessageImage`
+- **`imageStyle`** _(Object)_ - Custom style for message images
+- **`videoProps`** _(Object)_ - Extra props to be passed to the video component created by the required `renderMessageVideo`
+- **`messageTextProps`** _(Object)_ - Extra props to be passed to the MessageText component. Useful for customizing link parsing behavior, text styles, and matchers. Supports the following props:
+  - `matchers` - Custom matchers for linking message content (like URLs, phone numbers, hashtags, mentions)
+  - `linkStyle` - Custom style for links
+  - `email` - Enable/disable email parsing (default: true)
+  - `phone` - Enable/disable phone number parsing (default: true)
+  - `url` - Enable/disable URL parsing (default: true)
+  - `hashtag` - Enable/disable hashtag parsing (default: false)
+  - `mention` - Enable/disable mention parsing (default: false)
+  - `hashtagUrl` - Base URL for hashtags (e.g., 'https://x.com/hashtag')
+  - `mentionUrl` - Base URL for mentions (e.g., 'https://x.com')
+  - `stripPrefix` - Strip 'http://' or 'https://' from URL display (default: false)
+  - `TextComponent` - Custom Text component to use (e.g., from react-native-gesture-handler)
+
+Example:
+
+```tsx
 <GiftedChat
-  text={customText}
-  onInputTextChanged={text => this.setCustomText(text)}
-  /* ... */
+  messageTextProps={{
+    phone: false, // Disable default phone number linking
+    matchers: [
+      {
+        type: 'phone',
+        pattern: /\+?[1-9][0-9\-\(\) ]{7,}[0-9]/g,
+        getLinkUrl: (replacerArgs: ReplacerArgs): string => {
+          return replacerArgs[0].replace(/[\-\(\) ]/g, '')
+        },
+        getLinkText: (replacerArgs: ReplacerArgs): string => {
+          return replacerArgs[0]
+        },
+        style: styles.linkStyle,
+        onPress: (match: CustomMatch) => {
+          const url = match.getAnchorHref()
+
+          const options: {
+            title: string
+            action?: () => void
+          }[] = [
+            { title: 'Copy', action: () => setStringAsync(url) },
+            { title: 'Call', action: () => Linking.openURL(`tel:${url}`) },
+            { title: 'Send SMS', action: () => Linking.openURL(`sms:${url}`) },
+            { title: 'Cancel' },
+          ]
+
+          showActionSheetWithOptions({
+            options: options.map(o => o.title),
+            cancelButtonIndex: options.length - 1,
+          }, (buttonIndex?: number) => {
+            if (buttonIndex === undefined)
+              return
+
+            const option = options[buttonIndex]
+            option.action?.()
+          })
+        },
+      },
+    ],
+    linkStyle: { left: { color: 'blue' }, right: { color: 'lightblue' } },
+  }}
 />
 ```
 
-## Notes for Android
+See full example in [LinksExample](example/components/chat-examples/LinksExample.tsx)
 
-If you are using Create React Native App / Expo, no Android specific installation steps are required -- you can skip this section. Otherwise, we recommend modifying your project configuration as follows.
+### Avatars
 
-- Make sure you have `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:
+- **`renderAvatar`** _(Component | Function)_ - Custom message avatar; set to `null` to not render any avatar for the message
+- **`isUserAvatarVisible`** _(Bool)_ - Whether to render an avatar for the current user; default is `false`, only show avatars for other users
+- **`isAvatarVisibleForEveryMessage`** _(Bool)_ - When false, avatars will only be displayed when a consecutive message is from the same user on the same day; default is `false`
+- **`onPressAvatar`** _(Function(`user`))_ - Callback when a message avatar is tapped
+- **`onLongPressAvatar`** _(Function(`user`))_ - Callback when a message avatar is long-pressed
+- **`isAvatarOnTop`** _(Bool)_ - Render the message avatar at the top of consecutive messages, rather than the bottom; default is `false`
 
-  ```xml
-  <activity
-    android:name=".MainActivity"
-    android:label="@string/app_name"
-    android:windowSoftInputMode="adjustResize"
-    android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
-  ```
+### Username
 
-- For **Expo**, there are at least 2 solutions to fix it:
+- **`isUsernameVisible`** _(Bool)_ - Indicate whether to show the user's username inside the message bubble; default is `false`
+- **`renderUsername`** _(Component | Function)_ - Custom Username container
 
-  - Append [`KeyboardAvoidingView`](https://facebook.github.io/react-native/docs/keyboardavoidingview) after GiftedChat. This should only be done for Android, as `KeyboardAvoidingView` may conflict with the iOS keyboard avoidance already built into GiftedChat, e.g.:
+### Date & Time
 
+- **`timeFormat`** _(String)_ - Format to use for rendering times; default is `'LT'` (see [Day.js Format](https://day.js.org/docs/en/display/format))
+- **`dateFormat`** _(String)_ - Format to use for rendering dates; default is `'D MMMM'` (see [Day.js Format](https://day.js.org/docs/en/display/format))
+- **`dateFormatCalendar`** _(Object)_ - Format to use for rendering relative times; default is `{ sameDay: '[Today]' }` (see [Day.js Calendar](https://day.js.org/docs/en/plugin/calendar))
+- **`renderDay`** _(Component | Function)_ - Custom day above a message. The same function renders both the inline day separators and the floating/animated day header that sticks to the top while scrolling. Read `props.isAnimated` (`true` for the floating header, `false` for the inline separator) to give each a different look.
+- **`dayProps`** _(Object)_ - Props to pass to the Day component:
+  - `containerStyle` - Custom style for the day container
+  - `wrapperStyle` - Custom style for the day wrapper
+  - `textProps` - Props to pass to the Text component (e.g., `style`, `allowFontScaling`, `numberOfLines`)
+- **`renderTime`** _(Component | Function)_ - Custom time inside a message
+- **`timeTextStyle`** _(Object)_ - Custom text style for time inside messages (supports left/right styles)
+- **`isDayAnimationEnabled`** _(Bool)_ - Enable animated day label that appears on scroll; default is `true`
+
+### System Messages
+
+- **`renderSystemMessage`** _(Component | Function)_ - Custom system message
+
+### Load Earlier Messages
+
+- **`loadEarlierMessagesProps`** _(Object)_ - Props to pass to the LoadEarlierMessages component. The button is only visible when `isAvailable` is `true`. Supports the following props:
+  - `isAvailable` - Controls button visibility (default: false)
+  - `onPress` - Callback when button is pressed
+  - `isLoading` - Display loading indicator (default: false)
+  - `isInfiniteScrollEnabled` - Enable infinite scroll up when reaching the top of messages container, automatically calls `onPress` (not yet supported for web)
+  - `label` - Override the default "Load earlier messages" text
+  - `containerStyle` - Custom style for the button container
+  - `wrapperStyle` - Custom style for the button wrapper
+  - `textStyle` - Custom style for the button text
+  - `activityIndicatorStyle` - Custom style for the loading indicator
+  - `activityIndicatorColor` - Color of the loading indicator (default: 'white')
+  - `activityIndicatorSize` - Size of the loading indicator (default: 'small')
+- **`renderLoadEarlier`** _(Component | Function)_ - Custom "Load earlier messages" button
+
+### Typing Indicator
+
+- **`isTyping`** _(Bool)_ - Typing Indicator state; default `false`. If you use`renderFooter` it will override this.
+- **`renderTypingIndicator`** _(Component | Function)_ - Custom typing indicator component
+- **`typingIndicatorStyle`** _(StyleProp<ViewStyle>)_ - Custom style for the TypingIndicator component.
+- **`renderFooter`** _(Component | Function)_ - Custom footer component on the ListView, e.g. `'User is typing...'`; see [CustomizedFeaturesExample.tsx](example/components/chat-examples/CustomizedFeaturesExample.tsx) for an example. Overrides default typing indicator that triggers when `isTyping` is true.
+
+### Quick Replies
+
+See [Quick Replies example in messages.ts](example/example-expo/data/messages.ts)
+
+- **`onQuickReply`** _(Function)_ - Callback when sending a quick reply (to backend server)
+- **`renderQuickReplies`** _(Function)_ - Custom all quick reply view
+- **`quickReplyStyle`** _(StyleProp<ViewStyle>)_ - Custom quick reply view style
+- **`quickReplyTextStyle`** _(StyleProp<TextStyle>)_ - Custom text style for quick reply buttons
+- **`quickReplyContainerStyle`** _(StyleProp<ViewStyle>)_ - Custom container style for quick replies
+- **`renderQuickReplySend`** _(Function)_ - Custom quick reply **send** view
+
+### Reply to Messages
+
+Gifted Chat supports swipe-to-reply functionality out of the box. When enabled, users can swipe on a message to reply to it, displaying a reply preview in the input toolbar and the replied message above the new message bubble.
+
+> **Note:** This feature uses `ReanimatedSwipeable` from `react-native-gesture-handler` and `react-native-reanimated` for smooth, performant animations.
+
+#### Basic Usage
+
+```tsx
+<GiftedChat
+  messages={messages}
+  onSend={onSend}
+  user={{ _id: 1 }}
+  reply={{
+    swipe: {
+      isEnabled: true,
+      direction: 'left', // swipe left to reply
+    },
+  }}
+/>
 ```
+
+#### Reply Props (Grouped)
+
+The `reply` prop accepts an object with the following structure:
+
+```typescript
+interface ReplyProps<TMessage> {
+  // Swipe gesture configuration
+  swipe?: {
+    isEnabled?: boolean              // Enable swipe-to-reply; default false
+    direction?: 'left' | 'right'     // Swipe direction; default 'left'
+    onSwipe?: (message: TMessage) => void  // Callback when swiped
+    renderAction?: (                 // Custom swipe action component
+      progress: SharedValue<number>,
+      translation: SharedValue<number>,
+      position: 'left' | 'right'
+    ) => React.ReactNode
+    actionContainerStyle?: StyleProp<ViewStyle>
+  }
+
+  // Reply preview styling (above input toolbar)
+  previewStyle?: {
+    containerStyle?: StyleProp<ViewStyle>
+    textStyle?: StyleProp<TextStyle>
+    imageStyle?: StyleProp<ImageStyle>
+  }
+
+  // In-bubble reply styling
+  messageStyle?: {
+    containerStyle?: StyleProp<ViewStyle>
+    containerStyleLeft?: StyleProp<ViewStyle>
+    containerStyleRight?: StyleProp<ViewStyle>
+    textStyle?: StyleProp<TextStyle>
+    textStyleLeft?: StyleProp<TextStyle>
+    textStyleRight?: StyleProp<TextStyle>
+    imageStyle?: StyleProp<ImageStyle>
+  }
+
+  // Callbacks and state
+  message?: ReplyMessage             // Controlled reply state
+  onClear?: () => void               // Called when reply cleared
+  onPress?: (message: TMessage) => void  // Called when reply preview tapped
+
+  // Custom renderers
+  renderPreview?: (props: ReplyPreviewProps) => React.ReactNode
+  renderMessageReply?: (props: MessageReplyProps) => React.ReactNode
+}
+```
+
+#### ReplyMessage Structure
+
+When a message has a reply, it includes a `replyMessage` property:
+
+```typescript
+interface ReplyMessage {
+  _id: string | number
+  text: string
+  user: User
+  image?: string
+  audio?: string
+}
+```
+
+#### Advanced Example with External State
+
+```tsx
+const [replyMessage, setReplyMessage] = useState<ReplyMessage | null>(null)
+
+<GiftedChat
+  messages={messages}
+  onSend={messages => {
+    const newMessages = messages.map(msg => ({
+      ...msg,
+      replyMessage: replyMessage || undefined,
+    }))
+    setMessages(prev => GiftedChat.append(prev, newMessages))
+    setReplyMessage(null)
+  }}
+  user={{ _id: 1 }}
+  reply={{
+    swipe: {
+      isEnabled: true,
+      direction: 'right',
+      onSwipe: setReplyMessage,
+    },
+    message: replyMessage,
+    onClear: () => setReplyMessage(null),
+    onPress: (msg) => scrollToMessage(msg._id),
+  }}
+/>
+```
+
+#### Smooth Animations
+
+The reply preview automatically animates when:
+- **Appearing**: Smoothly expands from zero height with fade-in effect
+- **Disappearing**: Smoothly collapses with fade-out effect
+- **Content changes**: Smoothly transitions when replying to a different message
+
+These animations use `react-native-reanimated` for 60fps performance.
+
+### Scroll to Bottom
+
+- **`isScrollToBottomEnabled`** _(Bool)_ - Enables the scroll to bottom Component (Default is false)
+- **`scrollToBottomComponent`** _(Function)_ - Custom Scroll To Bottom Component container
+- **`scrollToBottomOffset`** _(Integer)_ - Custom Height Offset upon which to begin showing Scroll To Bottom Component (Default is 200)
+- **`scrollToBottomStyle`** _(Object)_ - Custom style for Scroll To Bottom wrapper (position, bottom, right, etc.)
+- **`scrollToBottomContentStyle`** _(Object)_ - Custom style for Scroll To Bottom content (size, background, shadow, etc.)
+
+### Maintaining Scroll Position (AI Chatbots)
+
+For AI chat interfaces where long responses arrive and you don't want to disrupt the user's reading position, use [`maintainVisibleContentPosition`](https://reactnative.dev/docs/scrollview#maintainvisiblecontentposition) via `listProps`:
+
+```tsx
+// Basic usage - always maintain scroll position
+<GiftedChat
+  listProps={{
+    maintainVisibleContentPosition: {
+      minIndexForVisible: 0,
+    },
+  }}
+/>
+
+// With auto-scroll threshold - auto-scroll if within 10 pixels of newest content
+<GiftedChat
+  listProps={{
+    maintainVisibleContentPosition: {
+      minIndexForVisible: 0,
+      autoscrollToTopThreshold: 10,
+    },
+  }}
+/>
+
+// Conditionally enable based on scroll state (recommended for chatbots)
+const [isScrolledUp, setIsScrolledUp] = useState(false)
+
+<GiftedChat
+  listProps={{
+    onScroll: (event) => {
+      setIsScrolledUp(event.contentOffset.y > 50)
+    },
+    maintainVisibleContentPosition: isScrolledUp
+      ? { minIndexForVisible: 0, autoscrollToTopThreshold: 10 }
+      : undefined,
+  }}
+/>
+```
+
+### Emoji Reactions
+
+Long-press a message to open a quick emoji picker; selected reactions render as pills below the bubble and toggle on tap. The core ships a lightweight quick picker (built on `react-native-gesture-handler` and `react-native-reanimated`, no extra dependencies). A full emoji browser is optional and demonstrated in the example app via the `renderReactionPicker` override.
+
+<p align="center">
+  <img width="200" src="https://raw.githubusercontent.com/FaridSafi/react-native-gifted-chat/master/media/reactions-picker.png" />
+  &nbsp;&nbsp;
+  <img width="200" src="https://raw.githubusercontent.com/FaridSafi/react-native-gifted-chat/master/media/reactions-pills.png" />
+  &nbsp;&nbsp;
+  <img width="200" src="https://raw.githubusercontent.com/FaridSafi/react-native-gifted-chat/master/media/reactions-emoji-browser.png" />
+</p>
+
+Store reactions on each message as a `reactions` array, then enable the feature and handle the toggle. Reaction state is owned by you, so it works with any backend:
+
+```tsx
+interface IChatMessage extends IMessage {
+  reactions?: MessageReaction[] // { emoji: string, userIds: (string | number)[] }[]
+}
+
+const CURRENT_USER_ID = 1
+
+const handleReactionPress = useCallback((message: IChatMessage, emoji: string) => {
+  setMessages(prev =>
+    prev.map(m => {
+      if (m._id !== message._id)
+        return m
+
+      const existing = (m.reactions ?? []).find(r => r.emoji === emoji)
+      if (!existing)
+        return { ...m, reactions: [...(m.reactions ?? []), { emoji, userIds: [CURRENT_USER_ID] }] }
+
+      const userIds = existing.userIds.includes(CURRENT_USER_ID)
+        ? existing.userIds.filter(id => id !== CURRENT_USER_ID)
+        : [...existing.userIds, CURRENT_USER_ID]
+
+      return {
+        ...m,
+        reactions: userIds.length === 0
+          ? (m.reactions ?? []).filter(r => r.emoji !== emoji)
+          : (m.reactions ?? []).map(r => (r.emoji === emoji ? { ...r, userIds } : r)),
+      }
+    })
+  )
+}, [])
+
+<GiftedChat
+  messages={messages}
+  onSend={onSend}
+  user={{ _id: CURRENT_USER_ID }}
+  reactions={{
+    isEnabled: true,
+    onReactionPress: handleReactionPress,
+    // Optional: provide a richer picker (e.g. a full emoji browser).
+    // See example/components/chat-examples/ReactionsExample.tsx
+    // renderReactionPicker: props => <MyEmojiPicker {...props} />,
+  }}
+/>
+```
+
+#### Reactions Props (Grouped)
+
+The `reactions` prop accepts:
+
+- **`isEnabled`** _(Bool)_ - Enable emoji reactions (default `false`)
+- **`emojis`** _(String[])_ - Emojis shown in the quick picker (default `['👍', '❤️', '😂', '😮', '😢', '👎']`)
+- **`onReactionPress`** _(Function)_ - `(message, emoji) => void` called when an emoji is selected or a pill is tapped. Toggle logic is left to you
+- **`renderReactions`** _(Function)_ - Override the reactions-display component rendered below the bubble
+- **`renderReactionPicker`** _(Function)_ - Override the picker shown on long-press (use for a full emoji browser)
+- **`containerStyle`**, **`reactionStyle`**, **`reactionActiveStyle`**, **`reactionTextStyle`**, **`reactionCountStyle`** - Styles for the reaction pills
+- **`pickerContainerStyle`**, **`pickerEmojiStyle`** - Styles for the quick picker
+
+### Smart Link Parsing
+
+Message text is automatically scanned for URLs, emails, and phone numbers; hashtags and mentions are opt-in. Configure it via `messageTextProps`:
+
+```tsx
+<GiftedChat
+  messageTextProps={{
+    url: true,        // default true
+    email: true,      // default true
+    phone: true,      // default true
+    hashtag: true,    // default false
+    mention: true,    // default false
+    hashtagUrl: 'https://example.com/hashtag',
+    mentionUrl: 'https://example.com',
+    linkStyle: { left: { color: '#1d9bf0' }, right: { color: '#fff' } },
+    onPress: (message, url, type) => {
+      // type: 'url' | 'email' | 'phone' | 'mention' | 'hashtag'
+      Linking.openURL(url)
+    },
+  }}
+/>
+```
+
+For full control, pass custom `matchers` (`{ type, pattern, getLinkUrl?, getLinkText?, renderLink?, onPress? }[]`) to add or override patterns. See the Links example in the [example app](#-example-app).
+
+### Copy to Clipboard
+
+Long-press handling is exposed via `onLongPressMessage`. GiftedChat wraps [`@expo/react-native-action-sheet`](https://github.com/expo/react-native-action-sheet), so you can show a "Copy Text" action sheet and copy with the clipboard library of your choice:
+
+```tsx
+import { useActionSheet } from '@expo/react-native-action-sheet'
+import { setStringAsync } from 'expo-clipboard'
+
+const { showActionSheetWithOptions } = useActionSheet()
+
+<GiftedChat
+  onLongPressMessage={(_context, message) => {
+    showActionSheetWithOptions(
+      { options: ['Copy Text', 'Cancel'], cancelButtonIndex: 1 },
+      buttonIndex => {
+        if (buttonIndex === 0)
+          setStringAsync(message.text)
+      }
+    )
+  }}
+/>
+```
+
+### Message Status
+
+Set `sent`, `received`, or `pending` on a message to show its delivery status. By default these render as tick indicators next to the timestamp (`✓` sent, `✓✓` received, `🕓` pending):
+
+```tsx
+const message: IMessage = {
+  _id: 1,
+  text: 'Delivered!',
+  createdAt: new Date(),
+  user: { _id: 1 },
+  sent: true,
+  received: true,
+}
+```
+
+Customize the indicators with `renderTicks` (full override) or `tickStyle` (style only):
+
+```tsx
+<GiftedChat
+  renderTicks={message => (message.received ? <MyReadIcon /> : null)}
+  tickStyle={{ color: '#1d9bf0' }}
+/>
+```
+
+### TypeScript
+
+GiftedChat ships complete type definitions and is generic over your message type. Extend `IMessage` to add custom fields and everything stays typed end to end:
+
+```tsx
+import { GiftedChat, IMessage } from 'react-native-gifted-chat'
+
+interface MyMessage extends IMessage {
+  reactions?: { emoji: string, userIds: (string | number)[] }[]
+}
+
+<GiftedChat<MyMessage>
+  messages={messages}
+  onSend={msgs => {/* msgs is typed as MyMessage[] */}}
+  user={{ _id: 1 }}
+/>
+```
+
+---
+
+## 📱 Platform Notes
+
+### Android
+
+<details>
+<summary><strong>Keyboard configuration</strong></summary>
+
+If you are using Create React Native App / Expo, no Android specific installation steps are required. Otherwise, we recommend modifying your project configuration:
+
+Make sure you have `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:
+
+```xml
+<activity
+  android:name=".MainActivity"
+  android:label="@string/app_name"
+  android:windowSoftInputMode="adjustResize"
+  android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+```
+
+For **Expo**, you can append `KeyboardAvoidingView` after GiftedChat (Android only):
+
+```jsx
 <View style={{ flex: 1 }}>
    <GiftedChat />
-   {
-      Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />
-   }
+   {Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />}
 </View>
 ```
 
-If you use React Navigation, additional handling may be required to account for navigation headers and tabs. `KeyboardAvoidingView`'s `keyboardVerticalOffset` property can be set to the height of the navigation header and [`tabBarOptions.keyboardHidesTabBar`](https://reactnavigation.org/docs/en/bottom-tab-navigator.html#bottomtabnavigatorconfig) can be set to keep the tab bar from being shown when the keyboard is up. Due to a [bug with calculating height on Android phones with notches](facebook/react-native#23693), `KeyboardAvoidingView` is recommended over other solutions that involve calculating the height of the window.
+</details>
 
-- adding an opaque background status bar on app.json (even though `android:windowSoftInputMode="adjustResize"` is set internally on Expo's Android apps, the translucent status bar causes it not to work): https://docs.expo.io/versions/latest/guides/configuration.html#androidstatusbar
+### Web (react-native-web)
 
-- If you plan to use `GiftedChat` inside a `Modal`, see [#200](https://github.com/FaridSafi/react-native-gifted-chat/issues/200).
+<details>
+<summary><strong>With create-react-app</strong></summary>
 
-## Notes for local development
-
-### Native
-
-1. Install `yarn global add expo-cli`
-2. Install dependencies`yarn install`
-3. `expo start`
-
-### react-native-web
-
-#### With expo
-
-1. Install `yarn global add expo-cli`
-2. Install dependencies`yarn install`
-3. `expo start -w`
-
-[Upgrade snack version](https://snackager.expo.io/bundle/react-native-gifted-chat@0.15.0?bypassCache=true)
-
-#### With create-react-app
-
-1. `yarn add -D react-app-rewired`
-2. `touch config-overrides.js`
+1. Install react-app-rewired: `yarn add -D react-app-rewired`
+2. Create `config-overrides.js`:
 
 ```js
 module.exports = function override(config, env) {
   config.module.rules.push({
     test: /\.js$/,
-    exclude: /node_modules[/\\](?!react-native-gifted-chat|react-native-lightbox|react-native-parsed-text)/,
+    exclude: /node_modules[/\\](?!react-native-gifted-chat)/,
     use: {
       loader: 'babel-loader',
       options: {
@@ -531,44 +882,180 @@ module.exports = function override(config, env) {
       },
     },
   })
-
   return config
 }
 ```
 
-> You will find an example and a **web demo** here: [xcarpentier/gifted-chat-web-demo](https://github.com/xcarpentier/gifted-chat-web-demo)
+> **Examples:**
+> - [xcarpentier/gifted-chat-web-demo](https://github.com/xcarpentier/gifted-chat-web-demo)
+> - [Gatsby example](https://github.com/xcarpentier/clean-archi-boilerplate/tree/develop/apps/web)
 
-> Another example with **Gatsby** : [xcarpentier/clean-archi-boilerplate](https://github.com/xcarpentier/clean-archi-boilerplate/tree/develop/apps/web)
+</details>
 
-## Questions
+---
 
-- [How can I set Bubble color for each user?](https://github.com/FaridSafi/react-native-gifted-chat/issues/672)
-- [How can I pass style props to InputToolbar design and customize its color and other styles properties?](https://github.com/FaridSafi/react-native-gifted-chat/issues/662)
-- [How can I change the color of the message box?](https://github.com/FaridSafi/react-native-gifted-chat/issues/640)
-- [Is there a way to manually dismiss the keyboard?](https://github.com/FaridSafi/react-native-gifted-chat/issues/647)
-- [I want to implement a popover that pops right after clicking on a specific avatar,
-  what is the best implementation in this case and how?](https://github.com/FaridSafi/react-native-gifted-chat/issues/660)
-- [Why TextInput is hidden on Android?](https://github.com/FaridSafi/react-native-gifted-chat/issues/680#issuecomment-359699364)
-- [How to use renderLoading?](https://github.com/FaridSafi/react-native-gifted-chat/issues/298)
-- [Can I use MySql to save the message?](https://github.com/FaridSafi/react-native-gifted-chat/issues/738)
+## 🧪 Testing
 
-## License
+<details>
+<summary><strong>Triggering layout events in tests</strong></summary>
 
-- [MIT](LICENSE)
+`TEST_ID` is exported as constants that can be used in your testing library of choice.
 
-## Author
+Gifted Chat uses `onLayout` to determine the height of the chat container. To trigger `onLayout` during your tests:
 
-Feel free to ask me questions on Twitter [@FaridSafi](https://www.twitter.com/FaridSafi)! or [@xcapetir](https://www.twitter.com/xcapetir)!
+```typescript
+const WIDTH = 200
+const HEIGHT = 2000
 
-## Contributors
+const loadingWrapper = getByTestId(TEST_ID.LOADING_WRAPPER)
+fireEvent(loadingWrapper, 'layout', {
+  nativeEvent: {
+    layout: {
+      width: WIDTH,
+      height: HEIGHT,
+    },
+  },
+})
+```
 
-- Kevin Cooper [cooperka](https://github.com/cooperka)
-- Kfir Golan [kfiroo](https://github.com/kfiroo)
-- Bruno Cascio [brunocascio](https://github.com/brunocascio)
-- Xavier Carpentier [xcarpentier](https://github.com/xcarpentier)
-- Kesha Antonov [kesha-antonov](https://github.com/kesha-antonov)
-- [more](https://github.com/FaridSafi/react-native-gifted-chat/graphs/contributors)
+</details>
 
-## Hire an expert!
+---
 
-Looking for a ReactNative freelance expert with more than 14 years of experience? Contact Xavier from his [website](https://xaviercarpentier.com)!
+## 📦 Example App
+
+The repository includes a comprehensive example app demonstrating all features:
+
+```bash
+# Clone and install
+git clone https://github.com/FaridSafi/react-native-gifted-chat.git
+cd react-native-gifted-chat/example
+yarn install
+
+# Run on iOS
+npx expo run:ios
+
+# Run on Android
+npx expo run:android
+
+# Run on Web
+npx expo start --web
+```
+
+The example app showcases:
+- 💬 Basic chat functionality
+- 🎨 Custom message bubbles and avatars
+- ↩️ Reply to messages with swipe gesture
+- ⚡ Quick replies (bot-style)
+- ✍️ Typing indicators
+- 📎 Attachment actions
+- 🔗 Link parsing and custom matchers
+- 🌐 Web compatibility
+
+---
+
+## ❓ Troubleshooting
+
+<details>
+<summary><strong>TextInput is hidden on Android</strong></summary>
+
+Make sure you have `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`. See [Android configuration](#android) above.
+
+</details>
+
+<details>
+<summary><strong>How to set Bubble color for each user?</strong></summary>
+
+See [this issue](https://github.com/FaridSafi/react-native-gifted-chat/issues/672) for examples.
+
+</details>
+
+<details>
+<summary><strong>How to customize InputToolbar styles?</strong></summary>
+
+See [this issue](https://github.com/FaridSafi/react-native-gifted-chat/issues/662) for examples.
+
+</details>
+
+<details>
+<summary><strong>How to manually dismiss the keyboard?</strong></summary>
+
+See [this issue](https://github.com/FaridSafi/react-native-gifted-chat/issues/647) for examples.
+
+</details>
+
+<details>
+<summary><strong>How to use renderLoading?</strong></summary>
+
+See [this issue](https://github.com/FaridSafi/react-native-gifted-chat/issues/298) for examples.
+
+</details>
+
+---
+
+## 🤔 Have a Question?
+
+1. Check this README first
+2. Search [existing issues](https://github.com/FaridSafi/react-native-gifted-chat/issues)
+3. Ask on [StackOverflow](https://stackoverflow.com/questions/tagged/react-native-gifted-chat)
+4. Open a new issue if needed
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Install dependencies (`yarn install`)
+4. Make your changes
+5. Run tests (`yarn test`)
+6. Run linting (`yarn lint`)
+7. Build the library (`yarn build`)
+8. Commit your changes (`git commit -m 'Add amazing feature'`)
+9. Push to the branch (`git push origin feature/amazing-feature`)
+10. Open a Pull Request
+
+### Development Setup
+
+```bash
+# Install dependencies
+yarn install
+
+# Build the library
+yarn build
+
+# Run tests
+yarn test
+
+# Run linting
+yarn lint
+
+# Full validation
+yarn prepublishOnly
+```
+
+---
+
+## 👥 Authors
+
+**Original Author:** [Farid Safi](https://www.x.com/FaridSafi)
+
+**Co-author:** [Xavier Carpentier](https://www.x.com/xcapetir) - [Hire Xavier](https://xaviercarpentier.com)
+
+**Maintainer:** [Kesha Antonov](https://github.com/kesha-antonov)
+
+> I've been maintaining this project for 2 years, completely in my free time and without any compensation. If you find it helpful, please consider [becoming a sponsor](https://github.com/sponsors/kesha-antonov) to support continued development. 💖
+
+---
+
+## 📄 License
+
+[MIT](LICENSE)
+
+---
+
+<p align="center">
+  <sub>Built with ❤️ by the React Native community</sub>
+</p>

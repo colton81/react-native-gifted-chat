@@ -1,11 +1,10 @@
-import "react-native";
-import React from "react";
-import renderer from "react-test-renderer";
+import React from 'react'
+import { render } from '@testing-library/react-native'
 
-import { Composer } from "../GiftedChat";
+import { Composer } from '..'
 
-it("should render <Composer /> and compare with snapshot", () => {
-	const tree = renderer.create(<Composer />).toJSON();
+it('should render <Composer /> and compare with snapshot', () => {
+  const { toJSON } = render(<Composer />)
 
-	expect(tree).toMatchSnapshot();
-});
+  expect(toJSON()).toMatchSnapshot()
+})

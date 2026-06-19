@@ -1,100 +1,177 @@
-import React, { useMemo } from "react";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { Actions, ActionsProps } from "./Actions";
-import Color from "./Color";
-import { Composer, ComposerProps } from "./Composer";
-import { Send, SendProps } from "./Send";
-import { IMessage } from "./types";
+import React, { useCallback, useMemo } from 'react'
+import { StyleSheet, View, StyleProp, ViewStyle, TextStyle } from 'react-native'
+
+import { Actions, ActionsProps } from './Actions'
+import { Color } from './Color'
+import { ReplyPreview, ReplyPreviewProps } from './components/ReplyPreview'
+import { Composer, ComposerProps } from './Composer'
+import { useColorScheme } from './hooks/useColorScheme'
+import { IMessage, ReplyMessage } from './Models'
+import { Send, SendProps } from './Send'
+import { renderComponentOrElement } from './utils'
+
+export type { ReplyPreviewProps } from './components/ReplyPreview'
 
 export interface InputToolbarProps<TMessage extends IMessage> {
-	options?: { [key: string]: () => void };
-	optionTintColor?: string;
-	containerStyle?: StyleProp<ViewStyle>;
-	primaryStyle?: StyleProp<ViewStyle>;
-	accessoryStyle?: StyleProp<ViewStyle>;
-	renderAccessory?(props: InputToolbarProps<TMessage>): React.ReactNode;
-	renderActions?(props: ActionsProps): React.ReactNode;
-	renderSend?(props: SendProps<TMessage>): React.ReactNode;
-	renderComposer?(props: ComposerProps): React.ReactNode;
-	onPressActionButton?(): void;
-	icon?: () => React.ReactNode;
-	wrapperStyle?: StyleProp<ViewStyle>;
+  actions?: Array<{ title: string, action: () => void }>
+  actionSheetOptionTintColor?: string
+  containerStyle?: StyleProp<ViewStyle>
+  primaryStyle?: StyleProp<ViewStyle>
+  renderAccessory?: (props: InputToolbarProps<TMessage>) => React.ReactNode
+  renderActions?: (props: ActionsProps) => React.ReactNode
+  renderSend?: (props: SendProps<TMessage>) => React.ReactNode
+  renderComposer?: (props: ComposerProps) => React.ReactNode
+  onPressActionButton?: () => void
+  icon?: () => React.ReactNode
+  wrapperStyle?: StyleProp<ViewStyle>
+  /** Reply message to show in preview */
+  replyMessage?: ReplyMessage | null
+  /** Callback to clear reply */
+  onClearReply?: () => void
+  /** Custom render for reply preview */
+  renderReplyPreview?: (props: ReplyPreviewProps) => React.ReactNode
+  /** Style for reply preview container */
+  replyPreviewContainerStyle?: StyleProp<ViewStyle>
+  /** Style for reply preview text */
+  replyPreviewTextStyle?: StyleProp<TextStyle>
 }
 
-export function InputToolbar<TMessage extends IMessage = IMessage>(
-	props: InputToolbarProps<TMessage>,
+export function InputToolbar<TMessage extends IMessage = IMessage> (
+  props: InputToolbarProps<TMessage>
 ) {
-	const {
-		renderActions,
-		onPressActionButton,
-		renderComposer,
-		renderSend,
-		renderAccessory,
-		options,
-		optionTintColor,
-		icon,
-		wrapperStyle,
-		containerStyle,
-	} = props;
+  const {
+    renderActions,
+    onPressActionButton,
+    renderComposer,
+    renderSend,
+    renderAccessory,
+    actions,
+    actionSheetOptionTintColor,
+    icon,
+    wrapperStyle,
+    containerStyle,
+    replyMessage,
+    onClearReply,
+    renderReplyPreview: renderReplyPreviewProp,
+    replyPreviewContainerStyle,
+    replyPreviewTextStyle,
+  } = props
 
-	const actionsFragment = useMemo(() => {
-		const props = {
-			onPressActionButton,
-			options,
-			optionTintColor,
-			icon,
-			wrapperStyle,
-			containerStyle,
-		};
+  const colorScheme = useColorScheme()
 
-		return (
-			renderActions?.(props) || (onPressActionButton && <Actions {...props} />)
-		);
-	}, [
-		renderActions,
-		onPressActionButton,
-		options,
-		optionTintColor,
-		icon,
-		wrapperStyle,
-		containerStyle,
-	]);
+  const containerStyles = useMemo(() => [
+    styles.container,
+    colorScheme === 'dark' && styles.container_dark,
+    containerStyle,
+  ], [colorScheme, containerStyle])
 
-	const composerFragment = useMemo(() => {
-		return (
-			renderComposer?.(props as ComposerProps) || (
-				<Composer {...(props as ComposerProps)} />
-			)
-		);
-	}, [renderComposer, props]);
+  const primaryStyles = useMemo(() => [
+    styles.primary,
+    props.primaryStyle,
+  ], [props.primaryStyle])
 
-	return (
-		<View style={[styles.container, containerStyle]}>
-			<View style={[styles.primary, props.primaryStyle]}>
-				{actionsFragment}
-				{composerFragment}
-				{renderSend?.(props) || <Send {...props} />}
-			</View>
-			{renderAccessory && (
-				<View style={[styles.accessory, props.accessoryStyle]}>
-					{renderAccessory(props)}
-				</View>
-			)}
-		</View>
-	);
+  const actionsFragment = useMemo(() => {
+    const actionsProps = {
+      onPressActionButton,
+      actions,
+      actionSheetOptionTintColor,
+      icon,
+      wrapperStyle,
+      containerStyle,
+    }
+
+    if (renderActions)
+      return renderComponentOrElement(renderActions, actionsProps)
+
+    if (onPressActionButton)
+      return <Actions {...actionsProps} />
+
+    return null
+  }, [
+    renderActions,
+    onPressActionButton,
+    actions,
+    actionSheetOptionTintColor,
+    icon,
+    wrapperStyle,
+    containerStyle,
+  ])
+
+  const composerFragment = useMemo(() => {
+    const composerProps = props as ComposerProps
+
+    if (renderComposer)
+      return renderComponentOrElement(renderComposer, composerProps)
+
+    return <Composer {...composerProps} />
+  }, [renderComposer, props])
+
+  const sendFragment = useMemo(() => {
+    if (renderSend)
+      return renderComponentOrElement(renderSend, props)
+
+    return <Send {...props} />
+  }, [renderSend, props])
+
+  const accessoryFragment = useMemo(() => {
+    if (!renderAccessory)
+      return null
+
+    return renderComponentOrElement(renderAccessory, props)
+  }, [renderAccessory, props])
+
+  const handleClearReply = useCallback(() => {
+    onClearReply?.()
+  }, [onClearReply])
+
+  const replyPreviewFragment = useMemo(() => {
+    if (!replyMessage)
+      return null
+
+    const replyPreviewProps: ReplyPreviewProps = {
+      replyMessage,
+      onClearReply: handleClearReply,
+      containerStyle: replyPreviewContainerStyle,
+      textStyle: replyPreviewTextStyle,
+    }
+
+    if (renderReplyPreviewProp)
+      return renderComponentOrElement(renderReplyPreviewProp, replyPreviewProps)
+
+    return <ReplyPreview {...replyPreviewProps} />
+  }, [
+    replyMessage,
+    handleClearReply,
+    renderReplyPreviewProp,
+    replyPreviewContainerStyle,
+    replyPreviewTextStyle,
+  ])
+
+  return (
+    <View style={containerStyles}>
+      {replyPreviewFragment}
+      <View style={primaryStyles}>
+        {actionsFragment}
+        {composerFragment}
+        {sendFragment}
+      </View>
+      {accessoryFragment}
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-	container: {
-		borderTopWidth: StyleSheet.hairlineWidth,
-		borderTopColor: Color.defaultColor,
-		backgroundColor: Color.white,
-	},
-	primary: {
-		flexDirection: "row",
-		alignItems: "flex-end",
-	},
-	accessory: {
-		height: 44,
-	},
-});
+  container: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Color.defaultColor,
+    backgroundColor: Color.white,
+  },
+  container_dark: {
+    backgroundColor: '#1a1a1a',
+    borderTopColor: '#444',
+  },
+  primary: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+})

@@ -1,63 +1,79 @@
-import React from "react";
+import React from 'react'
 import {
-	StyleProp,
-	StyleSheet,
-	Text,
-	TextStyle,
-	View,
-	ViewStyle,
-} from "react-native";
-import Color from "./Color";
-import stylesCommon from "./styles";
-import { IMessage } from "./types";
-
-const styles = StyleSheet.create({
-	container: {
-		marginTop: 5,
-		marginBottom: 10,
-	},
-	text: {
-		backgroundColor: Color.backgroundTransparent,
-		color: Color.defaultColor,
-		fontSize: 12,
-		fontWeight: "300",
-	},
-});
+  StyleSheet,
+  View,
+  ViewStyle,
+  StyleProp,
+  TextStyle,
+} from 'react-native'
+import { Color } from './Color'
+import { MessageText, MessageTextProps } from './MessageText'
+import { IMessage } from './Models'
+import stylesCommon from './styles'
 
 export interface SystemMessageProps<TMessage extends IMessage> {
-	currentMessage: TMessage;
-	containerStyle?: StyleProp<ViewStyle>;
-	wrapperStyle?: StyleProp<ViewStyle>;
-	textStyle?: StyleProp<TextStyle>;
-	children?: React.ReactNode;
+  currentMessage: TMessage
+  containerStyle?: StyleProp<ViewStyle>
+  messageContainerStyle?: StyleProp<ViewStyle>
+  textStyle?: StyleProp<TextStyle>
+  messageTextProps?: Partial<MessageTextProps<TMessage>>
+  children?: React.ReactNode
 }
 
-export function SystemMessage<TMessage extends IMessage = IMessage>({
-	currentMessage,
-	containerStyle,
-	wrapperStyle,
-	textStyle,
-	children,
+export function SystemMessage<TMessage extends IMessage> ({
+  currentMessage,
+  containerStyle,
+  messageContainerStyle,
+  textStyle,
+  messageTextProps,
+  children,
 }: SystemMessageProps<TMessage>) {
-	if (currentMessage == null || currentMessage.system === false) {
-		return null;
-	}
+  if (currentMessage == null)
+    return null
 
-	return (
-		<View
-			style={[
-				stylesCommon.fill,
-				stylesCommon.centerItems,
-				styles.container,
-				containerStyle,
-			]}
-		>
-			<View style={wrapperStyle}>
-				{!!currentMessage.text && (
-					<Text style={[styles.text, textStyle]}>{currentMessage.text}</Text>
-				)}
-				{children}
-			</View>
-		</View>
-	);
+  return (
+    <View style={[stylesCommon.fill, styles.wrapper]}>
+      <View style={[styles.container, containerStyle]}>
+        {
+          !!currentMessage.text && (
+            <MessageText
+              currentMessage={currentMessage}
+              customTextStyle={[styles.text, textStyle]}
+              position='left'
+              containerStyle={{ left: [styles.messageContainer, messageContainerStyle] }}
+              {...messageTextProps}
+            />
+          )
+        }
+        {children}
+      </View>
+    </View>
+  )
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    alignItems: 'center',
+    marginVertical: 5,
+    marginHorizontal: 10,
+  },
+  container: {
+    maxWidth: '70%',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    backgroundColor: 'rgba(0,0,0,0.05)',
+  },
+  messageContainer: {
+    marginVertical: 0,
+    marginHorizontal: 0,
+  },
+  text: {
+    backgroundColor: Color.backgroundTransparent,
+    fontSize: 12,
+    fontWeight: '300',
+    textAlign: 'center',
+  },
+})

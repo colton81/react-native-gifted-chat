@@ -1,61 +1,30 @@
-# Starter Template with React Navigation
+# How to use
 
-This is a minimal starter template for React Native apps using Expo and React Navigation.
+1. Install dependencies:
 
-## Launch your own
-
-[![Launch with Expo](https://github.com/expo/examples/blob/master/.gh-assets/launch.svg?raw=true)](https://launch.expo.dev/?github=https://github.com/expo/examples/tree/master/with-react-navigation)
-
-It includes the following:
-
-- Example [Native Stack](https://reactnavigation.org/docs/native-stack-navigator) with a nested [Bottom Tab](https://reactnavigation.org/docs/bottom-tab-navigator)
-- Web support with [React Native for Web](https://necolas.github.io/react-native-web/)
-- TypeScript support and configured for React Navigation
-- Automatic [deep link](https://reactnavigation.org/docs/deep-linking) and [URL handling configuration](https://reactnavigation.org/docs/configuring-links)
-- Theme support [based on system appearance](https://reactnavigation.org/docs/themes/#using-the-operating-system-preferences)
-- Expo [Development Build](https://docs.expo.dev/develop/development-builds/introduction/) with [Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)
-- Edge-to-edge configured on Android with [`react-native-edge-to-edge`](https://www.npmjs.com/package/react-native-edge-to-edge)
-
-## Getting Started
-
-1. Create a new project using this template:
-
-   ```sh
-   npx create-expo-app --example with-react-navigation
-   yarn create expo-app --example with-react-navigation
-   pnpm create expo-app --example with-react-navigation
-   bun create expo-app --example with-react-navigation
+   ```bash
+   yarn install
+   cd example
+   yarn install
    ```
 
-## Running the app
+2. Install iOS dev build (only needed once or after rebuilding native dependencies):
+   ```bash
+   yarn installDevBuild:ios
+   ```
 
-- Install the dependencies:
+   or
 
-  ```sh
-  npx expo install
-  ```
+   ```bash
+   yarn installDevBuild:android
+   ```
 
-- Start the development server:
+3. Start the example app on iOS simulator:
 
-  ```sh
-  npx expo start
-  ```
+   ```bash
+   yarn start:ios
+   ```
 
-- Build and run iOS and Android development builds:
+# Dark Theme Support
 
-  ```sh
-  npm run ios
-  # or
-  npm run android
-  ```
-
-- In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
-
-## Resources
-
-- [React Navigation documentation](https://reactnavigation.org/)
-- [Expo documentation](https://docs.expo.dev/)
-
----
-
-Demo assets are from [lucide.dev](https://lucide.dev/)
+To switch theme press `Cmd + Shift + A` in iOS simulator.
